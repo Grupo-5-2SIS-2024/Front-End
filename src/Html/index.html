@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MultiClinics</title>
+    <link rel="shortcut icon" href="../Assets/logo_Multclinics_branca_sem_nome.png" type="image/x-icon">
+    <link rel="stylesheet" href="../Css/index.css">
+</head>
+<body>
+
+    <div id="inicio" class="paiCabecalho">
+        <div class="filhoCabecalho">
+
+            <div class="esquerdaCabecalho">
+                <img class="imgEsquerdaCabecalho" src="../Assets/logo_Multclinics_branca_verde_sem_nome.png" onclick="home()">
+                <span>MultiClinics</span>
+            </div>
+
+            <div class="direitaCabecalho">
+                <div class="pCabecalho">
+                    <a href="#Div_servicos">Serviços</a>
+                </div>
+                <div class="pCabecalho">
+                    <a href="login.html">Sobre nós</a>
+                </div>
+                <div class="pCabecalho">
+                    <a href="login.html">Nossa Equipe</a>
+                </div>
+                <div class="pCabecalho">
+                    <a href="login.html">Avaliações</a>
+                </div>
+                <div class="pCabecalho">
+                    <Button class="registrar">Registre-se</Button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+<!-- Banner -->
+
+<!-- começo do banner -->
+<div id="inicio" class="espacamento"></div>
+<div class="fundoBanner">
+    <div class="paiBanner">
+        <div class="divBoxTextoBanner">
+
+            <div class="tituloBanner">
+                <p class="pTituloBanner">Boas-vindas ao MultiClinics</p>
+            </div>
+
+            <div class="textoBanner">
+                <p>Nossa missão é proporcionar a você uma experiência de cuidado de saúde excepcional e abrangente. Em nosso ambiente multidisciplinar</p>
+            </div>
+
+            <div class="divBoxBotaoBanner">
+                    <button class="botaoBanner"><span class="texto">
+                                Registre-se</span></button> 
+            </div>
+
+            
+        </div>
+        <img class="ImagemBanner" src="../Assets/Imagem_banner.png" alt="">
+    </div>
+</div>
+
+<!-- Servicos -->
+
+<div class="Div_servicos" id="Div_servicos">
+    <div class="Div_filtro_servicos">
+        <div class="Tit_servicos">
+            <h1>Principais Serviços</h1>
+            <h3>Porque escolher o nosso negócio?</h3><br>
+        </div>
+        <div class="Cards_servicos">
+            <div class="card_servicos">
+                <div class="foto">
+                    <img src="../assets/calendario.png" alt="">
+                    <div class="nomes">
+                        <h3>Sistema de agendamento</h3><br>
+                    </div>
+                </div>
+                <p>"A eficiência da Nocline é excepcional. A coleta e análise de dados dos componentes de hardware
+                    são realizadas de maneira impecável. Uma solução fundamental para a otimização operacional."
+                </p>
+            </div>
+            <div class="card_servicos">
+                <div class="foto">
+                    <img src="../assets/prontuario-medico.png" alt="">
+                    <div class="nomes">
+                        <h3>Prontuarios Eletronicos</h3><br>
+                    </div>
+                </div>
+                <p>"A Nocline superou minhas expectativas! O monitoramento preciso e a assistência ágil
+                    transformaram a gestão dos sistemas metroviários. Uma parceria confiável e inovadora."
+                </p>
+            </div>
+            <div class="card_servicos">
+                <div class="foto">
+                    <img src="../assets/analise.png" alt="">
+                    <div class="nomes">
+                        <h3>Proteção de dados</h3><br>
+                    </div>
+                </div>
+                <p>“A Nocline se destaca não apenas pela tecnologia avançada, mas também pela atenção personalizada.
+                    A equipe entendeu nossas necessidades específicas e adaptou os serviços de maneira excepcional.“
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+    
+</body>
+</html>
+
+<script>
+
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+
+</script>
