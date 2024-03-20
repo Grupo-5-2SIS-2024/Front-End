@@ -56,8 +56,8 @@
 }
 
 .imgEsquerdaCabecalho {
-    width: 9vw;
-    height: 17vh;
+    width: 7vw;
+    height: 14vh;
     position: relative;
     top: 1vh;
 }
@@ -92,12 +92,12 @@ a {
     padding: 1rem, 2rem, 1rem, 2rem;
     border-radius: 0.5rem;
     font-size: 1rem;
-    background-color: #4CAF4F;
+    background-color: #43A046;
     font-weight: bold;
     outline: none;
     border: none;
     cursor: pointer;
-
+    color: whitesmoke;
 }
 
 .registrar:hover {
@@ -123,53 +123,79 @@ a {
 .paiBanner {
     display: flex;
     width: 100%;
-    height: 70vh;
-    background-color: #C8E6C9;
+    height: 102.5vh;
+    background-color: #00000071;
     background-size: 100%;
     position: relative;
+}
+
+.paiBanner video{
+
+    position: absolute;
+            top: 40%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 70%;
+            width: auto;
+            height: auto;
+            z-index: -100;
+            transform: translateX(-50%) translateY(-50%);
+            background-size: cover;
+            transition: 1s opacity;
+
 }
 
 .divBoxTextoBanner {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: end;
     height: 23vh;
     position: relative;
-    top: 20vh;
-    right: 4vw;
+    top: 40vh;
+    left: 30vw; 
 
 }
 
-.pTituloBanner {
+.pTituloBannerc {
     display: flex;
-    justify-content: center;
+    justify-content: end;
     width: 100%;
-    font-size: 2.5rem;
+    font-size: 4.5rem;
     letter-spacing: 0.1rem;
-    font-weight: bold;
-    color: rgb(0, 0, 0);
+    font-weight: 500;
+    color: rgb(196, 196, 196);
+}
+
+.pTituloBannerv {
+    display: flex;
+    justify-content: end;
+    width: 100%;
+    font-size: 4.5rem;
+    letter-spacing: 0.1rem;
+    font-weight: 500;
+    color: #43A046;
 }
 
 .divBoxTextoBanner {
     display: flex;
-    justify-content: center;
+    justify-content: end;
     width: 60%;
 }
 
 .textoBanner {
     display: flex;
-    text-align: center;
-    justify-content: center;
-    color: rgb(0, 0, 0);
+    text-align: end;
+    justify-content: end;
+    color: rgb(197, 197, 197);
     font-size: 1rem;
     width: 70%;
     position: relative;
-    left: 9vw;
+    left: 18vw;
 }
 
 .divBoxBotaoBanner {
     display: flex;
-    justify-content: center;
+    justify-content: end;
     margin-top: 3%;
     width: 100%;
 }
@@ -188,6 +214,7 @@ a {
     transition: all 0.3s ease 0s;
     cursor: pointer;
     outline: none;
+    color: rgb(186, 186, 186);
 }
 
 .botaoBanner:hover {
@@ -210,7 +237,7 @@ a {
 
 /* fim do banner */
 
-/* Comeco valores */
+/* Comeco servicos */
 
 .Div_servicos {
     width: 100%;
@@ -234,11 +261,18 @@ a {
 }
 
 .Tit_servicos h1 {
+    padding-top: 10vh;
     font-size: xx-large;
+    width: 50%;
+    color:rgb(56, 56, 56);
 }
 
 .Tit_servicos h3 {
     font-size: large;
+    font-size: 3vh;
+    padding-top: 2vh;
+    color:rgb(89, 88, 88);
+    font-weight:350;
 }
 
 .Tit_servicos h4 {
@@ -247,19 +281,19 @@ a {
 
 .Cards_servicos {
     width: 100%;
-    height: 31rem;
+    height: 32rem;
     position: relative;
     bottom: 10vh;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
     align-items: center;
 }
 
 .Cards_servicos .card_servicos {
     width: 22rem;
-    height: 20rem;
+    height: 18.7rem;
     background-color: #ffffff;
-    box-shadow: 0rem 1rem 1rem rgba(20, 20, 20, 0.342);
+    box-shadow: 0.1rem 0.5rem 1rem rgba(47, 47, 47, 0.342);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -268,17 +302,25 @@ a {
 
 
 .nomes span {
-    color: #000000;
-    font-size: small;
+    color: rgb(56, 56, 56);
+    font-size: x-large;
+    font-weight: 700;
+    padding-top: 2vh;
+}
+.foto {
+    height: 20vh;
+    display: flex;
+    flex-direction: column;
+    align-items:center ;
+   justify-content: space-evenly;
+   padding-top: 2vh;
 }
 
 .card_servicos img {
-    position: relative;
-    top: 4vh;
-    left: 4vw;
     width: 6rem;
     height: 6rem;
     border-radius: 1vh;
+   
 }
 
 .card_servicos h3 {
@@ -289,6 +331,290 @@ a {
 }
 
 .card_servicos p {
+    text-align: center;
+    width: 16rem;
+    position: relative;
+    top: 3vh;
+    font-size: 0.95rem;
+    color: rgb(89, 88, 88);
+}
+
+.Tit_servicos span {
+    color: rgb(89, 88, 88);
+    font-size: large;
+    font-weight: 500;
+    padding-top: 2vh;
+}
+/* fim servicos */
+
+/* about us */
+.sobrenos{
+    width: 100%;
+    height: 70vh;
+    background-color:rgb(231, 229, 229);
+    display: flex;
+flex-direction: row;
+justify-content: space-evenly;
+}
+.titulo_about{
+    color:rgb(72, 72, 72);
+    font-size: 5vh;
+    font-weight: bold;
+    padding-left: 10%;
+    padding-top: 10vh;
+}
+.titulo_about_verde{
+    color:#2ab42e;
+    font-size: 5vh;
+    font-weight: bold;
+    padding-left: 10%;
+}
+.subtitulo_about{
+    color:rgb(0, 0, 0);
+    font-size: 2.7vh;
+    padding-left: 10%;
+    padding-top: 1.8vh;
+    padding-bottom: 1.8vh;
+}
+.desc_nos{
+    color:rgb(89, 88, 88);
+    width: 90%;
+    padding-left: 10%;
+}
+.sobrev{
+    color:#2ab42e;
+    width: 90%;
+    padding-left: 10%;
+    padding-top: 1.9vh;
+    padding-bottom: 0.5vh;
+    font-size: 2.7vh;
+    font-weight: 500;
+}
+.sobrec{
+    color:rgb(89, 88, 88);
+    width: 90%;
+    padding-left: 10%;
+}
+.icon_nos{
+    width: 80%;
+    height: 50vh;
+}
+
+.nos{
+display: flex;
+position: center;
+width: 30%;
+padding-top: 10vh;
+}
+.nos1{
+    width: 60%;
+}
+
+/* fim about us */
+
+/* Beneficios */
+
+.Div_beneficios {
+    width: 100%;
+    height: 65rem;
+    position: relative;
+}
+
+.Tit_beneficios {
+    width: 100%;
+    height: 13rem;
+    color: rgb(0, 0, 0);
+    font-family: Inter;
+    font-size: 0.75rem;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    top: 5%;
+}
+
+.Tit_beneficios h1 {
+    padding-top: 10vh;
+    font-size: xx-large;
+    width: 40%;
+    color:rgb(56, 56, 56);
+}
+
+.Tit_beneficios h3 {
+    font-size: 3vh;
+    padding-top: 2vh;
+    color:rgb(89, 88, 88);
+    font-weight:350;
+}
+
+.Tit_beneficios h4 {
+    font-size: large;
+}
+
+.Tit_beneficios span {
+    color: rgb(89, 88, 88);
+    font-size: large;
+    font-weight: 400;
+    padding-top: 2vh;
+    width: 60%;
+}
+
+.Cards_beneficios {
+    width: 100%;
+    height: 31rem;
+    position: relative;
+    bottom: 10vh;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.Cards_beneficios2 {
+    width: 100%;
+    height: 31rem;
+    position: relative;
+    bottom: 10vh;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: start;
+}
+
+.card_beneficios1 {
+    width: 22rem;
+    height: 16rem;
+    background-image: url('../Assets/gracas-a-internet-sem-fio-meu-trabalho-e-muito-mais-facil.jpg');
+    background-size: cover;
+    box-shadow: 0.1rem 0.5rem 1rem rgba(47, 47, 47, 0.342);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: end;
+    border-radius: 0.5rem;
+    text-align: center;
+}
+
+.card_beneficios2 {
+    width: 22rem;
+    height: 16rem;
+    background-image: url('../Assets/employee-holding-laptop-with-business-diagrams-company-office-management-presentation-diagrams-graphs-computer-screen-data-report-research-information-pc-close-up.jpg');
+    background-size: cover;
+    box-shadow: 0.1rem 0.5rem 1rem rgba(47, 47, 47, 0.342);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: end;
+    border-radius: 0.5rem;
+    text-align: center;
+}
+
+.card_beneficios3 {
+    width: 22rem;
+    height: 16rem;
+    background-image: url('../Assets/calendar-planner-agenda-schedule-concept.jpg');
+    background-size: cover;
+    box-shadow: 0.1rem 0.5rem 1rem rgba(47, 47, 47, 0.342);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: end;
+    border-radius: 0.5rem;
+    text-align: center;
+}
+
+.card_beneficios4 {
+    width: 22rem;
+    height: 16rem;
+    background-image: url('../Assets/standard-quality-control-collage-concept.jpg');
+    background-size: cover;
+    box-shadow: 0.1rem 0.5rem 1rem rgba(47, 47, 47, 0.342);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: end;
+    border-radius: 0.5rem;
+    text-align: center;
+}
+
+.card_beneficios5 {
+    width: 22rem;
+    height: 16rem;
+    background-image: url('../Assets/social-media-marketing-concept-marketing-with-applications.jpg');
+    background-size: cover;
+    box-shadow: 0.1rem 0.5rem 1rem rgba(47, 47, 47, 0.342);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: end;
+    border-radius: 0.5rem;
+    text-align: center;
+}
+
+.card_beneficios6 {
+    width: 22rem;
+    height: 16rem;
+    background-image: url('../Assets/group-people-working-out-business-plan-office.jpg');
+    background-size: cover;
+    box-shadow: 0.1rem 0.5rem 1rem rgba(47, 47, 47, 0.342);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: end;
+    border-radius: 0.5rem;
+    color: rgb(71, 71, 71);
+    text-align: center;
+}
+
+
+.boxTexto {
+    width: 15rem;
+    height: 7rem;
+    background-color: #ffffff;
+    box-shadow: 0.1rem 0.5rem 1rem rgba(47, 47, 47, 0.342);
+    display: flex;
+    /* flex-direction: column; */
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    z-index: 9999;
+    position: relative;
+    top: 2.5rem;
+
+}
+
+.boxTexto span{
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.card_beneficios img {
+    position: relative;
+    top: 4vh;
+    left: 4vw;
+    width: 6rem;
+    height: 6rem;
+    border-radius: 1vh;
+}
+
+.card_beneficios span {
+    position: relative;
+    top: 5vh;
+    left: 0.8vw;
+    color: rgb(56, 56, 56);
+}
+
+.card_beneficios h3 {
+    position: relative;
+    top: 5vh;
+    left: 0.8vw;
+    color: rgb(56, 56, 56);
+}
+
+.card_beneficios p {
     text-align: justify;
     width: 16rem;
     position: relative;
@@ -297,4 +623,275 @@ a {
     color: #000000;
 }
 
-/* fim Valores */
+
+/* fale conosco */
+
+.faleconosco{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #E8F5E9;
+    height: 90vh;
+}
+
+.fc_labels{
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content:space-evenly;
+    /* align-items: center; */
+    height: 15vh;
+    padding-bottom: 4vh;
+    padding-top: 13vh;
+}
+
+.fc_titulo{
+    font-size: 50px;
+    font-weight: 700;
+}
+
+.fale{
+    color: rgb(56, 56, 56);
+}
+
+.conosco{
+    color:#2ab42e;
+}
+
+.fc_desc{
+    font-size: 18px;
+    font-weight: 400;
+    color: rgb(89, 88, 88);
+    display: flex;
+    padding-top: 2vh;
+    text-align: justify;
+}
+
+.fc_banner{
+     width: 75%;
+     height: 90vh;
+    display: flex;
+    flex-direction: row;
+    border-radius: 100px;
+    padding-bottom: 20vh;
+}
+.fundo_faleconosco{
+    /* background-color:#b3e7b5; ; */
+    width: 58%;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+.formulario{
+    /* background-color:#a1a1a1; ; */
+    width: 42%;
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    padding-top: 10vh;
+    padding-left: 10vh;
+}
+.dados{
+    display: flex;
+    width: 80%;
+    justify-content: space-between;
+}
+.dado{
+    width: 77%;
+    height: 5vh;
+}
+.identidade{
+    width: 45%;
+    height: 5vh;
+}
+
+.mensagem{
+    width: 77%;
+    height: 15vh;
+}
+
+input{
+    background-color: #C8E6C9;
+    border: 1px solid #C8E6C9;;
+    border-radius: 10px;
+    color:grey;
+    padding-left: 2vh;
+}
+
+input::placeholder {
+    color: grey;
+}
+
+.fc_imagem{
+    background-image: url('../Assets/5114855-removebg-preview.png');
+    background-size: cover;
+/* background-color: black; */
+width: 55vh;
+height: 50vh;
+}
+
+.icon1{
+    background-image: url('../Assets/pin-de-seguranca.png');
+    width: 5.5vh;
+    height: 5.5vh;
+    background-size: cover;
+}
+
+.icon2{
+    background-image: url('../Assets/telefone.png');
+    width: 5vh;
+    height: 5vh;
+    background-size: cover;
+}
+
+.end_tel{
+display: flex;
+height: 9vh;
+width: 90%;
+justify-content: space-evenly;
+align-items: center;
+}
+
+.end_tel span {
+    width: 70%;
+}
+
+.wrapper{
+    /* position: fixed; */
+    top: 50%;
+    left: 50%;
+    /* transform: translate(-50%, -50%); */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .wrapper a{
+    /* display: block; */
+    width: 200px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 18px;
+    font-family: sans-serif;
+    text-decoration: none;
+    color: whitesmoke;
+    border: 2px solid #43A046;
+    letter-spacing: 2px;
+    text-align: center;
+    position: relative;
+    transition: all .50s;
+    /* padding: 2vh; */
+    border-radius: 10px;
+    background-color: #43A046;
+  }
+  
+ .wrapper a span{
+    position: relative;
+    z-index: 2;
+  }
+  
+  .wrapper a:after{
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: #1B5E1F;
+    transition: all .35s;
+    border-radius: 9px;
+  }
+  
+  a:hover{
+    color: #fff;
+  }
+  
+  a:hover:after{
+    width: 100%;
+  }
+/* fim do fale conosco */
+
+/* footer */
+
+/* Estilos do Rodapé */
+.footer {
+    background-color: #103E13;
+    color: white;
+    padding-left: 30px;
+    padding-top: 50px;
+    padding-bottom: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 28vh;
+    text-align: center;
+}
+
+
+
+.content{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    height: 25vh;
+    align-items: center;
+    padding-bottom: 20px;
+}
+
+.brand {
+    width: 20%;
+
+}
+
+.brand img {
+    width: 65%;
+    height: 27vh;
+}
+
+
+.footer-nav{
+    width: 20%;
+}
+.contact{
+    width: 20%;
+    height: 17vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+
+.footer-nav ul {
+   list-style-type:none;
+   padding-left :0px ;
+   height: 20vh;
+   display: flex;
+   flex-direction: column;
+   justify-content: space-evenly;
+}
+.brand a, .footer-nav a{
+   color:white ;
+font-weight: 100;
+}
+
+.contact-button {
+    background-color: #2ab42e; 
+    color: white; 
+    border-radius: 10px; 
+    borde
+    padding: 15px 25px; 
+    text-align: center; 
+    text-decoration: none; 
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer; 
+}
+
+
