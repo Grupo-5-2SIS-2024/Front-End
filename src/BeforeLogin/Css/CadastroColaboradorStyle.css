@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
 
 * {
     margin: 0;
@@ -10,14 +10,19 @@
 body {
     display: flex;
     height: 100vh;
-    background-color: #e3e9f7;
+    background-image: url(https://img.freepik.com/fotos-gratis/vista-do-luxuoso-espaco-interior-do-hotel_23-2150683473.jpg?t=st=1717014718~exp=1717018318~hmac=808a6ebab494c075a2c564e18bca7eba2f1680aa38e734a6d283539f03177540&w=740);
+    background-size: cover;
+    background-position: 100%;
+    overflow-x: hidden;
 }
 
 main {
     padding: 20px;
-    position: fixed;
-    z-index: 1;
-    padding-left: calc(82px + 20px);
+    transition: margin-left 0.5s;
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #sidebar {
@@ -28,9 +33,12 @@ main {
     height: 100vh;
     border-radius: 0px 18px 18px 0px;
     position: relative;
-    transition: all .5s;
-    min-width: 82px;
-    z-index: 2;
+    transition: width 0.5s;
+    width: 82px;
+}
+
+#sidebar.open-sidebar {
+    width: 250px;
 }
 
 #sidebar_content {
@@ -133,37 +141,108 @@ main {
     height: 20px;
     border: none;
     cursor: pointer;
+    transition: transform 0.5s;
 }
 
 #open_btn_icon {
-    transition: transform .3s ease;
+    transition: transform 0.5s;
 }
 
-.open-sidebar #open_btn_icon {
+#sidebar.open-sidebar #open_btn_icon {
     transform: rotate(180deg);
 }
 
 .item-description {
-    width: 0px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     font-size: 14px;
-    transition: width .6s;
-    height: 0px;
+    transition: width 0.5s, opacity 0.5s;
+    width: 0;
+    opacity: 0;
     color: #fff;
-}
-
-#sidebar.open-sidebar {
-    min-width: 15%;
 }
 
 #sidebar.open-sidebar .item-description {
     width: 150px;
-    height: auto;
+    opacity: 1;
 }
 
 #sidebar.open-sidebar .side-item a {
     justify-content: flex-start;
     gap: 14px;
+}
+
+main.expanded {
+    margin-left: 0.5rem;
+}
+
+/* Box do Cadastro */
+
+.ContainerCadastro {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 2rem;
+    width: 60vw;
+    height: 95vh;
+    background-color: #7e7e7ecb;
+    border-radius: 2%;
+
+}
+
+.inputs_login_esquerda,
+.inputs_login_direita {
+    gap: 1.8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.input {
+    position: relative;
+}
+
+.input__field {
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 4px;
+    font: inherit;
+    color: #0a0a0a;
+    background-color: transparent;
+    outline: 2px solid #000000;
+}
+
+.input__label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(10px, 10px);
+    transform-origin: left;
+    transition: transform 0.25s;
+}
+
+.input__field:focus-visible~.input__label,
+.input__field:valid~.input__label {
+    transform: translate(0, -30px) scale(0.8);
+}
+
+.input__field:is(:focus-visible, :valid) {
+    outline-color: #000000;
+}
+
+.input__icon-wrapper {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.input__icon {
+    color: #999;
+    font-size: 24px;
 }
