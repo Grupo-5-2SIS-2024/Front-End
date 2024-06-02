@@ -17,7 +17,7 @@ body {
 }
 
 main {
-    padding: 20px;
+    padding: 1.25rem;
     transition: margin-left 0.5s;
     flex-grow: 1;
     display: flex;
@@ -31,32 +31,32 @@ main {
     justify-content: space-between;
     background-color: #276E2A;
     height: 100vh;
-    border-radius: 0px 18px 18px 0px;
+    border-radius: 0px 1.125rem 1.125rem 0px;
     position: relative;
     transition: width 0.5s;
-    width: 82px;
+    width: 5.125rem;
 }
 
 #sidebar.open-sidebar {
-    width: 250px;
+    width: 15.625rem;
 }
 
 #sidebar_content {
-    padding: 12px;
+    padding: 0.75rem;
 }
 
 #user {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 24px;
+    gap: 0.5rem;
+    margin-bottom: 3rem;
 }
 
 #user_avatar {
-    width: 50px;
-    height: 50px;
+    width: 3.125rem;
+    height: 3.125rem;
     object-fit: cover;
-    border-radius: 20px;
+    border-radius: 1.25rem;
 }
 
 #user_infos {
@@ -66,19 +66,19 @@ main {
 
 #user_infos span:last-child {
     color: #fff;
-    font-size: 12px;
+    font-size: 0.75rem;
 }
 
 #side_items {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 0.5rem;
     list-style: none;
 }
 
 .side-item {
-    border-radius: 8px;
-    padding: 14px;
+    border-radius: 0.5rem;
+    padding: 0.875rem;
     cursor: pointer;
 }
 
@@ -107,23 +107,23 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 20px;
-    height: 20px;
+    width: 1.25rem;
+    height: 1.25rem;
 }
 
 #logout {
     border-top: 1px solid #e3e9f7;
-    padding: 12px;
+    padding: 0.75rem;
 }
 
 #logout_btn {
     border: none;
-    padding: 12px;
-    font-size: 14px;
+    padding: 0.75rem;
+    font-size: 0.875rem;
     display: flex;
-    gap: 20px;
+    gap: 1.25rem;
     align-items: center;
-    border-radius: 8px;
+    border-radius: 0.5rem;
     text-align: start;
     cursor: pointer;
     background-color: transparent;
@@ -132,13 +132,13 @@ main {
 
 #open_btn {
     position: absolute;
-    top: 30px;
-    right: -10px;
+    top: 1.875rem;
+    right: -0.625rem;
     background-color: #276E2A;
     color: #e3e9f7;
     border-radius: 100%;
-    width: 20px;
-    height: 20px;
+    width: 1.25rem;
+    height: 1.25rem;
     border: none;
     cursor: pointer;
     transition: transform 0.5s;
@@ -156,7 +156,7 @@ main {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    font-size: 14px;
+    font-size: 0.875rem;
     transition: width 0.5s, opacity 0.5s;
     width: 0;
     opacity: 0;
@@ -164,13 +164,13 @@ main {
 }
 
 #sidebar.open-sidebar .item-description {
-    width: 150px;
+    width: 9.375rem;
     opacity: 1;
 }
 
 #sidebar.open-sidebar .side-item a {
     justify-content: flex-start;
-    gap: 14px;
+    gap: 1.4rem;
 }
 
 main.expanded {
@@ -183,22 +183,91 @@ main.expanded {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: row;
-    gap: 2rem;
+    flex-direction: column;
     width: 60vw;
     height: 95vh;
-    background-color: #7e7e7ecb;
+    background-color: #fffffff2;
     border-radius: 2%;
-
 }
 
-.inputs_login_esquerda,
-.inputs_login_direita {
-    gap: 1.8rem;
+.equipe {
+    color: #38B54C;
+}
+
+/* Avatar */
+
+#picture__input {
+    display: none;
+}
+
+.picture {
+    width: 12.5rem;
+    aspect-ratio: 16/16;
+    background: #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #aaa;
+    border: 0.125rem solid;
+    border-radius: 90%;
+    cursor: pointer;
+    font-family: sans-serif;
+    transition: color 300ms ease-in-out, background 300ms ease-in-out;
+    outline: none;
+    overflow: hidden;
+}
+
+.picture:hover {
+    color: #777;
+    background: #ccc;
+}
+
+.picture:active {
+    border-color: turquoise;
+    color: turquoise;
+    background: #eee;
+}
+
+.picture:focus {
+    color: #777;
+    background: #ccc;
+    box-shadow: 0 0 0.625rem rgba(0, 0, 0, 0.3);
+}
+
+.picture__img {
+    max-width: 100%;
+}
+
+/* Fim do avatar */
+
+.inputs_Container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 7rem;
+    width: 100vw;
+    height: 50vh;
+}
+
+.inputs_login_esquerda {
+    gap: 2rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+    position: relative;
+    top: 2rem;
+}
+
+.inputs_login_direita {
+    gap: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    top: 2rem;
 }
 
 .input {
@@ -206,28 +275,28 @@ main.expanded {
 }
 
 .input__field {
-    padding: 10px;
+    padding: 0.625rem;
     width: 100%;
     border: none;
-    border-radius: 4px;
+    border-radius: 0.25rem;
     font: inherit;
     color: #0a0a0a;
     background-color: transparent;
-    outline: 2px solid #000000;
+    outline: 0.125rem solid #000000;
 }
 
 .input__label {
     position: absolute;
     top: 0;
     left: 0;
-    transform: translate(10px, 10px);
+    transform: translate(0.625rem, 0.625rem);
     transform-origin: left;
     transition: transform 0.25s;
 }
 
 .input__field:focus-visible~.input__label,
 .input__field:valid~.input__label {
-    transform: translate(0, -30px) scale(0.8);
+    transform: translate(0, -1.875rem) scale(0.8);
 }
 
 .input__field:is(:focus-visible, :valid) {
@@ -237,12 +306,19 @@ main.expanded {
 .input__icon-wrapper {
     position: absolute;
     top: 50%;
-    right: 12px;
+    right: 0.75rem;
     transform: translateY(-50%);
     cursor: pointer;
 }
 
 .input__icon {
     color: #999;
-    font-size: 24px;
+    font-size: 1.5rem;
 }
+
+.input__icon2 {
+    color: #999;
+    font-size: 1.5rem;
+}
+
+/* Fim do box cadastro */

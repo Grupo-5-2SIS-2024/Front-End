@@ -1,20 +1,24 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css'>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="../Css/CadastroColaboradorStyle.css">
     <link rel="shortcut icon" href="../../Assets/logo_Multclinics_branca_sem_nome.png" type="image/x-icon">
     <title>Multiclinics | Cadastro do Colaborador</title>
 </head>
+
 <body>
     <nav id="sidebar">
         <div id="sidebar_content">
             <div id="user">
                 <img src="../Assets/perfil.jpeg" id="user_avatar" alt="Avatar">
-    
+
                 <p id="user_infos">
                     <span class="item-description">
                         Silvia
@@ -24,7 +28,7 @@
                     </span>
                 </p>
             </div>
-    
+
             <ul id="side_items">
                 <li class="side-item">
                     <a href="#">
@@ -34,7 +38,7 @@
                         </span>
                     </a>
                 </li>
-    
+
                 <li class="side-item">
                     <a href="#">
                         <i class="fa-solid fa-calendar"></i>
@@ -43,7 +47,7 @@
                         </span>
                     </a>
                 </li>
-    
+
                 <li class="side-item active">
                     <a href="#">
                         <i class="fa-solid fa-user"></i>
@@ -52,7 +56,7 @@
                         </span>
                     </a>
                 </li>
-    
+
                 <li class="side-item">
                     <a href="#">
                         <i class="fa-solid fa-hospital-user"></i>
@@ -61,7 +65,7 @@
                         </span>
                     </a>
                 </li>
-    
+
                 <li class="side-item">
                     <a href="#">
                         <i class="fa-solid fa-chart-line"></i>
@@ -71,7 +75,7 @@
                     </a>
                 </li>
             </ul>
-    
+
             <button id="open_btn">
                 <i id="open_btn_icon" class="fa-solid fa-chevron-right"></i>
             </button>
@@ -89,58 +93,67 @@
 
     <main>
         <Div class="ContainerCadastro">
-            <div class="inputs_login_esquerda">
-            
-              </div>
-              <div class="inputs_login_direita">
-                <div class="input">
-                    <input class="input__field" id="nome" type="text" required />
-                    <label for="nome" class="input__label">Nome</label>
-                  </div>
-    
-                  <div class="input">
-                    <input class="input__field" id="email" type="text" required />
-                    <label for="email" class="input__label">E-mail</label>
-                  </div>
-    
-                  <div class="input">
-                    <input class="input__field" id="cpf" type="text" required />
-                    <label for="cpf" class="input__label">CPF</label>
-                  </div>
-    
-                  <div class="input">
-                    <input class="input__field" id="especialidade" type="text" required />
-                    <label for="especialidade" class="input__label">Especialidade</label>
-                  </div>
-    
-                  <div class="input">
-                    <input class="input__field" id="carteirinha" type="text" required />
-                    <label for="carteirinha" class="input__label">Carteirinha</label>
-                  </div>
-    
-                  <div class="input">
-                    <input class="input__field" id="password" type="password" required />
-                    <label for="password" class="input__label">Senha</label>
-                    <span class="input__icon-wrapper">
-                      <i class="input__icon ri-eye-off-line"></i>
-                    </span>
-                  </div>
-    
-                  <div class="input">
-                    <input class="input__field" id="password" type="password" required />
-                    <label for="password" class="input__label">Confirmar Senha</label>
-                    <span class="input__icon-wrapper">
-                      <i class="input__icon ri-eye-off-line"></i>
-                    </span>
-                  </div>
-    
-                  <div class="input">
-                    <input class="input__field" id="nivelAcesso" type="text" required />
-                    <label for="nivelAcesso" class="input__label">Nivel de acesso</label>
-                  </div>
-              </div>
+            <h1>Cadastre sua <span class="equipe">Equipe</span></h1><br><br>
+            <label class="picture" for="picture__input" tabIndex="0">
+                <span class="picture__image"></span>
+            </label>
+
+            <input type="file" name="picture__input" id="picture__input">
+            <div class="inputs_Container">
+                <div class="inputs_login_esquerda">
+                     <div class="input">
+                        <input class="input__field" id="nome" type="text" required />
+                        <label for="nome" class="input__label">Nome</label>
+                    </div>
+
+                    <div class="input">
+                        <input class="input__field" id="email" type="text" required />
+                        <label for="email" class="input__label">E-mail</label>
+                    </div>
+
+                    <div class="input">
+                        <input class="input__field" id="cpf" type="text" required />
+                        <label for="cpf" class="input__label">CPF</label>
+                    </div>
+
+                    <div class="input">
+                        <input class="input__field" id="especialidade" type="text" required />
+                        <label for="especialidade" class="input__label">Especialidade</label>
+                    </div>
+                </div>
+                <div class="inputs_login_direita">
+                   
+
+                    <div class="input">
+                        <input class="input__field" id="carteirinha" type="text" required />
+                        <label for="carteirinha" class="input__label">Carteirinha</label>
+                    </div>
+
+                    <div class="input">
+                        <input class="input__field" id="password" type="password" required />
+                        <label for="password" class="input__label">Senha</label>
+                        <span class="input__icon-wrapper">
+                            <i class="input__icon ri-eye-off-line"></i>
+                        </span>
+                    </div>
+
+                    <div class="input">
+                        <input class="input__field" id="ConfirmedPassword" type="password" required />
+                        <label for="ConfirmedPassword" class="input__label">Confirmar Senha</label>
+                        <span class="input__icon-wrapper">
+                            <i class="input__icon2 ri-eye-off-line"></i>
+                        </span>
+                    </div>
+
+                    <div class="input">
+                        <input class="input__field" id="nivelAcesso" type="text" required />
+                        <label for="nivelAcesso" class="input__label">Nivel de acesso</label>
+                    </div>
+                </div>
+            </div>
         </Div>
     </main>
     <script src="../Js/cadastroColaboradorscript.js"></script>
 </body>
+
 </html>
