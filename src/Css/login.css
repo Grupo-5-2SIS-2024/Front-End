@@ -1,0 +1,137 @@
+body{
+    font-family: 'Inter', serif;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background-color: #F5F5F5;
+}
+
+
+
+.tela{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+.banner{
+width:80% ;
+height: fit-content; 
+display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: rgba(0, 0, 0, 0.175) 0px 30px 100px, rgba(0, 0, 0, 0.121) 20px 21px 12px;
+}
+
+.intro{
+    width: 50%;
+    height: 75vh;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    background-color: #FFFFFF;
+    padding-left: 6vh;
+    box-shadow: 7px 0px 5px -2px #88888892;
+}
+
+.dados{
+    width: 50%;
+    height: 55vh;
+    background-color: #C8E6C9;
+    padding-top: 10vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    padding-bottom: 10vh;
+    
+}
+
+.login{
+    background-color: #388E3B;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    color: #FFFFFF;
+    font-size: 22px;
+    border-radius: 5px;
+    border:0px;
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+    position: relative;
+    transition: all .50s;
+    z-index: 2;
+}
+
+.login button::after{
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: #1B5E1F;
+    transition: all .35s;
+    border-radius: 9px; 
+}
+.dadosform{
+    height: 33vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.titulo1{
+    font-weight: 990;
+    color: #38B54C;
+    font-size: 9vh;
+    padding-top: 3vh;
+}
+
+.titulo2{
+    font-weight: bolder;
+    color: #276E2A;
+    font-size: 7vh;
+}
+
+.slogan{
+    font-weight: 500;
+    color: #949090;
+    font-size: 3vh;
+    width: 84%;
+}
+
+.conta{
+    font-weight: 500;
+    color: #949090;
+    font-size: 3.5vh;
+}
+
+.contato{
+    font-weight:700;
+    color: #276E2A;
+    font-size: 3.5vh;
+}
+
+.fotomedicos{
+    background-image: url("../Assets/medicos.jpg");
+    background-size: cover;
+    height: 21vh;
+    width: 90%;
+}
