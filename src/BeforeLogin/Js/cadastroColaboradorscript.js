@@ -52,3 +52,77 @@ inputFile.addEventListener("change", function (e) {
   }
 });
 
+// Cadastro do colaborador
+
+async function cadastrarColaborador(){
+  const nomeElement = document.getElementById("nome");
+  const sobrenomeElement = document.getElementById("sobrenome");
+  const emailElement = document.getElementById("email");
+  const telefoneElement = document.getElementById("telefone");
+  const cpfElement = document.getElementById("cpf");
+  const dataNascimentoElement = document.getElementById("dataNascimento");
+  const especialidadeElement = document.getElementById("especialidade");
+  const carteirinhaElement = document.getElementById("carteirinha");
+  const passwordElement = document.getElementById("password");
+  const confirmedPasswordElement = document.getElementById("confirmedPassword");
+  const nivelAcessoElement = document.getElementById("nivelAcesso");
+
+  if (!nomeElement || !sobrenomeElement || !emailElement || !telefoneElement || !cpfElement || 
+      !dataNascimentoElement || !especialidadeElement || !carteirinhaElement || 
+      !passwordElement || !confirmedPasswordElement || !nivelAcessoElement) {
+    alert("Todos os campos devem estar preenchidos.");
+    return;
+  }
+
+  const nomeDigitado = nomeElement.value;
+  const sobrenomeDigitado = sobrenomeElement.value;
+  const emailDigitado = emailElement.value;
+  const telefoneDigitado = telefoneElement.value;
+  const cpfDigitado = cpfElement.value;
+  const dataNascimentoDigitada = dataNascimentoElement.value;
+  const especialidadeDigitada = especialidadeElement.value;
+  const carteirinhaDigitada = carteirinhaElement.value;
+  const senhaDigitada = passwordElement.value;
+  const confirmedPasswordDigitada = confirmedPasswordElement.value;
+  const nivelAcessoEscolhido = nivelAcessoElement.value;
+
+  if(senhaDigitada !== confirmedPasswordDigitada){
+      alert("As senhas não coincidem.");
+      return;
+  }
+
+  const dadosColaborador = {       
+      "nome": nomeDigitado, 
+      "sobrenome": sobrenomeDigitado,
+      "email": emailDigitado,
+      "telefone": telefoneDigitado,
+      "cpf": cpfDigitado,
+      "dataNascimento": dataNascimentoDigitada,
+      "especificacaoMedica": {
+          "id": especialidadeDigitada
+      },
+      "carterinha": carteirinhaDigitada,
+      "senha": senhaDigitada,
+      "ativo": true,
+      "permissao": {
+          "id": nivelAcessoEscolhido
+      }
+  };
+
+  try {
+    const respostaCadastro = await fetch("http://localhost:8080/medicos", {
+        method: "POST",
+        body: JSON.stringify(dadosColaborador),
+        headers: {"Content-type": "application/json; charset=UTF-8"}
+    });
+
+    if(respostaCadastro.status == 201){
+        window.location.href = "listagemColaborador.html";
+    }else{
+        alert("Ocorreu um erro ao cadastrar");
+    }
+  } catch (error) {
+    alert("Ocorreu um erro ao tentar cadastrar: " + error.message);
+  }
+}
+
