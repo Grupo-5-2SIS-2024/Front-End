@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,250 +7,141 @@
     <link rel="stylesheet" href="../Css/dashboard.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
 <body>
     <div class="dashboard">
         <h1>DASHBOARD</h1>
-
         <div class="grid-container">
             <div class="card executed-appointments">
-                <div class="line-chart" id="graficoLinha1">
-                    <div class="graph">
-                        <canvas id="GraficoRosca"></canvas>
-                    </div>
+                <div class="line-chart">
+                    <canvas id="GraficoRosca"></canvas>
                 </div>
             </div>
-
             <div class="card upcoming-appointments">
                 <p>Agendamentos recorrentes próximos ao vencimento:</p>
-                <table>
+                <table id="tableUpcomingAppointments">
                     <tr>
                         <th>Paciente</th>
                         <th>Vencimento</th>
                         <th>Especialidade</th>
                     </tr>
-                    <tr>
-                        <td>Giovanna Freitas</td>
-                        <td>18/06/2024</td>
-                        <td>Nutricionista</td>
-                    </tr>
-                    <tr>
-                        <td>Fernando de Ferraz</td>
-                        <td>22/06/2024</td>
-                        <td>Fonoaudiologia</td>
-                    </tr>
-                    <tr>
-                        <td>Shakira Sanchez</td>
-                        <td>30/06/2024</td>
-                        <td>Psicologia</td>
-                    </tr>
                 </table>
             </div>
-
             <div class="card patients-released">
-                <div class="line-chart" id="graficoLinha2">
-                    <div class="graph">
-                        <canvas id="GraficoBarraHorizontal"></canvas>
-                    </div>
+                <div class="line-chart">
+                    <canvas id="GraficoBarraHorizontal"></canvas>
                 </div>
             </div>
-
             <div class="card retention">
-                <div class="line-chart" id="graficoLinha3">
-                    <div class="graph">
-                        <canvas id="GraficoLinhaFidelizacao"></canvas>
-                    </div>
+                <div class="line-chart">
+                    <canvas id="GraficoLinhaFidelizacao"></canvas>
                 </div>
             </div>
         </div>
     </div>
 
+    <script>
+        const baseURL = "http://localhost:8080";
 
-</body>
-
-</html>
-
-
-
-
-<script>
-    async function buscarDadosDoGrafico1() {
-        console.log("Buscando dados do gráfico 1...");
-        try {
-            const resposta = await fetch("http://localhost:8080/pacientesFidelizados");
-            if (!resposta.ok) {
-                throw new Error("Resposta de rede não foi ok");
+        async function fetchData(endpoint) {
+            console.log(`Buscando dados de ${endpoint}...`);
+            try {
+                const response = await fetch(`${baseURL}${endpoint}`);
+                if (!response.ok) throw new Error("Resposta de rede não foi ok");
+                const data = await response.json();
+                console.log("Dados buscados:", data);
+                return data;
+            } catch (error) {
+                console.error(`Falha ao buscar dados de ${endpoint}:`, error);
+                return [];
             }
-            const dados = await resposta.json();
-            console.log("Dados buscados:", dados);
-            return dados;
-        } catch (erro) {
-            console.error("Falha ao buscar dados:", erro);
-            return [];
         }
-    }
 
-    async function plotarGraficoDeLinhas1() {
-        const dadosDoGrafico = await buscarDadosDoGrafico1();
-
-        const labels = dadosDoGrafico.map(item => new Date(item.data).toLocaleDateString());
-        const pontosDeDados = dadosDoGrafico.map(item => item.dado);
-
-        const dados = {
-            labels: labels,
-            datasets: [{
-                label: 'Quantidade Pacientes Fidelizados',
-                data: pontosDeDados,
-                fill: false,
-                borderColor: '#36D000',
-                tension: 0.1
-            }]
-        };
-
-        const configuracao = {
-            type: 'line',
-            data: dados
-        };
-
-        const ctx = document.getElementById('GraficoLinhaFidelizacao').getContext('2d');
-        new Chart(ctx, configuracao);
-    }
-
-    plotarGraficoDeLinhas1();
-
-
-    async function buscarDadosDoGrafico2() {
-        console.log("Buscando dados do gráfico 2...");
-        try {
-            const resposta = await fetch("http://localhost:8080/pacientesAlta");
-            if (!resposta.ok) {
-                throw new Error("Resposta de rede não foi ok");
-            }
-            const dados = await resposta.json();
-            console.log("Dados buscados:", dados);
-            return dados;
-        } catch (erro) {
-            console.error("Falha ao buscar dados:", erro);
-            return [];
+        function createLineChart(ctx, labels, dataPoints, label, borderColor) {
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels,
+                    datasets: [{
+                        label,
+                        data: dataPoints,
+                        fill: false,
+                        borderColor,
+                        tension: 0.1
+                    }]
+                }
+            });
         }
-    }
 
-    async function plotarGraficoDeBarrasHorizontais() {
-        const dadosDoGrafico = await buscarDadosDoGrafico2();
-
-        const labels = dadosDoGrafico.map(item => new Date(item.data).toLocaleDateString());
-        const pontosDeDados = dadosDoGrafico.map(item => item.dado);
-
-        const dados = {
-            labels: labels,
-            datasets: [{
-                label: 'Quantidade Pacientes que receberam alta',
-                data: pontosDeDados,
-                fill: false,
-                borderColor: '#36D000',
-                backgroundColor: '#36D000',
-                tension: 0.1
-            }]
-        };
-
-        const configuracao = {
-            type: 'bar',
-            data: dados,
-            options: {
-                indexAxis: 'y',
-                scales: {
-                    x: {
-                        beginAtZero: true
+        function createBarChart(ctx, labels, dataPoints, label, backgroundColor) {
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels,
+                    datasets: [{
+                        label,
+                        data: dataPoints,
+                        backgroundColor,
+                        borderColor: backgroundColor,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        }
                     }
                 }
-            }
-        };
-
-        const ctx = document.getElementById('GraficoBarraHorizontal').getContext('2d');
-        new Chart(ctx, configuracao);
-    }
-
-    plotarGraficoDeBarrasHorizontais();
-
-
-    async function buscarDadosDoGrafico3() {
-        console.log("Buscando dados do gráfico 3...");
-        try {
-            const resposta = await fetch("http://localhost:8080/agendementosExecutados");
-            if (!resposta.ok) {
-                throw new Error("Resposta de rede não foi ok");
-            }
-            const dados = await resposta.json();
-            console.log("Dados buscados:", dados);
-            return dados;
-        } catch (erro) {
-            console.error("Falha ao buscar dados:", erro);
-            return [];
+            });
         }
-    }
 
-    async function plotarGraficoDeRosca() {
-        const dadosDoGrafico = await buscarDadosDoGrafico3();
+        function createDoughnutChart(ctx, labels, dataPoints, backgroundColors) {
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels,
+                    datasets: [{
+                        data: dataPoints,
+                        backgroundColor: backgroundColors
+                    }]
+                }
+            });
+        }
 
-        const labels = dadosDoGrafico.map(item => new Date(item.data).toLocaleDateString());
-        const pontosDeDados = dadosDoGrafico.map(item => item.dado);
+        async function plotCharts() {
+            const fidelizadosData = await fetchData("/pacientesFidelizados");
+            const fidelizadosLabels = fidelizadosData.map(item => new Date(item.data).toLocaleDateString());
+            const fidelizadosPoints = fidelizadosData.map(item => item.dado);
+            createLineChart(document.getElementById('GraficoLinhaFidelizacao').getContext('2d'), fidelizadosLabels, fidelizadosPoints, 'Quantidade Pacientes Fidelizados', '#36D000');
 
-        const dados = {
-            labels: labels,
-            datasets: [{
-                label: 'Quantidade agendamentos executados',
-                data: pontosDeDados,
-                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'], // Cores para as partes da rosca
-            }]
-        };
+            const altaData = await fetchData("/pacientesAlta");
+            const altaLabels = altaData.map(item => new Date(item.data).toLocaleDateString());
+            const altaPoints = altaData.map(item => item.dado);
+            createBarChart(document.getElementById('GraficoBarraHorizontal').getContext('2d'), altaLabels, altaPoints, 'Quantidade Pacientes que receberam alta', '#36D000');
 
-        const configuracao = {
-            type: 'doughnut',
-            data: dados,
-        };
+            const executadosData = await fetchData("/agendementosExecutados");
+            const executadosLabels = executadosData.map(item => new Date(item.data).toLocaleDateString());
+            const executadosPoints = executadosData.map(item => item.dado);
+            createDoughnutChart(document.getElementById('GraficoRosca').getContext('2d'), executadosLabels, executadosPoints, ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40']);
+        }
 
-        const ctx = document.getElementById('GraficoRosca').getContext('2d');
-        new Chart(ctx, configuracao);
-    }
-
-    plotarGraficoDeRosca();
-
-
-    async function buscarAgendamentos() {
-        console.log("Buscando agendamentos...");
-        try {
-            const resposta = await fetch("http://localhost:8080/agendamentos");
-            if (!resposta.ok) {
-                throw new Error("Resposta de rede não foi ok");
-            }
-            const dadosAgenda = await resposta.json();
-            console.log("Dados de agendamentos:", dadosAgenda);
-
-            // Atualiza a exibição dos agendamentos na interface
-            const cards = document.getElementById("Agendamentos");
-            cards.innerHTML = dadosAgenda.map(item => `
-                <div class="cardItem">
-                    <p>${item.paciente}</p>
-                    <p>${new Date(item.data).toLocaleDateString()}</p>
-                    <p>${item.especialidade}</p>
-                </div>
+        async function fetchAndDisplayUpcomingAppointments() {
+            const appointmentsData = await fetchData("/agendamentos");
+            const table = document.getElementById("tableUpcomingAppointments");
+            table.innerHTML += appointmentsData.map(item => `
+                <tr>
+                    <td>${item.paciente}</td>
+                    <td>${new Date(item.data).toLocaleDateString()}</td>
+                    <td>${item.especialidade}</td>
+                </tr>
             `).join('');
-        } catch (erro) {
-            console.error("Falha ao buscar agendamentos:", erro);
         }
-    }
 
-    console.log("Antes de buscar agendamentos");
-    buscarAgendamentos();
-    console.log("Depois de buscar agendamentos");
-
-
-
-
-
-
-
-
-
-
-</script>
+        document.addEventListener("DOMContentLoaded", () => {
+            plotCharts();
+            fetchAndDisplayUpcomingAppointments();
+        });
+    </script>
+</body>
+</html>
