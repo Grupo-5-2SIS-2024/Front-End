@@ -7,15 +7,6 @@
     font-family: 'Poppins', sans-serif;
 }
 
-body {
-    display: flex;
-    height: 100vh;
-    background-image: url(https://img.freepik.com/fotos-gratis/vista-do-luxuoso-espaco-interior-do-hotel_23-2150683473.jpg?t=st=1717014718~exp=1717018318~hmac=808a6ebab494c075a2c564e18bca7eba2f1680aa38e734a6d283539f03177540&w=740);
-    background-size: cover;
-    background-position: 100%;
-    overflow-x: hidden;
-}
-
 main {
     padding: 1.25rem;
     transition: margin-left 0.5s;
