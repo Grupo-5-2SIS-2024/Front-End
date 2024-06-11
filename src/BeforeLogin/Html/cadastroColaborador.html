@@ -50,7 +50,7 @@
                 </li>
 
                 <li class="side-item active">
-                    <a href="#">
+                    <a href="listagemColaborador.html">
                         <i class="fa-solid fa-user"></i>
                         <span class="item-description">
                             Colaborador
@@ -105,76 +105,99 @@
                     <div class="input">
                         <input class="input__field" id="nome" type="text" required />
                         <label for="nome" class="input__label">Nome</label>
+                        <small class="error-message" id="error-nome"></small>
                     </div>
-
+    
                     <div class="input">
                         <input class="input__field" id="sobrenome" type="text" required />
                         <label for="sobrenome" class="input__label">Sobrenome</label>
+                        <small class="error-message" id="error-sobrenome"></small>
                     </div>
-
+    
                     <div class="input">
-                        <input class="input__field" id="email" type="text" required />
+                        <input class="input__field" id="email" type="email" required />
                         <label for="email" class="input__label">E-mail</label>
+                        <small class="error-message" id="error-email"></small>
                     </div>
-
+    
                     <div class="input">
-                        <input class="input__field" id="telefone" type="text" required />
+                        <input class="input__field" id="telefone" type="tel" required />
                         <label for="telefone" class="input__label">Telefone</label>
+                        <small class="error-message" id="error-telefone"></small>
                     </div>
-
+    
                 </div>
-
+    
                 <div class="inputs_login_esquerda">
                     <div class="input">
                         <input class="input__field" id="cpf" type="text" required />
                         <label for="cpf" class="input__label">CPF</label>
+                        <small class="error-message" id="error-cpf"></small>
                     </div>
                     <div class="input">
-                        <input class="input__field" id="especialidade" type="text" required />
+                        <select class="input__field" id="especialidade" required>
+                            <option value=""></option>
+                            <option value="cardiologia">Cardiologia</option>
+                            <option value="dermatologia">Dermatologia</option>
+                            <option value="fonodiologia">Fonodiologia</option>
+                        </select>
                         <label for="especialidade" class="input__label">Especialidade</label>
+                        <small class="error-message" id="error-especialidade"></small>
                     </div>
                     <div class="input">
-                        <input class="input__field" id="dataNascimento" type="text" required />
-                        <label for="dataNascimento" class="input__label">Data de Nascimento</label>
+                        <input class="input__field" id="dataNascimento" type="date" required />
+                        <label for="dataNascimento" class="input__labelDate">Data de Nascimento</label>
+                        <small class="error-message" id="error-dataNascimento"></small>
                     </div>
                     <div class="input">
                         <input class="input__field" id="carteirinha" type="text" required />
                         <label for="carteirinha" class="input__label">Carteirinha</label>
+                        <small class="error-message" id="error-carteirinha"></small>
                     </div>
                 </div>
-
+    
                 <div class="inputs_login_direita">
-
+    
                     <div class="input">
                         <input class="input__field" id="password" type="password" required />
                         <label for="password" class="input__label">Senha</label>
                         <span class="input__icon-wrapper">
                             <i class="input__icon ri-eye-off-line"></i>
                         </span>
+                        <small class="error-message" id="error-password"></small>
                     </div>
-
+    
                     <div class="input">
                         <input class="input__field" id="confirmedPassword" type="password" required />
                         <label for="confirmedPassword" class="input__label">Confirmar Senha</label>
                         <span class="input__icon-wrapper">
                             <i class="input__icon2 ri-eye-off-line"></i>
                         </span>
+                        <small class="error-message" id="error-confirmedPassword"></small>
                     </div>
-
+    
                     <div class="input">
-                        <input class="input__field" id="nivelAcesso" type="text" required />
-                        <label for="nivelAcesso" class="input__label">Nivel de acesso</label>
+                        <select class="input__field" id="nivelAcesso" required>
+                            <option value=""></option>
+                            <option value="Admin">Admin</option>
+                            <option value="Médico">Médico</option>
+                            <option value="Recepcionista">Recepcionista</option>
+                        </select>
+                        <label for="nivelAcesso" class="input__label">Nível de Acesso</label>
+                        <small class="error-message" id="error-nivelAcesso"></small>
+                    </div>
+                    <div>
+                        <Button class="registrar" onclick="cadastrarColaborador()">
+                            Cadastrar
+                        </Button>
+                        <small class="success-message" id="success-message"></small>
                     </div>
                 </div>
-            </div>
-            <div>
-                <Button class="registrar" onclick="cadastrarColaborador()">
-                    Cadastrar
-                </Button>
             </div>
         </div>
     </main>
     <script src="../Js/cadastroColaboradorscript.js"></script>
+    <script src="../Js/funcoesPadroes.js"></script>
 </body>
 
 </html>

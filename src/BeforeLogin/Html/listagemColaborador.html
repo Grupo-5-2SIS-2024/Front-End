@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="../Css/listagemColaboradorStyle.css">
     <link rel="stylesheet" href="../Css/Sidebar.css">
     <link rel="shortcut icon" href="../../Assets/logo_Multclinics_branca_sem_nome.png" type="image/x-icon">
-    <title>Multiclinics | Cadastro do Colaborador</title>
+    <title>Multiclinics | Área do Colaborador</title>
 </head>
 
 <body>
@@ -50,7 +50,7 @@
                 </li>
 
                 <li class="side-item active">
-                    <a href="#">
+                    <a href="listagemColaborador.html">
                         <i class="fa-solid fa-user"></i>
                         <span class="item-description">
                             Colaborador
@@ -94,165 +94,71 @@
 
     <main>
         <div class="container">
-            <div class="containerBotao">
-                <Button class="registrar" onclick="">
-                    Adicionar Colaborador
-                </Button>
+            <div class="header">
+                <h1>Área dos <span>Colaboradores</span></h1>
+                <div class="containerBotao">
+                    <button class="registrar"><a href="cadastroColaborador.html">Adicionar</a></button>
+                    <button class="filtro">Filtro</button>
+                </div>
             </div>
-            <div class="listagemBox">
-                <div class="cardColaborador">
-                    <img src="path_to_image.jpg" alt="Foto do Colaborador">
-                    <div class="info">
-                        <div class="field">
-                            <label for="nome">Nome</label>
-                            <p id="nome">Nome do Colaborador</p>
+            <div class="KPIS">
+                <div class="cardKpi">
+                    <div class="kpiContent">
+                        <div class="kpiData">
+                            <p class="kpiNumber">3</p>
+                            <p class="kpiText">Médicos</p>
+                            <p class="kpiSubtext">Número total de médicos que trabalham na clínica</p>
                         </div>
-                        <div class="field">
-                            <label for="email">Email</label>
-                            <p id="email">colaborador@example.com</p>
-                        </div>
-                        <div class="field">
-                            <label for="status">Status</label>
-                            <p id="status">Ativo</p>
-                        </div>
-                        <div class="field">
-                            <label for="permissao">Permissão</label>
-                            <p id="permissao">Admin</p>
+                        <div class="kpiIcon">
+                            <img src="../Assets/images.jfif" alt="Ícone">
                         </div>
                     </div>
                 </div>
-                <div class="cardColaborador">
-                    <img src="path_to_image.jpg" alt="Foto do Colaborador">
-                    <div class="info">
-                        <div class="field">
-                            <label for="nome">Nome</label>
-                            <p id="nome">Nome do Colaborador</p>
+                <div class="cardKpi">
+                    <div class="kpiContent">
+                        <div class="kpiData">
+                            <p class="kpiNumber">3</p>
+                            <p class="kpiText">Médicos Ativos</p>
+                            <p class="kpiSubtext">Número de médicos ativos atualmente</p>
                         </div>
-                        <div class="field">
-                            <label for="email">Email</label>
-                            <p id="email">colaborador@example.com</p>
-                        </div>
-                        <div class="field">
-                            <label for="status">Status</label>
-                            <p id="status">Ativo</p>
-                        </div>
-                        <div class="field">
-                            <label for="permissao">Permissão</label>
-                            <p id="permissao">Admin</p>
+                        <div class="kpiIcon">
+                            <img src="../Assets/images.jfif" alt="Ícone">
                         </div>
                     </div>
                 </div>
-                <div class="cardColaborador">
-                    <img src="path_to_image.jpg" alt="Foto do Colaborador">
-                    <div class="info">
-                        <div class="field">
-                            <label for="nome">Nome</label>
-                            <p id="nome">Nome do Colaborador</p>
+                <div class="cardKpi">
+                    <div class="kpiContent">
+                        <div class="kpiData">
+                            <p class="kpiNumber">1</p>
+                            <p class="kpiText">administradores</p>
+                            <p class="kpiSubtext">Número de admins trabalhando atualmente</p>
                         </div>
-                        <div class="field">
-                            <label for="email">Email</label>
-                            <p id="email">colaborador@example.com</p>
-                        </div>
-                        <div class="field">
-                            <label for="status">Status</label>
-                            <p id="status">Ativo</p>
-                        </div>
-                        <div class="field">
-                            <label for="permissao">Permissão</label>
-                            <p id="permissao">Admin</p>
+                        <div class="kpiIcon">
+                            <img src="../Assets/images.jfif" alt="Ícone">
                         </div>
                     </div>
                 </div>
-                <div class="cardColaborador">
-                    <img src="path_to_image.jpg" alt="Foto do Colaborador">
-                    <div class="info">
-                        <div class="field">
-                            <label for="nome">Nome</label>
-                            <p id="nome">Nome do Colaborador</p>
+                <div class="cardKpi">
+                    <div class="kpiContent">
+                        <div class="kpiData">
+                            <p class="kpiNumber">1</p>
+                            <p class="kpiText">administradores ativos</p>
+                            <p class="kpiSubtext">Admins Ativos atualmente</p>
                         </div>
-                        <div class="field">
-                            <label for="email">Email</label>
-                            <p id="email">colaborador@example.com</p>
-                        </div>
-                        <div class="field">
-                            <label for="status">Status</label>
-                            <p id="status">Ativo</p>
-                        </div>
-                        <div class="field">
-                            <label for="permissao">Permissão</label>
-                            <p id="permissao">Admin</p>
+                        <div class="kpiIcon">
+                            <img src="../Assets/images.jfif" alt="Ícone">
                         </div>
                     </div>
                 </div>
-                <div class="cardColaborador">
-                    <img src="path_to_image.jpg" alt="Foto do Colaborador">
-                    <div class="info">
-                        <div class="field">
-                            <label for="nome">Nome</label>
-                            <p id="nome">Nome do Colaborador</p>
-                        </div>
-                        <div class="field">
-                            <label for="email">Email</label>
-                            <p id="email">colaborador@example.com</p>
-                        </div>
-                        <div class="field">
-                            <label for="status">Status</label>
-                            <p id="status">Ativo</p>
-                        </div>
-                        <div class="field">
-                            <label for="permissao">Permissão:</label>
-                            <p id="permissao">Admin</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="cardColaborador">
-                    <img src="path_to_image.jpg" alt="Foto do Colaborador">
-                    <div class="info">
-                        <div class="field">
-                            <label for="nome">Nome</label>
-                            <p id="nome">Nome do Colaborador</p>
-                        </div>
-                        <div class="field">
-                            <label for="email">Email</label>
-                            <p id="email">colaborador@example.com</p>
-                        </div>
-                        <div class="field">
-                            <label for="status">Status</label>
-                            <p id="status">Ativo</p>
-                        </div>
-                        <div class="field">
-                            <label for="permissao">Permissão</label>
-                            <p id="permissao">Admin</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="cardColaborador">
-                    <img src="path_to_image.jpg" alt="Foto do Colaborador">
-                    <div class="info">
-                        <div class="field">
-                            <label for="nome">Nome</label>
-                            <p id="nome">Nome do Colaborador</p>
-                        </div>
-                        <div class="field">
-                            <label for="email">Email</label>
-                            <p id="email">colaborador@example.com</p>
-                        </div>
-                        <div class="field">
-                            <label for="status">Status</label>
-                            <p id="status">Ativo</p>
-                        </div>
-                        <div class="field">
-                            <label for="permissao">Permissão</label>
-                            <p id="permissao">Admin</p>
-                        </div>
-                    </div>
-                </div>
-                
             </div>
+            <div class="listagemBox" id="listagem"></div>
+        </div>
         </div>
 
     </main>
-    <script src="../Js/cadastroColaboradorscript.js"></script>
+    <script src="../Js/listagemColaboradorscript.js"></script>
+    <script src="../Js/funcoesPadroes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>

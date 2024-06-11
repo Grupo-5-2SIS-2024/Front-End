@@ -165,5 +165,36 @@ main {
 }
 
 main.expanded {
-    margin-left: 0.5rem;
+    margin-left: -2rem;
+}
+
+@media only screen and (min-device-width: 428px) and (max-device-width: 926px) {
+    main {
+        margin-left: 5.125rem;
+        /* Ajusta a margem para a largura da sidebar fixa */
+    }
+
+    #sidebar {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background-color: #276E2A;
+        height: 100%;
+        border-radius: 0px 1.125rem 1.125rem 0px;
+        position: fixed;
+        transition: width 0.5s;
+        width: 5.125rem;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 99999;
+    }
+
+    #sidebar.open-sidebar {
+        width: 15.625rem;
+    }
+
+    #sidebar_content {
+        height: 100%;
+    }
 }

@@ -5,18 +5,17 @@ body {
     background-size: cover;
     background-position: 100%;
     overflow-x: hidden;
+    font-size: 1rem; /* Base for rem units */
 }
 
-
 /* Box do Cadastro */
-
 .ContainerCadastro {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    width: 60vw;
-    height: 95vh;
+    width: 70vw;
+    height: 90vh;
     padding: 1rem;
     background-color: #fffffff2;
     border-radius: 2%;
@@ -27,21 +26,20 @@ body {
 }
 
 /* Avatar */
-
 #picture__input {
     display: none;
 }
 
 .picture {
     width: 12.5rem;
-    aspect-ratio: 16/16;
+    aspect-ratio: 1;
     background: #ddd;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #aaa;
     border: 0.125rem solid;
-    border-radius: 90%;
+    border-radius: 50%;
     cursor: pointer;
     font-family: sans-serif;
     transition: color 300ms ease-in-out, background 300ms ease-in-out;
@@ -71,41 +69,34 @@ body {
 }
 
 /* Fim do avatar */
+.error-message {
+    color: red;
+    display: none;
+    margin-top: 0.25rem; /* Adiciona um pequeno espaço acima das mensagens de erro */
+}
 
 .inputs_Container {
     display: flex;
     justify-content: center;
-    align-items: center;
-    flex-direction: row;
-    gap: 4rem;
-    width: 100vw;
-    height: 50vh;
-    position: relative;
-    bottom: 1rem;
-}
-
-.inputs_login_esquerda {
+    align-items: flex-start; /* Alinha as inputs no topo */
     gap: 2rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-    top: 2rem;
+    width: 100%;
+    height: auto;
+    padding: 1rem;
 }
 
+.inputs_login_esquerda,
 .inputs_login_direita {
-    gap: 2rem;
+    gap: 2.5rem;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-    top: 2rem;
+
+    width: 100%;
 }
 
 .input {
     position: relative;
+    width: 100%;
 }
 
 .input__field {
@@ -119,7 +110,7 @@ body {
     outline: 0.125rem solid #000000;
 }
 
-.input__label {
+.input__label, .input__labelDate {
     position: absolute;
     top: 0;
     left: 0;
@@ -128,14 +119,21 @@ body {
     transition: transform 0.25s;
 }
 
+.input__label--active, .input__labelDate--active {
+    transform: translate(0, -1.875rem) scale(0.8);
+}
+
 .input__field:focus-visible~.input__label,
-.input__field:valid~.input__label {
+.input__field:valid~.input__label,
+.input__field:focus-visible~.input__labelDate,
+.input__field:valid~.input__labelDate {
     transform: translate(0, -1.875rem) scale(0.8);
 }
 
 .input__field:is(:focus-visible, :valid) {
     outline-color: #000000;
 }
+
 
 .input__icon-wrapper {
     position: absolute;
@@ -155,11 +153,14 @@ body {
     font-size: 1.5rem;
 }
 
-.registrar {
 
-    width: 20vw;
+
+
+
+.registrar {
+    width: 100%;
     height: 7vh;
-    padding: 1rem, 1rem, 1rem, 1rem;
+    padding: 1rem;
     border-radius: 0.5rem;
     font-size: 1rem;
     background-color: #43A046;
@@ -171,20 +172,72 @@ body {
 }
 
 .registrar:hover {
-
     transform: translateY(-0.4rem);
     transition: 0.2s;
     box-shadow: 0rem 0.5rem 0.8rem rgb(0, 0, 0);
-
-}
-
-a {
-    list-style: none;
-    text-decoration: none;
-    color: rgb(255, 255, 255);
-    font-weight: bold;
-    transition: all 0.3s ease 0s;
-    cursor: pointer;
 }
 
 /* Fim do box cadastro */
+
+/* Media Queries for iPhone 14 Pro Max */
+@media (max-width: 440px) {
+
+    .ContainerCadastro {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Centraliza os itens horizontalmente */
+        justify-content: center; /* Centraliza os itens verticalmente */
+        width: 90vw;
+        height: 165vh;
+        padding: 2rem;
+        position: relative;
+        top: 20rem;
+    }
+    
+    h1 {
+        word-wrap: break-word; /* Allow text to break within words */
+        text-align: center; /* Center-align text */
+        margin-bottom: 2rem; /* Adiciona espaçamento inferior */
+    }
+    
+    .picture {
+        width: 10rem;
+        text-align: center;
+        margin-bottom: 2rem; /* Adiciona espaçamento inferior */
+    }
+    
+    .inputs_Container {
+        display: flex;
+        flex-direction: column;
+        gap: 3rem;
+    }
+    
+    .inputs_login_esquerda,
+    .inputs_login_direita {
+        width: 100%;
+        align-items: center; /* Centraliza os itens horizontalmente */
+        gap: 3rem;
+    }
+    
+    .input__field {
+        width: 90%;
+    }
+    
+    .registrar {
+        width: 100%;
+        text-align: center; /* Centraliza o texto */
+        padding: auto;
+        position: relative;
+        right: 1rem;
+        margin-top: 2rem; /* Adiciona espaçamento superior */
+    }
+    
+    .input__icon-wrapper {
+        position: absolute;
+        top: 50%;
+        right: 2.5rem;
+        transform: translateY(-50%);
+        cursor: pointer;
+    }
+    
+}
