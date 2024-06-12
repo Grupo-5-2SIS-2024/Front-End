@@ -1,123 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Inter">
-    <link rel="stylesheet" href="../Css/login.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="../Css/login.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
+
 <body>
-    <div class="tela">
-        <div class="banner">
-            <div class="intro">
-                <div class="titulo">
-                    <div class="titulo1">BEM VINDO</div>
-                    <div class="titulo2">DE VOLTA!</div>
-                </div>
-                
-                <div class="slogan">Ouse sonhar sobre a tecnologia que poderíamos criar, sobre o mundo que podemos construir juntos para um futuro melhor!</div>
-                <div class="cadastro">
-                    <span class="conta">Não possui conta?</span>
-                    <span class="contato">Entre em contato!</span>
-                </div>
-                
-                <div class="fotomedicos"></div>
-            </div>
-            <div class="dados">
-                <span class="titulo2">LOG IN</span>
-                    
-                <div class="dadosform">
-                    <input id="emailLogin" type="text">
-                    <input id="senhaLogin" type="text">
-                    <button onclick="fazerLogin()" class="login">LOGIN</button>
-                </div>
-                
-            </div>
+  <div class="tela">
+    <div class="banner">
+      <div class="intro">
+        <div class="titulo">
+          <div class="titulo1">BEM VINDO</div>
+          <div class="titulo2">DE VOLTA!</div>
         </div>
+
+        <div class="slogan">Ouse sonhar sobre a tecnologia que poderíamos criar, sobre o mundo que podemos construir
+          juntos para um futuro melhor!</div>
+        <div class="cadastro">
+          <span class="conta">Não possui conta?</span>
+          <span class="contato">Entre em contato!</span>
+        </div>
+
+        <div class="fotomedicos"></div>
+      </div>
+      <div class="dados">
+        <span class="titulo2">LOG IN</span>
+
+        <div class="dadosform">
+          <div class="input">
+            <input class="input__field" id="email" type="email" required />
+            <label for="email" class="input__label">E-mail</label>
+          </div>
+          <div class="input">
+            <input class="input__field" id="password" type="password" required />
+            <label for="password" class="input__label">Senha</label>
+            <span class="input__icon-wrapper">
+              <i class="input__icon ri-eye-off-line"></i>
+            </span>
+          </div>
+          <Button class="registrar" onclick="fazerLogin()">
+            Login <i class="fa-solid fa-right-to-bracket"></i>
+          </Button>
+        </div>
+
+      </div>
     </div>
-    
+  </div>
+
 </body>
+
 </html>
 
 <script>
 
-    async function fazerLogin() {
-  const valorEmailLogin = document.getElementById("emailLogin").value;
-  const valorSenhaLogin = document.getElementById("senhaLogin").value;
+  async function fazerLogin() {
+    const valorEmailLogin = document.getElementById("email").value;
+    const valorSenhaLogin = document.getElementById("password").value;
 
-  switch (true){
-    case valorEmailLogin == "":
-      Swal.fire({
-        icon: 'error',
-        title: 'Erro no login',
-        text: 'O campo email é obrigatório.'
-      });
-      return;
-    case valorSenhaLogin == "":
-      Swal.fire({
-        icon: 'error',
-        title: 'Erro no login',
-        text: 'O campo senha é obrigatório.'
-      });
-      return;
+    switch (true) {
+      case valorEmailLogin == "":
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro no login',
+          text: 'O campo email é obrigatório.'
+        });
+        return;
+      case valorSenhaLogin == "":
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro no login',
+          text: 'O campo senha é obrigatório.'
+        });
+        return;
       case valorEmailLogin == "" && valorSenhaLogin == "":
-      Swal.fire({
-        icon: 'error',
-        title: 'Erro no login',
-        text: 'Preencha todos os campos para fazer login.'
-      });
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro no login',
+          text: 'Preencha todos os campos para fazer login.'
+        });
       case valorEmailLogin.indexOf('@') === -1:
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro no login',
+          text: 'O email informado é inválido. Por favor, insira um email válido.'
+        });
+    }
+
+    const valoresLogin = {
+      email: valorEmailLogin,
+      senha: valorSenhaLogin
+    }
+    const respostaLogin = await fetch("http://localhost:8080/medicos/login", {
+      method: "PUT",
+      body: JSON.stringify(valoresLogin),
+      headers: { "Content-type": "application/json; charset=UTF-8" }
+    });
+
+    if (respostaLogin.status == 200) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Login bem-sucedido!',
+        text: 'Redirecionando para a Dashboard...',
+        showConfirmButton: false,
+        timer: 1500
+      }).then(() => {
+        respostaLogin.json().then(respostaLogin => {
+          sessionStorage.setItem("idUsuario", respostaLogin.idUsuario);
+        })
+        window.location.href = "../BeforeLogin/Html/listagemColaborador.html";
+      });
+    } else {
+      let mensagemErro;
+      switch (respostaLogin.status) {
+        case 401:
+          mensagemErro = "Credenciais inválidas. Por favor, tente novamente.";
+          break;
+        case 404:
+          mensagemErro = "Usuário não encontrado.";
+          break;
+        default:
+          mensagemErro = `Erro inesperado: ${respostaLogin.status}`;
+      }
       Swal.fire({
         icon: 'error',
         title: 'Erro no login',
-        text: 'O email informado é inválido. Por favor, insira um email válido.'
+
+        text: mensagemErro
       });
-  }  
-  
-  const valoresLogin = {
-    email: valorEmailLogin,
-    senha: valorSenhaLogin
-  }
-  const respostaLogin = await fetch("http://localhost:8080/medicos/login", {
-    method: "PUT",
-    body: JSON.stringify(valoresLogin),
-    headers: { "Content-type": "application/json; charset=UTF-8" }
-  });
-
-  if (respostaLogin.status == 200) {
-    Swal.fire({
-      icon: 'success',
-      title: 'Login bem-sucedido!',
-      text: 'Redirecionando para a Dashboard...',
-      showConfirmButton: false,
-      timer: 1500
-    }).then(() => {
-      respostaLogin.json().then(respostaLogin => {
-        sessionStorage.setItem("idUsuario", respostaLogin.idUsuario);
-      })
-      window.location.href = "index.html";
-    });
-  } else {
-    let mensagemErro;
-    switch (respostaLogin.status) {
-      case 401:
-        mensagemErro = "Credenciais inválidas. Por favor, tente novamente.";
-        break;
-      case 404:
-        mensagemErro = "Usuário não encontrado.";
-        break;
-      default:
-        mensagemErro = `Erro inesperado: ${respostaLogin.status}`;
     }
-    Swal.fire({
-      icon: 'error',
-      title: 'Erro no login',
-
-      text: mensagemErro
-    });
   }
-}
 </script>
