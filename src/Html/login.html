@@ -7,6 +7,7 @@
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Inter">
     <link rel="stylesheet" href="../Css/login.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <div class="tela">
@@ -29,9 +30,9 @@
                 <span class="titulo2">LOG IN</span>
                     
                 <div class="dadosform">
-                    <input type="text">
-                    <input type="text">
-                    <button class="login">LOGIN</button>
+                    <input id="emailLogin" type="text">
+                    <input id="senhaLogin" type="text">
+                    <button onclick="fazerLogin()" class="login">LOGIN</button>
                 </div>
                 
             </div>
@@ -40,3 +41,83 @@
     
 </body>
 </html>
+
+<script>
+
+    async function fazerLogin() {
+  const valorEmailLogin = document.getElementById("emailLogin").value;
+  const valorSenhaLogin = document.getElementById("senhaLogin").value;
+
+  switch (true){
+    case valorEmailLogin == "":
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro no login',
+        text: 'O campo email é obrigatório.'
+      });
+      return;
+    case valorSenhaLogin == "":
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro no login',
+        text: 'O campo senha é obrigatório.'
+      });
+      return;
+      case valorEmailLogin == "" && valorSenhaLogin == "":
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro no login',
+        text: 'Preencha todos os campos para fazer login.'
+      });
+      case valorEmailLogin.indexOf('@') === -1:
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro no login',
+        text: 'O email informado é inválido. Por favor, insira um email válido.'
+      });
+  }  
+  
+  const valoresLogin = {
+    email: valorEmailLogin,
+    senha: valorSenhaLogin
+  }
+  const respostaLogin = await fetch("http://localhost:8080/medicos/login", {
+    method: "PUT",
+    body: JSON.stringify(valoresLogin),
+    headers: { "Content-type": "application/json; charset=UTF-8" }
+  });
+
+  if (respostaLogin.status == 200) {
+    Swal.fire({
+      icon: 'success',
+      title: 'Login bem-sucedido!',
+      text: 'Redirecionando para a Dashboard...',
+      showConfirmButton: false,
+      timer: 1500
+    }).then(() => {
+      respostaLogin.json().then(respostaLogin => {
+        sessionStorage.setItem("idUsuario", respostaLogin.idUsuario);
+      })
+      window.location.href = "index.html";
+    });
+  } else {
+    let mensagemErro;
+    switch (respostaLogin.status) {
+      case 401:
+        mensagemErro = "Credenciais inválidas. Por favor, tente novamente.";
+        break;
+      case 404:
+        mensagemErro = "Usuário não encontrado.";
+        break;
+      default:
+        mensagemErro = `Erro inesperado: ${respostaLogin.status}`;
+    }
+    Swal.fire({
+      icon: 'error',
+      title: 'Erro no login',
+
+      text: mensagemErro
+    });
+  }
+}
+</script>
