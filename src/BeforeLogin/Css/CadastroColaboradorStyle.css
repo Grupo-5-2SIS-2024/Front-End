@@ -1,12 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-}
-
 body {
     display: flex;
     height: 100vh;
@@ -14,178 +5,18 @@ body {
     background-size: cover;
     background-position: 100%;
     overflow-x: hidden;
-}
-
-main {
-    padding: 1.25rem;
-    transition: margin-left 0.5s;
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#sidebar {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background-color: #276E2A;
-    height: 100vh;
-    border-radius: 0px 1.125rem 1.125rem 0px;
-    position: relative;
-    transition: width 0.5s;
-    width: 5.125rem;
-}
-
-#sidebar.open-sidebar {
-    width: 15.625rem;
-}
-
-#sidebar_content {
-    padding: 0.75rem;
-}
-
-#user {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 3rem;
-}
-
-#user_avatar {
-    width: 3.125rem;
-    height: 3.125rem;
-    object-fit: cover;
-    border-radius: 1.25rem;
-}
-
-#user_infos {
-    display: flex;
-    flex-direction: column;
-}
-
-#user_infos span:last-child {
-    color: #fff;
-    font-size: 0.75rem;
-}
-
-#side_items {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    list-style: none;
-}
-
-.side-item {
-    border-radius: 0.5rem;
-    padding: 0.875rem;
-    cursor: pointer;
-}
-
-.side-item.active {
-    background-color: #024e06;
-}
-
-.side-item:hover:not(.active),
-#logout_btn:hover {
-    background-color: #024e06;
-}
-
-.side-item a {
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-}
-
-.side-item.active a {
-    color: #fff;
-}
-
-.side-item a i {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.25rem;
-    height: 1.25rem;
-}
-
-#logout {
-    border-top: 1px solid #e3e9f7;
-    padding: 0.75rem;
-}
-
-#logout_btn {
-    border: none;
-    padding: 0.75rem;
-    font-size: 0.875rem;
-    display: flex;
-    gap: 1.25rem;
-    align-items: center;
-    border-radius: 0.5rem;
-    text-align: start;
-    cursor: pointer;
-    background-color: transparent;
-    color: #fff;
-}
-
-#open_btn {
-    position: absolute;
-    top: 1.875rem;
-    right: -0.625rem;
-    background-color: #276E2A;
-    color: #e3e9f7;
-    border-radius: 100%;
-    width: 1.25rem;
-    height: 1.25rem;
-    border: none;
-    cursor: pointer;
-    transition: transform 0.5s;
-}
-
-#open_btn_icon {
-    transition: transform 0.5s;
-}
-
-#sidebar.open-sidebar #open_btn_icon {
-    transform: rotate(180deg);
-}
-
-.item-description {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    font-size: 0.875rem;
-    transition: width 0.5s, opacity 0.5s;
-    width: 0;
-    opacity: 0;
-    color: #fff;
-}
-
-#sidebar.open-sidebar .item-description {
-    width: 9.375rem;
-    opacity: 1;
-}
-
-#sidebar.open-sidebar .side-item a {
-    justify-content: flex-start;
-    gap: 1.4rem;
-}
-
-main.expanded {
-    margin-left: 0.5rem;
+    font-size: 1rem; /* Base for rem units */
 }
 
 /* Box do Cadastro */
-
 .ContainerCadastro {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    width: 60vw;
-    height: 95vh;
+    width: 70vw;
+    height: 90vh;
+    padding: 1rem;
     background-color: #fffffff2;
     border-radius: 2%;
 }
@@ -202,19 +33,20 @@ main.expanded {
 
 .picture {
     width: 12.5rem;
-    aspect-ratio: 16/16;
+    aspect-ratio: 1;
     background: #ddd;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #aaa;
     border: 0.125rem solid;
-    border-radius: 90%;
+    border-radius: 50%;
     cursor: pointer;
     font-family: sans-serif;
     transition: color 300ms ease-in-out, background 300ms ease-in-out;
     outline: none;
     overflow: hidden;
+    margin-top: -1rem; /* Move um pouco para cima */
 }
 
 .picture:hover {
@@ -240,38 +72,37 @@ main.expanded {
 
 /* Fim do avatar */
 
+/* comeco do box cadastro */
+
+.error {
+    color: red;
+    font-size: 0.75rem; /* Tamanho da fonte da mensagem de erro */
+    margin-top: 0.25rem; /* Adiciona um pequeno espaço acima das mensagens de erro */
+    display: block; /* Exibe a mensagem de erro como bloco */
+}
+
 .inputs_Container {
     display: flex;
     justify-content: center;
-    align-items: center;
-    flex-direction: row;
-    gap: 7rem;
-    width: 100vw;
-    height: 50vh;
-}
-
-.inputs_login_esquerda {
+    align-items: flex-start; /* Alinha as inputs no topo */
     gap: 2rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-    top: 2rem;
+    width: 100%;
+    height: auto;
+    padding: 1rem;
 }
 
+.inputs_login_esquerda,
 .inputs_login_direita {
-    gap: 2rem;
+    gap: 2.5rem;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-    top: 2rem;
+
+    width: 100%;
 }
 
 .input {
     position: relative;
+    width: 100%;
 }
 
 .input__field {
@@ -285,7 +116,7 @@ main.expanded {
     outline: 0.125rem solid #000000;
 }
 
-.input__label {
+.input__label, .input__labelDate {
     position: absolute;
     top: 0;
     left: 0;
@@ -294,14 +125,21 @@ main.expanded {
     transition: transform 0.25s;
 }
 
+.input__label--active, .input__labelDate--active {
+    transform: translate(0, -1.875rem) scale(0.8);
+}
+
 .input__field:focus-visible~.input__label,
-.input__field:valid~.input__label {
+.input__field:valid~.input__label,
+.input__field:focus-visible~.input__labelDate,
+.input__field:valid~.input__labelDate {
     transform: translate(0, -1.875rem) scale(0.8);
 }
 
 .input__field:is(:focus-visible, :valid) {
     outline-color: #000000;
 }
+
 
 .input__icon-wrapper {
     position: absolute;
@@ -321,4 +159,91 @@ main.expanded {
     font-size: 1.5rem;
 }
 
+
+
+
+
+.registrar {
+    width: 100%;
+    height: 7vh;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    background-color: #43A046;
+    font-weight: bold;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    color: whitesmoke;
+}
+
+.registrar:hover {
+    transform: translateY(-0.4rem);
+    transition: 0.2s;
+    box-shadow: 0rem 0.5rem 0.8rem rgb(0, 0, 0);
+}
+
 /* Fim do box cadastro */
+
+/* Media Queries for iPhone 14 Pro Max */
+@media (max-width: 440px) {
+
+    .ContainerCadastro {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Centraliza os itens horizontalmente */
+        justify-content: center; /* Centraliza os itens verticalmente */
+        width: 90vw;
+        height: 165vh;
+        padding: 2rem;
+        position: relative;
+        top: 20rem;
+    }
+    
+    h1 {
+        word-wrap: break-word; /* Allow text to break within words */
+        text-align: center; /* Center-align text */
+        margin-bottom: 2rem; /* Adiciona espaçamento inferior */
+    }
+    
+    .picture {
+        width: 10rem;
+        text-align: center;
+        margin-bottom: 2rem; /* Adiciona espaçamento inferior */
+    }
+    
+    .inputs_Container {
+        display: flex;
+        flex-direction: column;
+        gap: 3rem;
+    }
+    
+    .inputs_login_esquerda,
+    .inputs_login_direita {
+        width: 100%;
+        align-items: center; /* Centraliza os itens horizontalmente */
+        gap: 3rem;
+    }
+    
+    .input__field {
+        width: 90%;
+    }
+    
+    .registrar {
+        width: 100%;
+        text-align: center; /* Centraliza o texto */
+        padding: auto;
+        position: relative;
+        right: 1rem;
+        margin-top: 2rem; /* Adiciona espaçamento superior */
+    }
+    
+    .input__icon-wrapper {
+        position: absolute;
+        top: 50%;
+        right: 2.5rem;
+        transform: translateY(-50%);
+        cursor: pointer;
+    }
+    
+}
