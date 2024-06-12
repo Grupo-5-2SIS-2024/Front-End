@@ -48,6 +48,7 @@ const inputIcon = document.querySelector(".input__icon");
 
 
 // Função para validar o cadastro do colaborador
+
 function validarCadastro() {
   var nome = document.getElementById('nome').value;
   var sobrenome = document.getElementById('sobrenome').value;
@@ -71,119 +72,99 @@ function validarCadastro() {
   var errors = [];
 
   if (!nome.trim()) {
-    document.getElementById('nome').classList.add('error');
-    document.getElementById('error-nome').textContent = "Nome é obrigatório.";
-    errors.push("Nome é obrigatório.");
+      document.getElementById('error-nome').textContent = "Nome é obrigatório.";
+      errors.push("Nome é obrigatório.");
   } else {
-    document.getElementById('nome').classList.remove('error');
-    document.getElementById('error-nome').textContent = "";
+      document.getElementById('error-nome').textContent = "";
   }
 
   if (!sobrenome.trim()) {
-    document.getElementById('sobrenome').classList.add('error');
-    document.getElementById('error-sobrenome').textContent = "Sobrenome é obrigatório.";
-    errors.push("Sobrenome é obrigatório.");
+      document.getElementById('error-sobrenome').textContent = "Sobrenome é obrigatório.";
+      errors.push("Sobrenome é obrigatório.");
   } else {
-    document.getElementById('sobrenome').classList.remove('error');
-    document.getElementById('error-sobrenome').textContent = "";
+      document.getElementById('error-sobrenome').textContent = "";
   }
 
   if (!emailRegex.test(email)) {
-    document.getElementById('email').classList.add('error');
-    document.getElementById('error-email').textContent = "E-mail inválido.";
-    errors.push("E-mail inválido.");
+      document.getElementById('error-email').textContent = "E-mail inválido.";
+      errors.push("E-mail inválido.");
   } else {
-    document.getElementById('email').classList.remove('error');
-    document.getElementById('error-email').textContent = "";
+      document.getElementById('error-email').textContent = "";
   }
 
   if (!telefoneRegex.test(telefone)) {
-    document.getElementById('telefone').classList.add('error');
-    document.getElementById('error-telefone').textContent = "Telefone inválido.";
-    errors.push("Telefone inválido.");
+      document.getElementById('error-telefone').textContent = "Telefone inválido.";
+      errors.push("Telefone inválido.");
   } else {
-    document.getElementById('telefone').classList.remove('error');
-    document.getElementById('error-telefone').textContent = "";
+      document.getElementById('error-telefone').textContent = "";
   }
 
   if (!cpfRegex.test(cpf)) {
-    document.getElementById('cpf').classList.add('error');
-    document.getElementById('error-cpf').textContent = "CPF inválido.";
-    errors.push("CPF inválido.");
+      document.getElementById('error-cpf').textContent = "CPF inválido.";
+      errors.push("CPF inválido.");
   } else {
-    document.getElementById('cpf').classList.remove('error');
-    document.getElementById('error-cpf').textContent = "";
+      document.getElementById('error-cpf').textContent = "";
   }
 
   if (!especialidade.trim()) {
-    document.getElementById('especialidade').classList.add('error');
-    document.getElementById('error-especialidade').textContent = "Especialidade é obrigatória.";
-    errors.push("Especialidade é obrigatória.");
+      document.getElementById('error-especialidade').textContent = "Especialidade é obrigatória.";
+      errors.push("Especialidade é obrigatória.");
   } else {
-    document.getElementById('especialidade').classList.remove('error');
-    document.getElementById('error-especialidade').textContent = "";
+      document.getElementById('error-especialidade').textContent = "";
   }
 
   if (!dataNascimento) {
-    document.getElementById('dataNascimento').classList.add('error');
-    document.getElementById('error-dataNascimento').textContent = "Data de nascimento é obrigatória.";
-    errors.push("Data de nascimento é obrigatória.");
+      document.getElementById('error-dataNascimento').textContent = "Data de nascimento é obrigatória.";
+      errors.push("Data de nascimento é obrigatória.");
   } else {
-    document.getElementById('dataNascimento').classList.remove('error');
-    document.getElementById('error-dataNascimento').textContent = "";
+      document.getElementById('error-dataNascimento').textContent = "";
   }
 
   if (!carteirinha.trim()) {
-    document.getElementById('carteirinha').classList.add('error');
-    document.getElementById('error-carteirinha').textContent = "Carteirinha é obrigatória.";
-    errors.push("Carteirinha é obrigatória.");
+      document.getElementById('error-carteirinha').textContent = "Carteirinha é obrigatória.";
+      errors.push("Carteirinha é obrigatória.");
   } else {
-    document.getElementById('carteirinha').classList.remove('error');
-    document.getElementById('error-carteirinha').textContent = "";
+      document.getElementById('error-carteirinha').textContent = "";
   }
 
   if (!passwordRegex.test(password)) {
-    document.getElementById('password').classList.add('error');
-    document.getElementById('error-password').textContent = "Senha deve conter no mínimo 8 caracteres, uma letra maiúscula, uma letra minúscula e um número.";
-    errors.push("Senha deve conter no mínimo 8 caracteres, uma letra maiúscula, uma letra minúscula e um número.");
+      document.getElementById('error-password').textContent = "Senha: 8+ caracteres, 1 maiúscula, 1 minúscula, 1 número.";
+      errors.push("Senha: 8+ caracteres, 1 maiúscula, 1 minúscula, 1 número.");
   } else {
-    document.getElementById('password').classList.remove('error');
-    document.getElementById('error-password').textContent = "";
+      document.getElementById('error-password').textContent = "";
   }
 
   if (password !== confirmedPassword) {
-    document.getElementById('confirmedPassword').classList.add('error');
-    document.getElementById('error-confirmedPassword').textContent = "As senhas não coincidem.";
-    errors.push("As senhas não coincidem.");
+      document.getElementById('error-confirmedPassword').textContent = "As senhas não coincidem.";
+      errors.push("As senhas não coincidem.");
   } else {
-    document.getElementById('confirmedPassword').classList.remove('error');
-    document.getElementById('error-confirmedPassword').textContent = "";
+      document.getElementById('error-confirmedPassword').textContent = "";
   }
 
   if (!nivelAcesso.trim()) {
-    document.getElementById('nivelAcesso').classList.add('error');
-    document.getElementById('error-nivelAcesso').textContent = "Nível de acesso é obrigatório.";
-    errors.push("Nível de acesso é obrigatório.");
+      document.getElementById('error-nivelAcesso').textContent = "Nível de acesso é obrigatório.";
+      errors.push("Nível de acesso é obrigatório.");
   } else {
-    document.getElementById('nivelAcesso').classList.remove('error');
-    document.getElementById('error-nivelAcesso').textContent = "";
+      document.getElementById('error-nivelAcesso').textContent = "";
   }
 
   // Exibir os erros se houverem
   if (errors.length > 0) {
-    const errorMessage = errors.join("<br>");
-    document.querySelector('.error-message').innerHTML = errorMessage;
-    return false;
+      const errorMessage = errors.join("<br>");
+      document.querySelector('.error-message').innerHTML = errorMessage;
+      return false;
   } else {
-    return true; // Retorna true se não houver erros
+      return true; 
   }
 }
 
+
 // Função assíncrona para cadastrar o colaborador
+
 async function cadastrarColaborador() {
-  // Verifica se o cadastro é válido
+
   if (validarCadastro()) {
-    // Obtém os valores dos campos do formulário
+
     const nomeDigitado = document.getElementById("nome").value;
     const sobrenomeDigitado = document.getElementById("sobrenome").value;
     const emailDigitado = document.getElementById("email").value;
@@ -194,8 +175,8 @@ async function cadastrarColaborador() {
     const carteirinhaDigitada = document.getElementById("carteirinha").value;
     const senhaDigitada = document.getElementById("password").value;
     const nivelAcessoEscolhido = document.getElementById("nivelAcesso").value;
+    const fotoEscolhida = document.getElementById("picture__input").files[0];
 
-    // Mapeamento de especialidades e níveis de acesso
     const especialidadeMap = {
       "cardiologia": 1,
       "dermatologia": 2,
@@ -208,7 +189,6 @@ async function cadastrarColaborador() {
       "Recepcionista": 3
     };
 
-    // Verifica se as opções selecionadas existem nos mapeamentos
     const especialidadeId = especialidadeMap[especialidadeDigitada.toLowerCase()];
     const nivelAcessoId = nivelAcessoMap[nivelAcessoEscolhido];
 
@@ -217,7 +197,6 @@ async function cadastrarColaborador() {
       return;
     }
 
-    // Dados do colaborador a serem cadastrados
     const dadosColaborador = {
       "nome": nomeDigitado,
       "sobrenome": sobrenomeDigitado,
@@ -233,21 +212,27 @@ async function cadastrarColaborador() {
       "ativo": false,
       "permissao": {
         "id": nivelAcessoId
-      }
+      },
+      "foto": fotoEscolhida
     };
 
     try {
-      // Requisição para cadastrar o colaborador
       const respostaCadastro = await fetch("http://localhost:8080/medicos", {
         method: "POST",
         body: JSON.stringify(dadosColaborador),
         headers: { "Content-type": "application/json; charset=UTF-8" }
       });
-
-      // Verifica se o cadastro foi bem-sucedido
+      
       if (respostaCadastro.status == 201) {
-        // Redireciona para a página de listagem de colaboradores
-        window.location.href = "listagemColaborador.html";
+        Swal.fire({
+          icon: 'success',
+          title: 'Colaborador cadastrado com sucesso!',
+          text: 'Redirecionando para a área do colaborador...',
+          showConfirmButton: false,
+          timer: 1500
+        }).then(() => {
+          window.location.href = "listagemColaborador.html";
+        });
       } else {
         alert("Ocorreu um erro ao cadastrar");
       }

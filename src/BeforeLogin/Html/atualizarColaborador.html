@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="../Css/CadastroColaboradorStyle.css">
     <link rel="stylesheet" href="../Css/Sidebar.css">
     <link rel="shortcut icon" href="../../Assets/logo_Multclinics_branca_sem_nome.png" type="image/x-icon">
-    <title>Multiclinics | Cadastro do Colaborador</title>
+    <title>Multiclinics | Atualizar dados do Colaborador</title>
 </head>
 
 <body>
@@ -94,7 +94,7 @@
 
     <main>
         <div class="ContainerCadastro">
-            <h1>Cadastre sua <span class="equipe">Equipe</span></h1><br><br>
+            <h1>Atualize os dados do seu <span class="equipe">Colaborador</span></h1><br><br>
             <label class="picture" for="picture__input" tabIndex="0">
                 <span class="picture__image"></span>
             </label>
@@ -187,15 +187,16 @@
                         <small class="error" id="error-nivelAcesso"></small>
                     </div>
                     <div>
-                        <Button class="registrar" onclick="cadastrarColaborador()">
-                            Cadastrar
+                        <Button class="registrar" onclick="atualizarColaborador()">
+                            Atualizar
                         </Button>
+                        <small class="success-message" id="success-message"></small>
                     </div>
                 </div>
             </div>
         </div>
     </main>
-    <script src="../Js/cadastroColaboradorscript.js"></script>
+    <script src="../Js/atualizarColaborador.js"></script>
     <script src="../Js/funcoesPadroes.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>

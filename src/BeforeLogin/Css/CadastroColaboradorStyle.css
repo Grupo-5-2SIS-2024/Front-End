@@ -26,6 +26,7 @@ body {
 }
 
 /* Avatar */
+
 #picture__input {
     display: none;
 }
@@ -45,6 +46,7 @@ body {
     transition: color 300ms ease-in-out, background 300ms ease-in-out;
     outline: none;
     overflow: hidden;
+    margin-top: -1rem; /* Move um pouco para cima */
 }
 
 .picture:hover {
@@ -69,10 +71,14 @@ body {
 }
 
 /* Fim do avatar */
-.error-message {
+
+/* comeco do box cadastro */
+
+.error {
     color: red;
-    display: none;
+    font-size: 0.75rem; /* Tamanho da fonte da mensagem de erro */
     margin-top: 0.25rem; /* Adiciona um pequeno espaço acima das mensagens de erro */
+    display: block; /* Exibe a mensagem de erro como bloco */
 }
 
 .inputs_Container {

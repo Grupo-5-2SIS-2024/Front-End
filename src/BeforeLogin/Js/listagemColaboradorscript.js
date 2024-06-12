@@ -65,12 +65,24 @@ async function buscarMedicos() {
                 }
             });
         });
+
+        cardsMedicos.querySelectorAll('.update').forEach((botao) => {
+            botao.addEventListener('click', function () {
+                const card = this.closest('.cardColaborador');
+                const id = card.dataset.medicoId;
+
+                if (id) {
+                    window.location.href = `atualizarColaborador.html?id=${id}`;
+                } else {
+                    console.error('ID do médico não encontrado.');
+                }
+            });
+        });
     } catch (e) {
         console.log(e);
     }
 }
 
-// Chama a função para buscar os médicos
 buscarMedicos();
 
 async function deletarMedico(id) {
