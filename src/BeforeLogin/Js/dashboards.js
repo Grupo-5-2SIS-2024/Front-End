@@ -1,59 +1,6 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="../Css/dashboard.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body onload="buscar(), buscarRosca()">
-    <div class="dashboard">
-        <h1>DASHBOARD</h1>
-        <div class="grid-container">
-            <div class="card executed-appointments">
-                <div id="rosca"  class="line-chart">
-                    <canvas id="GraficoRosca"></canvas>
-                </div>
-            </div>
-            <div class="card upcoming-appointments">
-                <p>Agendamentos recorrentes próximos ao vencimento:</p>
-                <table id="tableUpcomingAppointments">
-                    <tr>
-                        <th>Paciente</th>
-                        <th>Vencimento</th>
-                        <th>Especialidade</th>
-                    </tr>
 
 
-                </table>
-            </div>
-            <div class="card patients-released">
-                <div class="line-chart">
-                    <canvas id="GraficoBarraHorizontal"></canvas>
-                </div>
-            </div>
-            <div class="card retention">
-                <div class="line-chart">
-                    <canvas id="GraficoLinhaFidelizacao"></canvas>
-                </div>
-            </div>
-
-            <div class="card grande">
-                <div class="line-chart">
-                    <canvas id="GraficoBarraDePe"></canvas>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-
-</body>
-</html>
-
-<script>
-      async function buscar() {
+async function buscar() {
     console.log("passei por aqui");
 
     try {
@@ -80,10 +27,6 @@
 console.log("antes de buscar");
 buscar();
 console.log("depois de buscar");
-
-
-
-
 
 
 // GRAFICO 2
@@ -118,7 +61,7 @@ async function buscarRosca() {
         };
 
         const ctx = document.getElementById('GraficoRosca').getContext('2d');
-        new Chart(ctx, config);
+        graficoRosca = new Chart(ctx, config);
     } catch (error) {
         console.error('Failed to fetch:', error);
     }
@@ -127,15 +70,6 @@ async function buscarRosca() {
 console.log("antes de buscar");
 buscarRosca();
 console.log("depois de buscar");
-
-
-
-
-
-
-
-
-
 
 
 // GRAFICO 3
@@ -204,29 +138,7 @@ console.log("depois de buscar");
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // GRAFICO 4
-
 
 
 async function buscarLinhasFidelizacao() {
@@ -272,27 +184,7 @@ buscarLinhasFidelizacao();
 console.log("depois de buscar");
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // GRAFICO 5 
-
-
-
 
 
 async function buscarBarra() {
@@ -312,36 +204,36 @@ async function buscarBarra() {
         const dataValuesDisponiveis = respostaDados.map(item => item.disponiveis);
 
         const ctx = document.getElementById('GraficoBarraDePe').getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [
-                        {
-                            label: 'Agendados',
-                            data: dataValuesAgendados,
-                            backgroundColor: 'rgba(0, 204, 0, 0.6)',
-                            borderColor: 'rgba(0, 204, 0, 1)',
-                            borderWidth: 1
-                        },
-                        {
-                            label: 'Disponiveis',
-                            data: dataValuesDisponiveis,
-                            backgroundColor: 'rgba(0, 102, 0, 0.6)',
-                            borderColor: 'rgba(0, 102, 0, 1)',
-                            borderWidth: 1
-                        }
-                    ]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Agendados',
+                        data: dataValuesAgendados,
+                        backgroundColor: 'rgba(0, 204, 0, 0.6)',
+                        borderColor: 'rgba(0, 204, 0, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Disponiveis',
+                        data: dataValuesDisponiveis,
+                        backgroundColor: 'rgba(0, 102, 0, 0.6)',
+                        borderColor: 'rgba(0, 102, 0, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
                     }
                 }
-            });
-        
+            }
+        });
+
     } catch (error) {
         console.error('Failed to fetch:', error);
     }
@@ -350,17 +242,3 @@ async function buscarBarra() {
 console.log("antes de buscar");
 buscarBarra();
 console.log("depois de buscar");
-
-
-
-
-
-
-
-
-
-
-
-
-
-</script>

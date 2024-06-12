@@ -2,12 +2,19 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     color: #333;
-   
+    display: flex;
+    margin: 0;
 }
 
 .dashboard {
-    
-    margin: auto;
+    width: 100%;
+    max-width: 1200px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+    top: 7rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
@@ -76,11 +83,14 @@ h1 {
     border-collapse: collapse;
 }
 
-.upcoming-appointments table, .upcoming-appointments th, .upcoming-appointments td {
+.upcoming-appointments table,
+.upcoming-appointments th,
+.upcoming-appointments td {
     border: 1px solid #ddd;
 }
 
-.upcoming-appointments th, .upcoming-appointments td {
+.upcoming-appointments th,
+.upcoming-appointments td {
     padding: 8px;
     text-align: left;
 }
@@ -120,7 +130,7 @@ h1 {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    height: 150px; /* Increased height for better bar visibility */
+    height: 150px;
 }
 
 .bar {
@@ -139,12 +149,12 @@ h1 {
 
 .line-chart {
     position: relative;
-    height: 200px; /* Increased height for better line chart visibility */
+    height: 200px;
 }
 
 .line-chart svg {
     width: 100%;
-    height: 150px; /* Increased height for better line chart visibility */
+    height: 150px;
 }
 
 .line-chart .months {
@@ -227,7 +237,8 @@ h1 {
         font-size: 16px;
     }
 
-    .upcoming-appointments th, .upcoming-appointments td {
+    .upcoming-appointments th,
+    .upcoming-appointments td {
         font-size: 12px;
         padding: 4px;
     }

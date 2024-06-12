@@ -250,10 +250,10 @@ async function atualizarColaborador() {
         const fotoEscolhida = document.getElementById("picture__input").files[0];
 
         const especialidadeMap = {
-            "cardiologia": 1,
-            "dermatologia": 2,
-            "fonodiologia": 3
-        };
+            "psicologo": 1,
+            "terapeuta": 2,
+            "fonoaudiologia": 3
+          };
 
         const nivelAcessoMap = {
             "Admin": 1,
