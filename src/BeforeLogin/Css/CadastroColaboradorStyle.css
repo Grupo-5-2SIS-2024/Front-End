@@ -122,12 +122,20 @@ body {
     outline: 0.125rem solid #000000;
 }
 
-.input__label,
-.input__labelDate {
+.input__label {
     position: absolute;
     top: 0;
     left: 0;
     transform: translate(0.625rem, 0.625rem);
+    transform-origin: left;
+    transition: transform 0.25s;
+}
+
+.input__labelDate{
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(0, -1.825rem);
     transform-origin: left;
     transition: transform 0.25s;
 }

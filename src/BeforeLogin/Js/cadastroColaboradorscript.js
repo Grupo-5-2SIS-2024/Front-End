@@ -178,9 +178,9 @@ async function cadastrarColaborador() {
     const fotoEscolhida = document.getElementById("picture__input").files[0];
 
     const especialidadeMap = {
-      "Psicologo": 1,
-      "Terapeuta": 2,
-      "Fonoaudiologia": 3
+      "psicologo": 1,
+      "terapeuta": 2,
+      "fonoaudiologia": 3
     };
 
     const nivelAcessoMap = {
