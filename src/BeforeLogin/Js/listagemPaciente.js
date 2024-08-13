@@ -1,32 +1,38 @@
-async function buscarMedicos() {
+async function buscarPacientes() {
     try {
-        const resposta = await fetch("http://localhost:8080/medicos");
-        const listaMedicos = await resposta.json();
-        console.log(listaMedicos);
+        const resposta = await fetch("http://localhost:8080/pacientes");
+        const listaPacientes = await resposta.json();
+        console.log(listaPacientes);
 
         const cardsMedicos = document.getElementById("listagem");
-        cardsMedicos.innerHTML = listaMedicos.map((medico) => {
-            const status = medico.ativo ? 'Ativo' : 'Inativo';
+        cardsMedicos.innerHTML = listaPacientes.map((entry) => {
+            const paciente = entry.paciente;
+            const nomeMedico = entry.nomeMedico || 'Médico não associado';
+            const especialidadeMedica = entry.especialidadeMedica || 'Especialidade não informada';
+            const status = paciente.ativo ? 'Ativo' : 'Inativo';
 
             return `
-                <div class="cardColaborador" data-medico-id="${medico.id}">
-                    <img src="../Assets/perfil.jpeg" alt="Foto do Colaborador">
+                <div class="cardPaciente" data-paciente-id="${paciente.id}">
                     <div class="info">
                         <div class="field">
                             <label for="nome">Nome</label>
-                            <p id="nome">${medico.nome} ${medico.sobrenome}</p>
+                            <p id="nome">${paciente.nome} ${paciente.sobrenome}</p>
                         </div>
                         <div class="field">
-                            <label for="email">Email</label>
-                            <p id="email">${medico.email}</p>
+                            <label for="contato">Contato</label>
+                            <p id="contato">${paciente.telefone}</p>
                         </div>
                         <div class="field">
-                            <label for="status">Status</label>
-                            <p id="status">${status}</p>
+                            <label for="responsavel">Responsável</label>
+                            <p id="responsavel">${paciente.responsavel ? paciente.responsavel.nome : 'Não informado'}</p>
                         </div>
                         <div class="field">
-                            <label for="permissao">Permissão</label>
-                            <p id="permissao">${medico.permissao.nome}</p>
+                            <label for="medico">Médico</label>
+                            <p id="medico">${nomeMedico}</p>
+                        </div>
+                        <div class="field">
+                            <label for="especialidade">Especialidade</label>
+                            <p id="especialidade">${especialidadeMedica}</p>
                         </div>
                     </div>
                     <div class="actions">
@@ -40,8 +46,8 @@ async function buscarMedicos() {
         // Adiciona evento de clique para os botões de exclusão
         cardsMedicos.querySelectorAll('.delete').forEach((botao) => {
             botao.addEventListener('click', function () {
-                const card = this.closest('.cardColaborador');
-                const id = card.dataset.medicoId;
+                const card = this.closest('.cardPaciente');
+                const id = card.dataset.pacienteId;
 
                 if (id) {
                     // Mostra o modal de confirmação
@@ -57,24 +63,24 @@ async function buscarMedicos() {
                     }).then((result) => {
                         if (result.isConfirmed) {
                             // Se o usuário confirmar, chama a função de deletar
-                            deletarMedico(id);
+                            deletarPaciente(id);
                         }
                     });
                 } else {
-                    console.error('ID do médico não encontrado.');
+                    console.error('ID do paciente não encontrado.');
                 }
             });
         });
 
         cardsMedicos.querySelectorAll('.update').forEach((botao) => {
             botao.addEventListener('click', function () {
-                const card = this.closest('.cardColaborador');
-                const id = card.dataset.medicoId;
+                const card = this.closest('.cardPaciente');
+                const id = card.dataset.pacienteId;
 
                 if (id) {
                     window.location.href = `atualizarColaborador.html?id=${id}`;
                 } else {
-                    console.error('ID do médico não encontrado.');
+                    console.error('ID do paciente não encontrado.');
                 }
             });
         });
@@ -83,9 +89,9 @@ async function buscarMedicos() {
     }
 }
 
-buscarMedicos();
+buscarPacientes();
 
-async function deletarMedico(id) {
+async function deletarPaciente(id) {
     try {
         // Tenta deletar o acompanhamento
         try {
@@ -123,21 +129,18 @@ async function deletarMedico(id) {
             console.warn('Nenhuma nota para deletar ou erro ao deletar notas:', erro);
         }
 
-        // Deleta o médico
-        const resposta4 = await fetch(`http://localhost:8080/medicos/${id}`, {
+        // Deleta o paciente
+        const resposta4 = await fetch(`http://localhost:8080/pacientes/${id}`, {
             method: 'DELETE'
         });
         if (!resposta4.ok) {
-            throw new Error(`Erro ao deletar médico: ${resposta4.statusText}`);
+            throw new Error(`Erro ao deletar paciente: ${resposta4.statusText}`);
         }
 
-        // Se todas as operações forem bem-sucedidas, exibe a mensagem e recarrega a lista de médicos
-        console.log('Médico deletado com sucesso.');
-        buscarMedicos();
+        // Se todas as operações forem bem-sucedidas, exibe a mensagem e recarrega a lista de pacientes
+        console.log('Paciente deletado com sucesso.');
+        buscarPacientes();
     } catch (erro) {
-        console.error('Erro ao deletar médico:', erro);
+        console.error('Erro ao deletar paciente:', erro);
     }
 }
-
-
-

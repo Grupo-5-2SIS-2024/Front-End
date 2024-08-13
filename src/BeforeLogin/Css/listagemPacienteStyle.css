@@ -178,7 +178,7 @@ a {
     /* Espaçamento direito adicionado */
 }
 
-.cardColaborador {
+.cardPaciente {
     width: 100%;
     /* Largura total para ocupar toda a largura da listagem */
     border: 1px solid #ffffff;
@@ -196,7 +196,7 @@ a {
     /* Espaçamento inferior adicionado */
 }
 
-.cardColaborador img {
+.cardPaciente img {
     width: 5vw;
     height: auto;
     border-radius: 50%;
@@ -204,7 +204,7 @@ a {
     margin-bottom: 15px;
 }
 
-.cardColaborador .info {
+.cardPaciente .info {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
@@ -212,7 +212,7 @@ a {
     flex-grow: 1;
 }
 
-.cardColaborador .info .field {
+.cardPaciente .info .field {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -221,12 +221,12 @@ a {
     /* Margens horizontais adicionadas */
 }
 
-.cardColaborador .info .field label {
+.cardPaciente .info .field label {
     font-weight: bold;
     margin-bottom: 0.25rem;
 }
 
-.cardColaborador .info .field p {
+.cardPaciente .info .field p {
     word-wrap: break-word;
     /* Allow text to break within words */
     text-align: center;
@@ -234,12 +234,12 @@ a {
     margin: 0;
 }
 
-.cardColaborador .actions {
+.cardPaciente .actions {
     display: flex;
     gap: 0.5rem;
 }
 
-.cardColaborador .actions button {
+.cardPaciente .actions button {
     background: none;
     border: none;
     cursor: pointer;
@@ -248,7 +248,7 @@ a {
     transition: color 0.3s;
 }
 
-.cardColaborador .actions button:hover {
+.cardPaciente .actions button:hover {
     color: #276E2A;
 }
 
@@ -365,16 +365,16 @@ a {
         padding-right: 1rem;
     }
 
-    .cardColaborador {
+    .cardPaciente {
         flex-direction: column;
     }
 
-    .cardColaborador .info {
+    .cardPaciente .info {
         display: flex;
         flex-direction: column;
     }
 
-    .cardColaborador img {
+    .cardPaciente img {
         width: 50vw;
         height: auto;
         border-radius: 50%;
