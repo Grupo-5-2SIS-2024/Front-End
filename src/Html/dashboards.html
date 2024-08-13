@@ -53,6 +53,25 @@
 </html>
 
 <script>
+
+
+
+function formatarData(dataISO){
+const data = new Date(dataISO)
+const dia = String(data.getDate()).padStart(2,'0');
+const mes =String(data.getMonth() + 1). padStart(2,'0');
+const ano = data.getFullYear();
+
+const  horas = String(data.getHours()).padStart(2,'0')
+const minutos = String(data.getMinutes()).padStart(2,'0')
+const segundos = String(data.getSeconds()).padStart(2,'0')
+
+return `${dia}/${mes}/${ano} - ${horas}:${minutos}:${segundos}`
+
+
+}
+
+
       async function buscar() {
     console.log("passei por aqui");
 
@@ -68,7 +87,7 @@
         cards.innerHTML = respostaDados.map((item) => {
             return `                     <tr>
                         <th>${item.nomePaciente}</th>
-                        <th>${item.dataConsulta}</th>
+                        <th>${formatarData(item.dataConsulta)}</th>
                         <th>${item.especialidadeMedico}</th>
                     </tr> `;
         }).join('');
@@ -88,25 +107,37 @@ console.log("depois de buscar");
 
 // GRAFICO 2
 
-async function buscarRosca() {
+async function buscarRosca() {   
     console.log("passei por aqui");
 
     try {
         const resposta = await fetch("http://localhost:8080/consultas/percentagem-concluidos");
+        const resposta2 = await fetch("http://localhost:8080/consultas/percentagem-concluidos2");
+        const resposta3 = await fetch("http://localhost:8080/consultas/percentagem-concluidos3");
         if (!resposta.ok) {
             throw new Error(`HTTP error! Status: ${resposta.status}`);
         }
+        if (!resposta2.ok) {
+            throw new Error(`HTTP error! Status: ${resposta2.status}`);
+        }
+        if (!resposta3.ok) {
+            throw new Error(`HTTP error! Status: ${resposta3.status}`);
+        }
         const respostaDados = await resposta.json();
         console.log(respostaDados);
-
+        const respostaDados2 = await resposta2.json();
+        console.log(respostaDados2);
+        const respostaDados3 = await resposta3.json();
+        console.log(respostaDados3);
         const data = {
-            labels: ['Total', 'Porcentagem de Atendimento Concluidos'],
+            labels: ['Pendentes', 'Concluidos', 'Cancelados'],
             datasets: [{
                 label: 'Consultas',
-                data: [100, respostaDados.percentagemConcluidos],
+                data: [respostaDados.percentagemConcluidos, respostaDados2.percentagemConcluidos, respostaDados3.percentagempendete ],
                 backgroundColor: [
                     'rgb(255, 99, 132)',
-                    'rgb(54, 162, 235)'
+                    'rgb(54, 162, 235)',
+                    'rgb(78, 362, 900)'
                 ],
                 hoverOffset: 4
             }]
