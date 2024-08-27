@@ -1,4 +1,30 @@
-async function buscar() {
+async function buscarHoje() {
+    console.log("passei por aqui");
+    var idUser = 1
+
+    try {
+    const resposta = await fetch(`http://localhost:8080/consultas/listarConsultasMedicoID/${idUser}`);
+        if (!resposta.ok) {
+            throw new Error(`HTTP error! Status: ${resposta.status}`);
+        }
+        const respostaDados = await resposta.json();
+console.log(respostaDados);
+
+const cards = document.getElementById("listaAgendaH");
+cards.innerHTML = respostaDados.body.map((item) => {
+    return ` 
+            <div class="listaAgendaH">
+                <span class="horarioH">${formatarData(item.datahoraConsulta)}</span>
+                <span class="pacienteH">${item.paciente.nome} ${item.paciente.sobrenome}</span>
+            </div>`;
+        }).join('');
+    } catch (error) {
+        console.error('Failed to fetch:', error);
+    }
+}
+buscarHoje()
+
+async function buscarSemana() {
     console.log("passei por aqui");
     var idUser = 1
 
@@ -22,9 +48,7 @@ cards.innerHTML = respostaDados.body.map((item) => {
         console.error('Failed to fetch:', error);
     }
 }
-buscar()
-
-
+buscarSemana()
 
 function formatarData(dataISO){
     const data = new Date(dataISO)
