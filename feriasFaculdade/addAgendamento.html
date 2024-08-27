@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendar Consulta</title>
+    <link rel="stylesheet" href="./css/addAgendamento.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <h2>Multiclinics</h2>
+            <p>Espaço Neuroclin</p>
+            <nav>
+                <ul>
+                    <li><a href="#">Início</a></li>
+                    <li class="active"><a href="#">Agendamento</a></li>
+                    <li><a href="#">Funcionario</a></li>
+                    <li><a href="#">Paciente</a></li>
+                    <li><a href="#">Dashboard</a></li>
+                </ul>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <h1>Agendar <span>Consulta</span></h1>
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="dia">Escolher Dia</label>
+                    <input type="date" id="dia">
+                </div>
+                <div class="form-group">
+                    <label for="hora">Escolher Hora</label>
+                    <select id="hora">
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="medico">Escolher Médico</label>
+                    <select id="medico">
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="paciente">Escolher Paciente</label>
+                    <select id="paciente">
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                </div>
+                <button id="agendar">Agendar</button>
+            </div>
+            <div class="form-container2" id="consultas-container">
+                <!-- Consultas cadastradas serão inseridas aqui -->
+            </div>
+        </main>
+    </div>
+    
+    <script src="./addAgendamento.js"></script>
+</body>
+</html>
