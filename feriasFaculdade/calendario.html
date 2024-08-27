@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
+    <meta charset="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multiclinics Agenda</title>
     <link rel="stylesheet" href="./css/calendario.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div class="container">
@@ -21,30 +22,72 @@
         <div class="main-content">
             <div class="header">
                 <h2>Veja o seu <span class="highlight">Calendário</span></h2>
-                <button class="filter-button" onclick="abrirModalFiltro()">Filtrar</button>
+                <button class="filter-button" onclick="abrirModalFiltro()"><i class="fas fa-filter"></i> Filtrar</button>
+            </div>
 
-                <!-- Modal de Filtro -->
-                <div id="modalFiltro" class="modal">
-                    <div class="modal-content">
-                        <span class="close" onclick="fecharModalFiltro()">&times;</span>
-                        <h3>Filtrar Tarefas</h3>
-                        <label for="filtroIdade">Idade:</label>
-                        <input type="number" id="filtroIdade" placeholder="Idade">
-                        <label for="filtroArea">Área:</label>
-                        <input type="text" id="filtroArea" placeholder="Área">
-                        <button onclick="aplicarFiltros()">Aplicar Filtros</button>
+            <!-- Modal de Filtro -->
+            <div id="modalFiltro" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="fecharModalFiltro()">&times;</span>
+                    <h3><i class="fas fa-search"></i> Filtrar Consultas</h3>
+
+                    <div class="filter-group">
+                        <label for="filtroMedico"><i class="fas fa-user-md"></i> Médico:</label>
+                        <select id="filtroMedico">
+                            <option value="">Todos os Médicos</option>
+                        </select>
                     </div>
-                </div>
 
-                <!-- Modal de Detalhes da Tarefa -->
-                <div id="modalDetalhes" class="modal">
-                    <div class="modal-content">
-                        <span class="close" onclick="fecharModalDetalhes()">&times;</span>
-                        <h3>Detalhes da Consulta</h3>
-                        <div id="detalhesTarefa"></div>
+                    <div class="filter-group">
+                        <label for="filtroPaciente"><i class="fas fa-user"></i> Paciente:</label>
+                        <select id="filtroPaciente">
+                            <option value="">Todos os Pacientes</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="filtroStatus"><i class="fas fa-info-circle"></i> Status:</label>
+                        <select id="filtroStatus">
+                            <option value="">Todos os Status</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="filtroAreaConsulta"><i class="fas fa-stethoscope"></i> Área de Consulta:</label>
+                        <select id="filtroAreaConsulta">
+                            <option value="">Todas as Áreas</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="filtroIdadeGenero"><i class="fas fa-birthday-cake"></i> Idade do Paciente:</label>
+                        <div class="filtro-duplo">
+                            <input type="number" id="filtroIdade" placeholder="Digite a idade">
+                            <select id="filtroGenero">
+                                <option value="">Todos os Gêneros</option>
+                                <option value="Masculino">Masculino</option>
+                                <option value="Feminino">Feminino</option>
+                                <!-- Adicione outras opções de gênero conforme necessário -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="filter-buttons">
+                        <button onclick="aplicarFiltros()"><i class="fas fa-check"></i> Aplicar Filtros</button>
+                        <button onclick="limparFiltros()" class="limpar-button"><i class="fas fa-times"></i> Limpar Filtros</button>
                     </div>
                 </div>
             </div>
+
+            <!-- Modal de Detalhes da Tarefa -->
+            <div id="modalDetalhes" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="fecharModalDetalhes()">&times;</span>
+                    <h3>Detalhes da Consulta</h3>
+                    <div id="detalhesTarefa"></div>
+                </div>
+            </div>
+
             <div class="calendar">
                 <div id="contagemDias" class="count-dias">
                     <button onclick="semanaPassada()" class="nav-button">&lt;</button>
@@ -56,155 +99,299 @@
             </div>
         </div>
     </div>
+
+    <script>
+        let dataInicioAtual = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+        let consultasOriginais = []; // Para armazenar todas as consultas
+
+        async function buscarMedicos() {
+            try {
+                const resposta = await fetch("http://localhost:8080/medicos");
+                if (!resposta.ok) {
+                    throw new Error(`HTTP error! Status: ${resposta.status}`);
+                }
+                const medicos = await resposta.json();
+
+                const filtroMedico = document.getElementById('filtroMedico');
+                filtroMedico.innerHTML = '<option value="">Todos os Médicos</option>';
+                medicos.forEach(medico => {
+                    const option = document.createElement('option');
+                    option.value = medico.id;
+                    option.textContent = medico.nome + ' ' + medico.sobrenome;
+                    filtroMedico.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Erro ao buscar médicos:', error);
+            }
+        }
+
+        async function buscarPacientes() {
+            try {
+                const resposta = await fetch("http://localhost:8080/pacientes");
+                if (!resposta.ok) {
+                    throw new Error(`HTTP error! Status: ${resposta.status}`);
+                }
+                const pacientes = await resposta.json();
+
+                const filtroPaciente = document.getElementById('filtroPaciente');
+                filtroPaciente.innerHTML = '<option value="">Todos os Pacientes</option>';
+                pacientes.forEach(paciente => {
+                    const option = document.createElement('option');
+                    option.value = paciente.id;
+                    option.textContent = paciente.nome + ' ' + paciente.sobrenome;
+                    filtroPaciente.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Erro ao buscar pacientes:', error);
+            }
+        }
+
+        async function buscarEspecificacoesMedicas() {
+            try {
+                const resposta = await fetch("http://localhost:8080/especificacoes");
+                if (!resposta.ok) {
+                    throw new Error(`HTTP error! Status: ${resposta.status}`);
+                }
+                const especificacoes = await resposta.json();
+
+                const filtroAreaConsulta = document.getElementById('filtroAreaConsulta');
+                filtroAreaConsulta.innerHTML = '<option value="">Todas as Áreas</option>';
+                especificacoes.forEach(especificacao => {
+                    const option = document.createElement('option');
+                    option.value = especificacao.id;
+                    option.textContent = especificacao.area;
+                    filtroAreaConsulta.appendChild(option);
+                });
+
+                console.log(especificacoes); // Verifique os dados retornados
+            } catch (error) {
+                console.error('Erro ao buscar áreas de consulta:', error);
+            }
+        }
+
+        async function buscarStatusConsulta() {
+            try {
+                const resposta = await fetch("http://localhost:8080/statusConsultas");
+                if (!resposta.ok) {
+                    throw new Error(`HTTP error! Status: ${resposta.status}`);
+                }
+                const statusConsultas = await resposta.json();
+
+                const filtroStatus = document.getElementById('filtroStatus');
+                filtroStatus.innerHTML = '<option value="">Todos os Status</option>';
+                statusConsultas.forEach(status => {
+                    const option = document.createElement('option');
+                    option.value = status.id;
+                    option.textContent = status.nomeStatus;
+                    filtroStatus.appendChild(option);
+                });
+
+                console.log(statusConsultas); // Verifique os dados retornados
+            } catch (error) {
+                console.error('Erro ao buscar status de consulta:', error);
+            }
+        }
+
+        async function buscarConsultas() {
+            try {
+                const resposta = await fetch("http://localhost:8080/consultas");
+                if (!resposta.ok) {
+                    throw new Error(`HTTP error! Status: ${resposta.status}`);
+                }
+                consultasOriginais = await resposta.json();
+                bancoDeDadosFiltrado = consultasOriginais; // Inicialmente, o banco de dados filtrado é o original
+                atualizarDisplayData(dataInicioAtual);
+            } catch (error) {
+                console.error('Erro ao buscar consultas:', error);
+            }
+        }
+
+        function obterInicioDaSemana(date) {
+            const day = date.getDay();
+            const diff = (day === 0 ? -6 : 1) - day; // Ajuste para segunda-feira como o primeiro dia da semana
+            const startDate = new Date(date);
+            startDate.setDate(date.getDate() + diff);
+            return startDate;
+        }
+
+        function formatarData(date) {
+            const year = date.getFullYear();
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function calcularIdade(dataNasc) {
+            const hoje = new Date();
+            const nascimento = new Date(dataNasc);
+            let idade = hoje.getFullYear() - nascimento.getFullYear();
+            const mes = hoje.getMonth() - nascimento.getMonth();
+            if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
+                idade--;
+            }
+            return idade;
+        }
+
+        function obterTarefasParaData(date) {
+            const formattedDate = formatarData(date);
+            const entry = bancoDeDadosFiltrado.find(entry => entry.datahoraConsulta.startsWith(formattedDate));
+            return entry ? [entry.descricao] : ['Sem tarefas'];
+        }
+
+        function atualizarDisplayData(startDate) {
+            const endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() + 6);
+
+            const options = { day: '2-digit', month: 'long' };
+            const startStr = `${startDate.toLocaleDateString('pt-BR', options).replace(/^\d{2}/, match => match.padStart(2, '0'))} ${startDate.getFullYear()}`;
+            const endStr = `${endDate.toLocaleDateString('pt-BR', options).replace(/^\d{2}/, match => match.padStart(2, '0'))} ${endDate.getFullYear()}`;
+
+            document.getElementById('dias').innerText = `${startStr} - ${endStr}`;
+            atualizarDiasDaSemana(startDate);
+        }
+
+        function atualizarDiasDaSemana(startDate) {
+            const diasSemanaElement = document.getElementById('diasSemana');
+            diasSemanaElement.innerHTML = '';
+
+            for (let i = 0; i < 7; i++) {
+                const currentDate = new Date(startDate);
+                currentDate.setDate(startDate.getDate() + i);
+
+                const options = { weekday: 'short', day: '2-digit' };
+                const dayStr = currentDate.toLocaleDateString('pt-BR', options);
+
+                const dayElement = document.createElement('div');
+                dayElement.className = 'day';
+                dayElement.innerText = dayStr;
+
+                diasSemanaElement.appendChild(dayElement);
+            }
+
+            atualizarColunasDeTarefas(startDate);
+        }
+
+        function atualizarColunasDeTarefas(startDate) {
+            const colunasTarefasElement = document.getElementById('colunasTarefas');
+            colunasTarefasElement.innerHTML = '';
+
+            for (let i = 0; i < 7; i++) {
+                const currentDate = new Date(startDate);
+                currentDate.setDate(currentDate.getDate() + i);
+
+                const tasks = obterTarefasParaData(currentDate);
+
+                const columnElement = document.createElement('div');
+                columnElement.className = 'column';
+
+                tasks.forEach(task => {
+                    if (task !== 'Sem tarefas') {
+                        const taskElement = document.createElement('div');
+                        taskElement.className = 'task';
+                        taskElement.innerText = task;
+                        taskElement.onclick = () => abrirDetalhesTarefa(currentDate);
+                        columnElement.appendChild(taskElement);
+                    } else {
+                        const taskElement = document.createElement('div');
+                        taskElement.className = 'task inactive';
+                        taskElement.innerText = task;
+                        columnElement.appendChild(taskElement);
+                    }
+                });
+
+                colunasTarefasElement.appendChild(columnElement);
+            }
+        }
+
+        function semanaPassada() {
+            dataInicioAtual.setDate(dataInicioAtual.getDate() - 7);
+            dataInicioAtual = obterInicioDaSemana(dataInicioAtual);
+            atualizarDisplayData(dataInicioAtual);
+        }
+
+        function proximaSemana() {
+            dataInicioAtual.setDate(dataInicioAtual.getDate() + 7);
+            dataInicioAtual = obterInicioDaSemana(dataInicioAtual);
+            atualizarDisplayData(dataInicioAtual);
+        }
+
+        // Inicialização
+        async function inicializarPagina() {
+            await buscarMedicos();
+            await buscarPacientes();
+            await buscarEspecificacoesMedicas();
+            await buscarStatusConsulta();
+            await buscarConsultas();
+            
+            dataInicioAtual = obterInicioDaSemana(new Date());
+            atualizarDisplayData(dataInicioAtual);
+        }
+
+        inicializarPagina();
+
+        function abrirModalFiltro() {
+            document.getElementById('modalFiltro').style.display = 'flex';
+        }
+
+        function fecharModalFiltro() {
+            document.getElementById('modalFiltro').style.display = 'none';
+        }
+
+        function aplicarFiltros() {
+            const medicoId = parseInt(document.getElementById('filtroMedico').value);
+            const pacienteId = parseInt(document.getElementById('filtroPaciente').value);
+            const statusId = parseInt(document.getElementById('filtroStatus').value);
+            const areaConsultaId = parseInt(document.getElementById('filtroAreaConsulta').value);
+            const idadePaciente = parseInt(document.getElementById('filtroIdade').value);
+            const generoPaciente = document.getElementById('filtroGenero').value;
+
+            bancoDeDadosFiltrado = consultasOriginais.filter(consulta => {
+                const filtroMedico = !medicoId || consulta.medico.id === medicoId;
+                const filtroPaciente = !pacienteId || consulta.paciente.id === pacienteId;
+                const filtroStatus = !statusId || consulta.statusConsulta.id === statusId;
+                const filtroAreaConsulta = !areaConsultaId || consulta.especificacaoMedica.id === areaConsultaId;
+                const filtroIdade = !idadePaciente || calcularIdade(consulta.paciente.dtNasc) === idadePaciente;
+                const filtroGenero = !generoPaciente || consulta.paciente.genero === generoPaciente;
+
+                return filtroMedico && filtroPaciente && filtroStatus && filtroAreaConsulta && filtroIdade && filtroGenero;
+            });
+
+            fecharModalFiltro();
+            atualizarDisplayData(dataInicioAtual);
+        }
+
+        function limparFiltros() {
+            // Resetar todos os campos de filtro
+            document.getElementById('filtroMedico').value = '';
+            document.getElementById('filtroPaciente').value = '';
+            document.getElementById('filtroStatus').value = '';
+            document.getElementById('filtroAreaConsulta').value = '';
+            document.getElementById('filtroIdade').value = '';
+            document.getElementById('filtroGenero').value = '';
+
+            // Restaurar o banco de dados filtrado ao estado original
+            bancoDeDadosFiltrado = consultasOriginais;
+            atualizarDisplayData(dataInicioAtual);
+        }
+
+        function abrirDetalhesTarefa(consultaData) {
+            const consulta = bancoDeDadosFiltrado.find(c => c.datahoraConsulta.startsWith(formatarData(consultaData)));
+            
+            const detalhesDiv = document.getElementById('detalhesTarefa');
+            detalhesDiv.innerHTML = `
+                <p><strong>Descrição:</strong> ${consulta.descricao}</p>
+                <p><strong>Data e Hora:</strong> ${consulta.datahoraConsulta}</p>
+                <p><strong>Paciente:</strong> ${consulta.paciente.nome} ${consulta.paciente.sobrenome}</p>
+                <p><strong>Médico:</strong> ${consulta.medico.nome} ${consulta.medico.sobrenome} - ${consulta.especificacaoMedica.area}</p>
+                <p><strong>Status:</strong> ${consulta.statusConsulta.nomeStatus}</p>
+                <p><strong>Duração:</strong> ${consulta.duracaoConsulta}</p>
+            `;
+            document.getElementById('modalDetalhes').style.display = 'flex';
+        }
+
+        function fecharModalDetalhes() {
+            document.getElementById('modalDetalhes').style.display = 'none';
+        }
+    </script>
 </body>
 </html>
-<script>
-let dataInicioAtual = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-
-// Simulação de um banco de dados com dados de atividades
-const bancoDeDadosTarefas = [
-    { date: '2024-08-01', tasks: ['Tratamento de espinhas'], nome: 'Pedro', idade: 17, area: 'Psico' },
-    { date: '2024-08-02', tasks: ['Tratamento de unha', 'Consulta médica', 'aaaa', 'aaaa', 'aaaa', 'aaaa'], nome: 'Pedro', idade: 18, area: 'Psico' },
-    { date: '2024-08-03', tasks: ['Tratamento de unha'], nome: 'Pedro', idade: 18, area: 'Psico' },
-    { date: '2024-08-04', tasks: ['Consulta médica', 'Reunião'], nome: 'Pedro', idade: 18, area: 'Psico' },
-    { date: '2024-08-05', tasks: ['Reunião de trabalho'], nome: 'Pedro', idade: 18, area: 'Psico' },
-    { date: '2024-08-06', tasks: ['Aula de yoga', 'Reunião'], nome: 'Pedro', idade: 18, area: 'Psico' },
-    { date: '2024-08-07', tasks: ['Tratamento de espinhas', 'Compras'] },
-];
-
-let bancoDeDadosFiltrado = bancoDeDadosTarefas;
-
-function obterInicioDaSemana(date) {
-    const day = date.getDay();
-    const diff = (day === 0 ? -6 : 1) - day; // Ajuste para segunda-feira como o primeiro dia da semana
-    const startDate = new Date(date);
-    startDate.setDate(date.getDate() + diff);
-    return startDate;
-}
-
-function formatarData(date) {
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
-}
-
-function obterTarefasParaData(date) {
-    const formattedDate = formatarData(date);
-    const entry = bancoDeDadosFiltrado.find(entry => entry.date === formattedDate);
-    return entry ? entry.tasks : ['Sem tarefas'];
-}
-
-function atualizarDisplayData(startDate) {
-    const endDate = new Date(startDate);
-    endDate.setDate(startDate.getDate() + 6);
-
-    const options = { day: '2-digit', month: 'long' };
-    const startStr = `${startDate.toLocaleDateString('pt-BR', options).replace(/^\d{2}/, match => match.padStart(2, '0'))} ${startDate.getFullYear()}`;
-    const endStr = `${endDate.toLocaleDateString('pt-BR', options).replace(/^\d{2}/, match => match.padStart(2, '0'))} ${endDate.getFullYear()}`;
-
-    document.getElementById('dias').innerText = `${startStr} - ${endStr}`;
-    atualizarDiasDaSemana(startDate);
-}
-
-function atualizarDiasDaSemana(startDate) {
-    const diasSemanaElement = document.getElementById('diasSemana');
-    diasSemanaElement.innerHTML = '';
-
-    for (let i = 0; i < 7; i++) {
-        const currentDate = new Date(startDate);
-        currentDate.setDate(startDate.getDate() + i);
-
-        const options = { weekday: 'short', day: '2-digit' };
-        const dayStr = currentDate.toLocaleDateString('pt-BR', options);
-
-        const dayElement = document.createElement('div');
-        dayElement.className = 'day';
-        dayElement.innerText = dayStr;
-
-        diasSemanaElement.appendChild(dayElement);
-    }
-
-    atualizarColunasDeTarefas(startDate);
-}
-
-function atualizarColunasDeTarefas(startDate) {
-    const colunasTarefasElement = document.getElementById('colunasTarefas');
-    colunasTarefasElement.innerHTML = '';
-
-    for (let i = 0; i < 7; i++) {
-        const currentDate = new Date(startDate);
-        currentDate.setDate(currentDate.getDate() + i);
-
-        const tasks = obterTarefasParaData(currentDate);
-
-        const columnElement = document.createElement('div');
-        columnElement.className = 'column';
-
-        tasks.forEach(task => {
-            if (task !== 'Sem tarefas') {
-                const taskElement = document.createElement('div');
-                taskElement.className = 'task';
-                taskElement.innerText = task;
-                taskElement.onclick = () => abrirDetalhesTarefa(task, currentDate);
-                columnElement.appendChild(taskElement);
-            } else {
-                const taskElement = document.createElement('div');
-                taskElement.className = 'task inactive';
-                taskElement.innerText = task;
-                columnElement.appendChild(taskElement);
-            }
-        });
-
-        colunasTarefasElement.appendChild(columnElement);
-    }
-}
-
-function semanaPassada() {
-    dataInicioAtual.setDate(dataInicioAtual.getDate() - 7);
-    dataInicioAtual = obterInicioDaSemana(dataInicioAtual);
-    atualizarDisplayData(dataInicioAtual);
-}
-
-function proximaSemana() {
-    dataInicioAtual.setDate(dataInicioAtual.getDate() + 7);
-    dataInicioAtual = obterInicioDaSemana(dataInicioAtual);
-    atualizarDisplayData(dataInicioAtual);
-}
-
-// Inicialização
-dataInicioAtual = obterInicioDaSemana(dataInicioAtual);
-atualizarDisplayData(dataInicioAtual);
-
-function abrirModalFiltro() {
-    document.getElementById('modalFiltro').style.display = 'flex';
-}
-
-function fecharModalFiltro() {
-    document.getElementById('modalFiltro').style.display = 'none';
-}
-
-function aplicarFiltros() {
-    const idade = document.getElementById('filtroIdade').value;
-    const area = document.getElementById('filtroArea').value.toLowerCase();
-
-    bancoDeDadosFiltrado = bancoDeDadosTarefas.filter(entry => {
-        const filtroIdade = !idade || entry.idade == idade;
-        const filtroArea = !area || (entry.area && entry.area.toLowerCase().includes(area));
-        return filtroIdade && filtroArea;
-    });
-
-    fecharModalFiltro();
-    atualizarDisplayData(dataInicioAtual);
-}
-
-function abrirDetalhesTarefa(task, date) {
-    const detalhesDiv = document.getElementById('detalhesTarefa');
-    detalhesDiv.innerHTML = `<p><strong>Tarefa:</strong> ${task}</p><p><strong>Data:</strong> ${date.toLocaleDateString('pt-BR')}</p>`;
-    document.getElementById('modalDetalhes').style.display = 'flex';
-}
-
-function fecharModalDetalhes() {
-    document.getElementById('modalDetalhes').style.display = 'none';
-}
-</script>

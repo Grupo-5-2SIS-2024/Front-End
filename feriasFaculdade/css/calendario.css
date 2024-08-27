@@ -71,10 +71,48 @@ body {
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .filter-button:hover {
     background-color: #005533;
+}
+
+.filter-group {
+    margin-bottom: 20px;
+}
+
+.filter-group label {
+    font-weight: bold;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.filter-group select,
+.filter-group input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+}
+
+.filtro-duplo {
+    display: flex;
+    gap: 10px;
+}
+
+#filtroIdade {
+    width: 100px;
+}
+
+#filtroGenero {
+    flex-grow: 1;
 }
 
 .calendar {
@@ -107,11 +145,11 @@ body {
     font-size: 1.5em;
     font-weight: bold;
     color: #333;
-    width: 600px; /* Aumentando a largura para garantir que o texto caiba inteiro */
+    width: 600px;
     text-align: center;
     display: inline-block;
-    white-space: nowrap; /* Impede que o texto quebre em múltiplas linhas */
-    overflow: visible; /* Permite que todo o texto seja visível */
+    white-space: nowrap;
+    overflow: visible;
 }
 
 .week-days {
@@ -185,7 +223,7 @@ body {
     padding: 20px;
     border-radius: 10px;
     width: 80%;
-    max-width: 400px;
+    max-width: 500px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     position: relative;
     animation: animacaoModal 0.3s ease-out;
@@ -216,10 +254,12 @@ body {
     color: #333;
 }
 
-.modal-content input {
-    width: calc(100% - 20px);
+.modal-content select,
+.modal-content input,
+.modal-content button {
+    width: 100%;
     padding: 10px;
-    margin-bottom: 10px;
+    margin-top: 10px;
     border-radius: 5px;
     border: 1px solid #ccc;
 }
@@ -227,17 +267,32 @@ body {
 .modal-content button {
     background-color: #007744;
     color: white;
-    border: none;
-    padding: 10px;
-    width: 100%;
-    border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
-    margin-top: 10px;
 }
 
 .modal-content button:hover {
     background-color: #005533;
+}
+
+.filter-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.filter-buttons button {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.filter-buttons .limpar-button {
+    background-color: #ff6666;
+    color: white;
+}
+
+.filter-buttons .limpar-button:hover {
+    background-color: #cc0000;
 }
 
 .close {
