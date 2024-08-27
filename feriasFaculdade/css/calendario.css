@@ -107,9 +107,11 @@ body {
     font-size: 1.5em;
     font-weight: bold;
     color: #333;
-    width: 300px;
+    width: 600px; /* Aumentando a largura para garantir que o texto caiba inteiro */
     text-align: center;
     display: inline-block;
+    white-space: nowrap; /* Impede que o texto quebre em múltiplas linhas */
+    overflow: visible; /* Permite que todo o texto seja visível */
 }
 
 .week-days {

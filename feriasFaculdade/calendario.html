@@ -48,7 +48,7 @@
             <div class="calendar">
                 <div id="contagemDias" class="count-dias">
                     <button onclick="semanaPassada()" class="nav-button">&lt;</button>
-                    <span id="dias">01 - 07 - Agosto</span>
+                    <span id="dias">01 - 07 - Agosto 2024</span>
                     <button onclick="proximaSemana()" class="nav-button">&gt;</button>
                 </div>
                 <div class="week-days" id="diasSemana"></div>
@@ -100,8 +100,8 @@ function atualizarDisplayData(startDate) {
     endDate.setDate(startDate.getDate() + 6);
 
     const options = { day: '2-digit', month: 'long' };
-    const startStr = startDate.toLocaleDateString('pt-BR', options).replace(/^\d{2}/, match => match.padStart(2, '0'));
-    const endStr = endDate.toLocaleDateString('pt-BR', options).replace(/^\d{2}/, match => match.padStart(2, '0'));
+    const startStr = `${startDate.toLocaleDateString('pt-BR', options).replace(/^\d{2}/, match => match.padStart(2, '0'))} ${startDate.getFullYear()}`;
+    const endStr = `${endDate.toLocaleDateString('pt-BR', options).replace(/^\d{2}/, match => match.padStart(2, '0'))} ${endDate.getFullYear()}`;
 
     document.getElementById('dias').innerText = `${startStr} - ${endStr}`;
     atualizarDiasDaSemana(startDate);
