@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agendar Consulta</title>
     <link rel="stylesheet" href="./css/addAgendamento.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 </head>
 <body>
     <div class="container">
@@ -15,7 +17,7 @@
                 <ul>
                     <li><a href="#">Início</a></li>
                     <li class="active"><a href="#">Agendamento</a></li>
-                    <li><a href="#">Funcionario</a></li>
+                    <li><a href="#">Funcionário</a></li>
                     <li><a href="#">Paciente</a></li>
                     <li><a href="#">Dashboard</a></li>
                 </ul>
@@ -46,14 +48,18 @@
                         <!-- Options will be populated by JavaScript -->
                     </select>
                 </div>
-                <button id="agendar">Agendar</button>
+                <div class="form-group">
+                    <label for="descricao">Descrição</label>
+                    <textarea id="descricao" placeholder="Digite a descrição da consulta (opcional)" rows="3"></textarea>
+                </div>
+                <button id="agendar"><i class="fas fa-calendar-check"></i> Agendar</button>
             </div>
             <div class="form-container2" id="consultas-container">
                 <!-- Consultas cadastradas serão inseridas aqui -->
             </div>
         </main>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="./addAgendamento.js"></script>
     </div>
-    
-    <script src="./addAgendamento.js"></script>
 </body>
 </html>

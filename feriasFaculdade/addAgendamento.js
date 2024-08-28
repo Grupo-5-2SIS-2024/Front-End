@@ -1,135 +1,312 @@
-// Simulando dados de um banco de dados
-const horarios = [
-    "08:00 - 09:00",
-    "09:00 - 10:00",
-    "10:00 - 11:00",
-    "11:00 - 12:00",
-    "12:00 - 13:00",
-    "13:00 - 14:00",
-    "14:00 - 15:00",
-    "15:00 - 16:00",
-    "16:00 - 17:00"
-];
+// Função para formatar data
+function formatarData(data) {
+    const dataObj = new Date(data);
+    return dataObj.toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+    });
+}
 
-const medicos = [
-    "Luciano Rosa",
-    "Fernanda Brito",
-    "João Almeida",
-    "Rafaela Santos",
-    "Ana Sanchez",
-    "Julio Ferraz"
-];
+// Função para determinar o ícone com base no gênero do paciente
+function obterIconeGenero(genero) {
+    if (genero.toLowerCase() === 'masculino') {
+        return '<i class="fas fa-male" style="font-size: 50px; color: #1E90FF;"></i>'; // Azul para homens
+    } else if (genero.toLowerCase() === 'feminino') {
+        return '<i class="fas fa-female" style="font-size: 50px; color: #E91E63;"></i>'; // Rosa para mulheres
+    } else {
+        return '<i class="fas fa-user" style="font-size: 50px; color: #9E9E9E;"></i>'; // Ícone genérico para outros casos
+    }
+}
 
-const pacientes = [
-    { nome: "Clara Rodrigues", foto: "https://via.placeholder.com/50" },
-    { nome: "Rafael Souza", foto: "https://via.placeholder.com/50" },
-    { nome: "Pedro Matos", foto: "https://via.placeholder.com/50" },
-    { nome: "Pedro pinto", foto: "https://via.placeholder.com/50" },
-    { nome: "Pedro barbiellini", foto: "https://via.placeholder.com/50" },
-    { nome: "Lucca Fernandes", foto: "https://via.placeholder.com/50" },
-    { nome: "Valentina Pinto", foto: "https://via.placeholder.com/50" },
-    { nome: "Camila Viana", foto: "https://via.placeholder.com/50" }
-];
+// Função para buscar dados da API para consultas
+async function buscarConsultas() {
+    console.log("Buscando consultas...");
 
-// Simulando consultas existentes
-const consultas = [
-    { dia: "2024-10-01", hora: "08:00 - 09:00", medico: "Luciano Rosa", paciente: "Clara Rodrigues" },
-    { dia: "2024-10-01", hora: "09:00 - 10:00", medico: "Luciano Rosa", paciente: "Rafael Souza" },
-    { dia: "2024-10-01", hora: "10:00 - 11:00", medico: "Fernanda Brito", paciente: "Pedro Matos" },
-    { dia: "2024-10-10", hora: "10:00 - 11:00", medico: "Fernanda Brito", paciente: "Pedro pinto" },
-    { dia: "2024-10-09", hora: "10:00 - 11:00", medico: "Fernanda Brito", paciente: "Pedro barbiellini" },
-    // Adicione mais consultas conforme necessário
-];
+    try {
+        const resposta = await fetch("http://localhost:8080/consultas");
+        if (!resposta.ok) {
+            throw new Error(`HTTP error! Status: ${resposta.status}`);
+        }
+        const consultas = await resposta.json();
+        console.log(consultas);
+
+        // Atualiza a listagem de consultas
+        const consultasContainer = document.getElementById("consultas-container");
+        consultasContainer.innerHTML = consultas.map((consulta) => {
+            return `
+                <div class="consulta">
+                    ${obterIconeGenero(consulta.paciente.genero)}
+                    <div class="consulta-info">
+                        <h3>${consulta.paciente.nome} ${consulta.paciente.sobrenome}</h3>
+                        <p>${formatarData(consulta.datahoraConsulta)}</p>
+                        <p>Médico: ${consulta.medico.nome} ${consulta.medico.sobrenome} - ${consulta.especificacaoMedica.area}</p>
+                        <p>Status: ${consulta.statusConsulta.nomeStatus}</p>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        return consultas;
+    } catch (error) {
+        console.error('Erro ao buscar consultas:', error);
+        return []; // Retorna um array vazio em caso de erro
+    }
+}
+
+// Função para buscar dados da API para pacientes e médicos e popular os selects
+async function buscarPacientesEMedicos() {
+    console.log("Buscando pacientes e médicos...");
+
+    try {
+        const respostaPacientes = await fetch("http://localhost:8080/pacientes");
+        if (!respostaPacientes.ok) {
+            throw new Error(`HTTP error! Status: ${respostaPacientes.status}`);
+        }
+        const pacientes = await respostaPacientes.json();
+        console.log(pacientes);
+
+        const respostaMedicos = await fetch("http://localhost:8080/medicos");
+        if (!respostaMedicos.ok) {
+            throw new Error(`HTTP error! Status: ${respostaMedicos.status}`);
+        }
+        const medicos = await respostaMedicos.json();
+        console.log(medicos);
+
+        // Adiciona a opção padrão antes de popular as opções reais
+        populateSelect('paciente', [{nome: 'Selecione um Paciente', id: ''}, ...pacientes], 'nome', 'id');
+        populateSelect('medico', [{nome: 'Selecione um Médico', id: ''}, ...medicos], 'nome', 'id');
+    } catch (error) {
+        console.error('Erro ao buscar pacientes e médicos:', error);
+    }
+}
 
 // Função para popular as opções dos selects
-function populateSelect(selectId, options) {
+function populateSelect(selectId, options, textKey = 'nome', valueKey = 'id') {
     const selectElement = document.getElementById(selectId);
     selectElement.innerHTML = ''; // Limpar opções existentes
+    
+    // Verifica se a lista de opções é válida e não está vazia
+    if (options.length === 0 || options[0] === 'Sem horários disponíveis') {
+        const optionElement = document.createElement('option');
+        optionElement.textContent = 'Nenhum horário disponível';
+        optionElement.value = ''; // Define o valor como vazio
+        selectElement.appendChild(optionElement);
+        return;
+    }
+
     options.forEach(option => {
         const optionElement = document.createElement('option');
-        optionElement.textContent = option.nome || option;
-        optionElement.value = option.nome || option; // Atribuir valor para identificação
+        
+        if (typeof option === 'string') {
+            // Caso seja uma string, adiciona diretamente
+            optionElement.textContent = option;
+            optionElement.value = option;
+        } else {
+            // Caso contrário, utiliza as chaves fornecidas
+            optionElement.textContent = option[textKey];
+            optionElement.value = option[valueKey];
+        }
+        
         selectElement.appendChild(optionElement);
     });
 }
 
-// Função para exibir as consultas existentes
-function displayConsultas() {
-    const consultasContainer = document.getElementById('consultas-container');
-    consultasContainer.innerHTML = ''; // Limpar conteúdo existente
+// Função para obter horários disponíveis para um dia específico, considerando todos os médicos
+async function getAvailableHours(dia) {
+    console.log("Obtendo horas disponíveis para o dia:", dia);
+    const consultas = await buscarConsultas();
 
-    consultas.forEach(consulta => {
-        const pacienteData = pacientes.find(paciente => paciente.nome === consulta.paciente);
-        const consultaElement = document.createElement('div');
-        consultaElement.className = 'consulta';
+    const allHours = [];
+    for (let h = 6; h <= 18; h++) {
+        const hourStr = h.toString().padStart(2, '0') + ':00';
+        allHours.push(hourStr);
+    }
 
-        consultaElement.innerHTML = `
-            <img src="${pacienteData.foto}" alt="Foto de ${consulta.paciente}">
-            <div class="consulta-info">
-                <h3>${consulta.paciente}</h3>
-                <p>${consulta.hora}</p>
-                <p>Médico: ${consulta.medico}</p>
-            </div>
-        `;
+    // Lista de horários reservados por qualquer médico
+    const bookedHours = consultas
+        .filter(consulta => consulta.datahoraConsulta.startsWith(dia))
+        .map(consulta => consulta.datahoraConsulta.split('T')[1].substring(0, 5));
 
-        consultasContainer.appendChild(consultaElement);
+    // Horários disponíveis são aqueles que não estão reservados para todos os médicos
+    const availableHours = allHours.filter(hora => {
+        // Verifica se pelo menos um médico está livre neste horário
+        const isHourFullyBooked = consultas.every(consulta => consulta.datahoraConsulta.endsWith(hora));
+        return !isHourFullyBooked;
+    });
+
+    console.log("Horas disponíveis:", availableHours);
+    return availableHours.length > 0 ? availableHours : ['Sem horários disponíveis'];
+}
+
+// Função para atualizar as horas disponíveis após a seleção da data
+async function updateAvailableHours() {
+    const dia = document.getElementById('dia').value;
+    if (dia) {
+        const availableHours = await getAvailableHours(dia);
+        populateSelect('hora', availableHours, null, null);
+    }
+}
+
+// Função para popular as opções dos selects de maneira eficiente
+function populateSelect(selectId, options, textKey = 'nome', valueKey = 'id') {
+    const selectElement = document.getElementById(selectId);
+    selectElement.innerHTML = ''; // Limpar opções existentes
+
+    options.forEach(option => {
+        const optionElement = document.createElement('option');
+        if (typeof option === 'string') {
+            optionElement.textContent = option;
+            optionElement.value = option;
+        } else {
+            optionElement.textContent = option[textKey];
+            optionElement.value = option[valueKey];
+        }
+        selectElement.appendChild(optionElement);
     });
 }
 
-// Função para obter horas disponíveis para um dia e médico específicos
-function getAvailableHours(dia, medico) {
-    const bookedHours = consultas
-        .filter(consulta => consulta.dia === dia && consulta.medico === medico)
-        .map(consulta => consulta.hora);
-    return horarios.filter(hora => !bookedHours.includes(hora));
-}
-
-// Função para obter médicos disponíveis para um dia e hora específicos
-function getAvailableDoctors(dia, hora) {
-    const bookedDoctors = consultas
-        .filter(consulta => consulta.dia === dia && consulta.hora === hora)
-        .map(consulta => consulta.medico);
-    return medicos.filter(medico => !bookedDoctors.includes(medico));
-}
-
-// Popular os selects com dados
-populateSelect('paciente', pacientes);
-populateSelect('medico', medicos);
-
-document.getElementById('dia').addEventListener('change', updateAvailableHoursAndDoctors);
-document.getElementById('hora').addEventListener('change', updateAvailableDoctors);
-
-function updateAvailableHoursAndDoctors() {
-    const dia = document.getElementById('dia').value;
-    const medico = document.getElementById('medico').value;
-    if (dia) {
-        const availableHours = getAvailableHours(dia, medico);
-        populateSelect('hora', availableHours);
-        updateAvailableDoctors();
-    }
-}
-
-function updateAvailableDoctors() {
+async function updateAvailableDoctors() {
     const dia = document.getElementById('dia').value;
     const hora = document.getElementById('hora').value;
+
     if (dia && hora) {
-        const availableDoctors = getAvailableDoctors(dia, hora);
-        populateSelect('medico', availableDoctors);
+        try {
+            const consultas = await buscarConsultas();
+            const respostaMedicos = await fetch("http://localhost:8080/medicos");
+            const medicos = await respostaMedicos.json();
+
+            // Filtra os médicos que têm consultas no horário selecionado
+            const bookedDoctors = consultas
+                .filter(consulta => consulta.datahoraConsulta.startsWith(`${dia}T${hora}`))
+                .map(consulta => consulta.medico.id);
+
+            // Médicos disponíveis são aqueles que não estão na lista de médicos ocupados
+            const availableDoctors = medicos.filter(medico => !bookedDoctors.includes(medico.id));
+            
+            // Popula o select com os médicos disponíveis
+            populateSelect('medico', [{ nome: 'Selecione um Médico', id: '' }, ...availableDoctors], 'nome', 'id');
+        } catch (error) {
+            console.error('Erro ao atualizar médicos disponíveis:', error);
+        }
     }
 }
 
-document.getElementById('agendar').addEventListener('click', function() {
+async function updateAvailablePatients() {
     const dia = document.getElementById('dia').value;
     const hora = document.getElementById('hora').value;
-    const medico = document.getElementById('medico').value;
-    const paciente = document.getElementById('paciente').value;
 
-    if (dia && hora && medico && paciente) {
-        alert(`Consulta agendada para o dia ${dia} às ${hora} com o médico ${medico} para o paciente ${paciente}.`);
-    } else {
-        alert('Por favor, preencha todos os campos.');
+    if (dia && hora) {
+        try {
+            const consultas = await buscarConsultas();
+            const respostaPacientes = await fetch("http://localhost:8080/pacientes");
+            const pacientes = await respostaPacientes.json();
+
+            // Filtra os pacientes que têm consultas no horário selecionado
+            const bookedPatients = consultas
+                .filter(consulta => consulta.datahoraConsulta.startsWith(`${dia}T${hora}`))
+                .map(consulta => consulta.paciente.id);
+
+            // Pacientes disponíveis são aqueles que não estão na lista de pacientes ocupados
+            const availablePatients = pacientes.filter(paciente => !bookedPatients.includes(paciente.id));
+
+            // Popula o select com os pacientes disponíveis
+            populateSelect('paciente', [{ nome: 'Selecione um Paciente', id: '' }, ...availablePatients], 'nome', 'id');
+        } catch (error) {
+            console.error('Erro ao atualizar pacientes disponíveis:', error);
+        }
     }
-});
+}
 
-// Chamar a função para exibir as consultas existentes ao carregar a página
-document.addEventListener('DOMContentLoaded', displayConsultas);
+async function agendarConsulta() {
+    const dia = document.getElementById('dia').value;
+    const hora = document.getElementById('hora').value;
+    const medicoId = document.getElementById('medico').value;
+    const pacienteId = document.getElementById('paciente').value;
+    const descricao = document.getElementById('descricao').value || "Sem descrição";
+
+    try {
+        const respostaEspec = await fetch("http://localhost:8080/medicos");
+        if (!respostaEspec.ok) {
+            throw new Error(`HTTP error! Status: ${respostaEspec.status}`);
+        }
+
+        const medicos = await respostaEspec.json();
+        const medicoSelecionado = medicos.find(medico => medico.id == medicoId);
+
+        if (!medicoSelecionado) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro',
+                text: 'Médico não encontrado.',
+            });
+            return;
+        }
+
+        const especificacaoMedicaId = medicoSelecionado.especificacaoMedica.id;
+
+        const dadosConsulta = {
+            datahoraConsulta: `${dia}T${hora}:00`,
+            descricao: descricao,
+            medico: { id: medicoId },
+            especificacaoMedica: { id: especificacaoMedicaId },
+            statusConsulta: { id: 1 },
+            paciente: { id: pacienteId },
+            duracaoConsulta: "01:00:00"
+        };
+
+        const respostaCadastro = await fetch("http://localhost:8080/consultas", {
+            method: "POST",
+            body: JSON.stringify(dadosConsulta),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8",
+                "Accept": "application/json"
+            }
+        });
+
+        if (respostaCadastro.status == 201 || respostaCadastro.ok) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Consulta agendada com sucesso!',
+                showConfirmButton: false,
+                timer: 1500,
+            }).then(() => {
+                window.location.reload();
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro',
+                text: 'Ocorreu um erro ao cadastrar a consulta.',
+            });
+        }
+    } catch (error) {
+        console.error('Erro ao agendar consulta:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: 'Erro ao agendar a consulta.',
+        });
+    }
+}
+
+// Inicialização da página
+console.log("Iniciando página de agendamentos...");
+buscarPacientesEMedicos();
+buscarConsultas();
+
+// Inicialização da página
+(async function initialize() {
+    console.log("Iniciando página de agendamentos...");
+    await buscarPacientesEMedicos();
+    await buscarConsultas();
+})();
+
+// Eventos de mudança nos selects
+document.getElementById('dia').addEventListener('change', updateAvailableHours);
+document.getElementById('hora').addEventListener('change', () => {
+    updateAvailableDoctors();
+    updateAvailablePatients();
+});
+document.getElementById('medico').addEventListener('change', updateAvailablePatients);
+
+document.getElementById('agendar').addEventListener('click', agendarConsulta);

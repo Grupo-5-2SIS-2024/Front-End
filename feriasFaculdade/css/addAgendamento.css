@@ -59,7 +59,7 @@ body {
     background-color: #F5F5F5;
     display: flex;
     flex-direction: column;
-    gap: 20px; /* Espaçamento entre form-container e form-container2 */
+    gap: 20px;
 }
 
 .main-content h1 {
@@ -86,14 +86,14 @@ body {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    flex-grow: 1; /* Permite que o form-container2 ocupe o espaço restante */
+    flex-grow: 1;
     display: flex;
-    flex-direction: column; /* Alinha as consultas verticalmente */
+    flex-direction: column;
     gap: 20px;
     align-items: stretch;
-    overflow-y: auto; /* Adiciona rolagem vertical */
-    overflow-x: hidden; /* Impede a rolagem horizontal */
-    max-height: 400px; /* Define uma altura máxima, ajuste conforme necessário */
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 400px;
 }
 
 .form-group {
@@ -107,10 +107,15 @@ body {
 }
 
 .form-group input,
-.form-group select {
+.form-group select,
+.form-group textarea {
     padding: 10px;
     border: 1px solid #CCC;
     border-radius: 5px;
+}
+
+.form-group textarea {
+    resize: vertical;
 }
 
 button#agendar {
@@ -121,6 +126,9 @@ button#agendar {
     border-radius: 5px;
     cursor: pointer;
     align-self: flex-end;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 button#agendar:hover {
@@ -135,8 +143,8 @@ button#agendar:hover {
     border: 1px solid #CCC;
     border-radius: 5px;
     background-color: #FFF;
-    width: 100%; /* Garante que a consulta ocupe toda a largura disponível */
-    box-sizing: border-box; /* Inclui padding e border na largura total */
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .consulta img {
