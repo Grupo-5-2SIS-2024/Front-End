@@ -42,6 +42,10 @@ async function buscarConsultas() {
                         <p>${formatarData(consulta.datahoraConsulta)}</p>
                         <p>Médico: ${consulta.medico.nome} ${consulta.medico.sobrenome} - ${consulta.especificacaoMedica.area}</p>
                         <p>Status: ${consulta.statusConsulta.nomeStatus}</p>
+                        <div class="consulta-actions">
+                            <i class="fas fa-pen" onclick="alterarConsulta(${consulta.id})" title="Alterar Consulta"></i>
+                            <i class="fas fa-trash" onclick="excluirConsulta(${consulta.id})" title="Cancelar Consulta"></i>
+                        </div>
                     </div>
                 </div>
             `;
@@ -289,12 +293,76 @@ async function agendarConsulta() {
     }
 }
 
-// Inicialização da página
-console.log("Iniciando página de agendamentos...");
-buscarPacientesEMedicos();
-buscarConsultas();
+// Função para "cancelar" consulta, alterando o status para "Cancelada"
+async function excluirConsulta(idConsulta) {
+    console.log(idConsulta);
+    
+    Swal.fire({
+        title: 'Tem certeza?',
+        text: "Você não poderá reverter esta ação!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sim, cancele!'
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            try {
+                // Recupera a consulta existente específica pelo ID
+                const respostaConsulta = await fetch(`http://localhost:8080/consultas/${idConsulta}`);
+                if (!respostaConsulta.ok) {
+                    throw new Error(`Erro HTTP! Status: ${respostaConsulta.status}`);
+                }
 
-// Inicialização da página
+                const consultaExistente = await respostaConsulta.json();
+                console.log(consultaExistente);
+
+                // Confirma que a consulta é válida
+                if (!consultaExistente || !consultaExistente.id) {
+                    throw new Error('Consulta inválida ou não encontrada');
+                }
+
+                // Atualiza o campo statusConsulta para "Cancelada" (ID = 3)
+                consultaExistente.statusConsulta = { id: 3 };
+
+                // Envia a requisição PUT para atualizar o status da consulta
+                const resposta = await fetch(`http://localhost:8080/consultas/${idConsulta}`, {
+                    method: 'PUT',
+                    body: JSON.stringify(consultaExistente),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8",
+                        "Accept": "application/json"
+                    }
+                });
+
+                if (resposta.ok) {
+                    Swal.fire(
+                        'Cancelado!',
+                        'O status da consulta foi atualizado para "Cancelada".',
+                        'success'
+                    );
+                    await buscarConsultas(); // Atualiza a lista de consultas após a alteração
+                } else {
+                    const erro = await resposta.text();
+                    Swal.fire('Erro!', `Ocorreu um erro ao cancelar a consulta: ${erro}`, 'error');
+                }
+            } catch (error) {
+                console.error('Erro ao cancelar consulta:', error);
+                Swal.fire('Erro!', 'Erro ao cancelar a consulta.', 'error');
+            }
+        }
+    });
+}
+
+
+
+
+
+function alterarConsulta(id) {
+    console.log("Alterar consulta:", id);
+    Swal.fire('Em breve', 'A funcionalidade de alteração está em desenvolvimento.', 'info');
+}
+
 // Inicialização da página
 (async function initialize() {
     console.log("Iniciando página de agendamentos...");

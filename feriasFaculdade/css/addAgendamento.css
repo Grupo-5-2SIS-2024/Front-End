@@ -1,3 +1,4 @@
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -145,6 +146,32 @@ button#agendar:hover {
     background-color: #FFF;
     width: 100%;
     box-sizing: border-box;
+    position: relative; /* Adicionado para posicionar os ícones */
+}
+
+.consulta-actions {
+    display: flex;
+    gap: 20px; /* Espaçamento maior entre os ícones */
+    position: absolute;
+    right: 10px; /* Alinha os ícones completamente à direita */
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.consulta-actions i {
+    color: #555;
+    font-size: 24px; /* Aumenta o tamanho dos ícones */
+    transition: color 0.3s;
+}
+
+.consulta-actions i:hover {
+    color: #2E7D32; /* Cor ao passar o mouse */
+}
+
+.consulta-info {
+    flex: 1; /* Permite que a informação da consulta ocupe o espaço disponível */
+    margin-right: 60px; /* Espaço para os ícones à direita */
 }
 
 .consulta img {
