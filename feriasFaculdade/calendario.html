@@ -60,15 +60,16 @@
                     </div>
 
                     <div class="filter-group">
-                        <label for="filtroIdadeGenero"><i class="fas fa-birthday-cake"></i> Idade do Paciente:</label>
+                        <label for="filtroIdadeGenero"><i class="fas fa-birthday-cake"></i> Idade, Gênero e Data:</label>
                         <div class="filtro-duplo">
-                            <input type="number" id="filtroIdade" placeholder="Digite a idade">
+                            <input type="number" id="filtroIdade" placeholder="Idade">
                             <select id="filtroGenero">
                                 <option value="">Todos os Gêneros</option>
                                 <option value="Masculino">Masculino</option>
                                 <option value="Feminino">Feminino</option>
-                                <!-- Adicione outras opções de gênero conforme necessário -->
                             </select>
+                            <input type="date" id="filtroDataInicio" placeholder="Data >=">
+                            <input type="date" id="filtroDataFim" placeholder="Data <=">
                         </div>
                     </div>
 
@@ -162,8 +163,6 @@
                     option.textContent = especificacao.area;
                     filtroAreaConsulta.appendChild(option);
                 });
-
-                console.log(especificacoes); // Verifique os dados retornados
             } catch (error) {
                 console.error('Erro ao buscar áreas de consulta:', error);
             }
@@ -185,8 +184,6 @@
                     option.textContent = status.nomeStatus;
                     filtroStatus.appendChild(option);
                 });
-
-                console.log(statusConsultas); // Verifique os dados retornados
             } catch (error) {
                 console.error('Erro ao buscar status de consulta:', error);
             }
@@ -234,8 +231,9 @@
 
         function obterTarefasParaData(date) {
             const formattedDate = formatarData(date);
-            const entry = bancoDeDadosFiltrado.find(entry => entry.datahoraConsulta.startsWith(formattedDate));
-            return entry ? [entry.descricao] : ['Sem tarefas'];
+            // Filtra todas as consultas para a data específica
+            const entries = bancoDeDadosFiltrado.filter(entry => entry.datahoraConsulta.startsWith(formattedDate));
+            return entries; // Retorna todas as consultas como objetos completos
         }
 
         function atualizarDisplayData(startDate) {
@@ -279,25 +277,30 @@
                 const currentDate = new Date(startDate);
                 currentDate.setDate(currentDate.getDate() + i);
 
+                // Obter todas as consultas para o dia específico
                 const tasks = obterTarefasParaData(currentDate);
+
+                // Ordenar as consultas por data e hora (mais cedo para mais tarde)
+                tasks.sort((a, b) => new Date(a.datahoraConsulta) - new Date(b.datahoraConsulta));
 
                 const columnElement = document.createElement('div');
                 columnElement.className = 'column';
 
                 tasks.forEach(task => {
-                    if (task !== 'Sem tarefas') {
-                        const taskElement = document.createElement('div');
-                        taskElement.className = 'task';
-                        taskElement.innerText = task;
-                        taskElement.onclick = () => abrirDetalhesTarefa(currentDate);
-                        columnElement.appendChild(taskElement);
-                    } else {
-                        const taskElement = document.createElement('div');
-                        taskElement.className = 'task inactive';
-                        taskElement.innerText = task;
-                        columnElement.appendChild(taskElement);
-                    }
+                    const taskElement = document.createElement('div');
+                    taskElement.className = 'task';
+                    taskElement.innerText = task.descricao; // Exibe a descrição da consulta
+                    taskElement.onclick = () => abrirDetalhesTarefa(task); // Passa o objeto completo da consulta
+                    columnElement.appendChild(taskElement);
                 });
+
+                // Se não houver tarefas para o dia, adicione um elemento indicando "Sem tarefas"
+                if (tasks.length === 0) {
+                    const noTaskElement = document.createElement('div');
+                    noTaskElement.className = 'task inactive';
+                    noTaskElement.innerText = 'Sem tarefas';
+                    columnElement.appendChild(noTaskElement);
+                }
 
                 colunasTarefasElement.appendChild(columnElement);
             }
@@ -325,6 +328,12 @@
             
             dataInicioAtual = obterInicioDaSemana(new Date());
             atualizarDisplayData(dataInicioAtual);
+
+            // Atualiza as informações a cada 30 segundos
+            setInterval(async () => {
+                await buscarConsultas(); // Atualiza as consultas do banco de dados
+                atualizarDisplayData(dataInicioAtual); // Atualiza a exibição dos dados na página
+            }, 30000); // Intervalo de 30000 milissegundos (30 segundos)
         }
 
         inicializarPagina();
@@ -344,6 +353,8 @@
             const areaConsultaId = parseInt(document.getElementById('filtroAreaConsulta').value);
             const idadePaciente = parseInt(document.getElementById('filtroIdade').value);
             const generoPaciente = document.getElementById('filtroGenero').value;
+            const dataInicio = document.getElementById('filtroDataInicio').value;
+            const dataFim = document.getElementById('filtroDataFim').value;
 
             bancoDeDadosFiltrado = consultasOriginais.filter(consulta => {
                 const filtroMedico = !medicoId || consulta.medico.id === medicoId;
@@ -353,7 +364,12 @@
                 const filtroIdade = !idadePaciente || calcularIdade(consulta.paciente.dtNasc) === idadePaciente;
                 const filtroGenero = !generoPaciente || consulta.paciente.genero === generoPaciente;
 
-                return filtroMedico && filtroPaciente && filtroStatus && filtroAreaConsulta && filtroIdade && filtroGenero;
+                // Filtra por data de início e data de fim
+                const dataConsulta = new Date(consulta.datahoraConsulta);
+                const filtroDataInicio = !dataInicio || new Date(dataInicio) <= dataConsulta;
+                const filtroDataFim = !dataFim || new Date(dataFim) >= dataConsulta;
+
+                return filtroMedico && filtroPaciente && filtroStatus && filtroAreaConsulta && filtroIdade && filtroGenero && filtroDataInicio && filtroDataFim;
             });
 
             fecharModalFiltro();
@@ -368,19 +384,24 @@
             document.getElementById('filtroAreaConsulta').value = '';
             document.getElementById('filtroIdade').value = '';
             document.getElementById('filtroGenero').value = '';
+            document.getElementById('filtroDataInicio').value = '';
+            document.getElementById('filtroDataFim').value = '';
 
             // Restaurar o banco de dados filtrado ao estado original
             bancoDeDadosFiltrado = consultasOriginais;
             atualizarDisplayData(dataInicioAtual);
         }
 
-        function abrirDetalhesTarefa(consultaData) {
-            const consulta = bancoDeDadosFiltrado.find(c => c.datahoraConsulta.startsWith(formatarData(consultaData)));
-            
+        function abrirDetalhesTarefa(consulta) {
+            // Formatando a data e hora para exibição
+            const dataHora = new Date(consulta.datahoraConsulta);
+            const dataFormatada = dataHora.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+            const horaFormatada = dataHora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
             const detalhesDiv = document.getElementById('detalhesTarefa');
             detalhesDiv.innerHTML = `
                 <p><strong>Descrição:</strong> ${consulta.descricao}</p>
-                <p><strong>Data e Hora:</strong> ${consulta.datahoraConsulta}</p>
+                <p><strong>Data e Hora:</strong> ${dataFormatada} às ${horaFormatada}</p>
                 <p><strong>Paciente:</strong> ${consulta.paciente.nome} ${consulta.paciente.sobrenome}</p>
                 <p><strong>Médico:</strong> ${consulta.medico.nome} ${consulta.medico.sobrenome} - ${consulta.especificacaoMedica.area}</p>
                 <p><strong>Status:</strong> ${consulta.statusConsulta.nomeStatus}</p>

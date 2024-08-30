@@ -104,15 +104,14 @@ body {
 
 .filtro-duplo {
     display: flex;
-    gap: 10px;
+    gap: 5px;
 }
 
-#filtroIdade {
+#filtroIdade,
+#filtroGenero,
+#filtroDataInicio,
+#filtroDataFim {
     width: 100px;
-}
-
-#filtroGenero {
-    flex-grow: 1;
 }
 
 .calendar {

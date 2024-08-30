@@ -295,10 +295,16 @@ buscarPacientesEMedicos();
 buscarConsultas();
 
 // Inicialização da página
+// Inicialização da página
 (async function initialize() {
     console.log("Iniciando página de agendamentos...");
     await buscarPacientesEMedicos();
     await buscarConsultas();
+
+    // Atualiza as consultas a cada 30 segundos
+    setInterval(async () => {
+        await buscarConsultas(); // Atualiza a listagem de consultas
+    }, 30000); // Intervalo de 30000 milissegundos (30 segundos)
 })();
 
 // Eventos de mudança nos selects
