@@ -1,13 +1,17 @@
-// Função para formatar data
-function formatarData(data) {
-    const dataObj = new Date(data);
-    return dataObj.toLocaleDateString('pt-BR', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-    });
-}
-
+function formatarData(dataISO){
+    const data = new Date(dataISO)
+    const dia = String(data.getDate()).padStart(2,'0');
+    const mes =String(data.getMonth() + 1). padStart(2,'0');
+    const ano = data.getFullYear();
+    
+    const  horas = String(data.getHours()).padStart(2,'0')
+    const minutos = String(data.getMinutes()).padStart(2,'0')
+    const segundos = String(data.getSeconds()).padStart(2,'0')
+    
+    return `${dia}/${mes}/${ano} - ${horas}:${minutos}:${segundos}`
+    
+    
+    }
 // Função para determinar o ícone com base no gênero do paciente
 function obterIconeGenero(genero) {
     if (genero.toLowerCase() === 'masculino') {
@@ -39,7 +43,7 @@ async function buscarConsultas() {
                     ${obterIconeGenero(consulta.paciente.genero)}
                     <div class="consulta-info">
                         <h3>${consulta.paciente.nome} ${consulta.paciente.sobrenome}</h3>
-                        <p>${formatarData(consulta.datahoraConsulta)}</p>
+                        <p>${formatarData(consulta.datahoraConsulta)}  </p>
                         <p>Médico: ${consulta.medico.nome} ${consulta.medico.sobrenome} - ${consulta.especificacaoMedica.area}</p>
                         <p>Status: ${consulta.statusConsulta.nomeStatus}</p>
                         <div class="consulta-actions">
@@ -294,41 +298,168 @@ async function agendarConsulta() {
 }
 
 // Função para "cancelar" consulta, alterando o status para "Cancelada"
+// Função para "cancelar" consulta, alterando o status para "Cancelada"
+// Função para "cancelar" consulta, alterando o status para "Cancelada"
+// Função para "cancelar" consulta, alterando o status para "Cancelada"
+// Função para "cancelar" consulta, alterando o status para "Cancelada"
 async function excluirConsulta(idConsulta) {
-    console.log(idConsulta);
-    
-    Swal.fire({
-        title: 'Tem certeza?',
-        text: "Você não poderá reverter esta ação!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sim, cancele!'
-    }).then(async (result) => {
-        if (result.isConfirmed) {
+    console.log("Iniciando exclusão da consulta com ID:", idConsulta);
+
+    try {
+        // Recupera todas as consultas
+        const respostaConsulta = await fetch(`http://localhost:8080/consultas`, {
+            method: 'GET',
+            headers: {
+                "Content-type": "application/json; charset=UTF-8",
+                "Accept": "application/json"
+            }
+        });
+
+        if (!respostaConsulta.ok) {
+            throw new Error(`Erro HTTP! Status: ${respostaConsulta.status}`);
+        }
+
+        const todasConsultas = await respostaConsulta.json();
+        console.log("Todas as consultas recebidas:", todasConsultas);
+
+        // Filtra a consulta específica pelo ID
+        const consultaExistente = todasConsultas.find(consulta => consulta.id === idConsulta);
+
+        // Verifica se a consulta foi encontrada
+        if (!consultaExistente) {
+            throw new Error('Consulta inválida ou não encontrada');
+        }
+
+        // Cria o objeto de consulta com os dados atualizados
+        const consultaAtualizada = {
+            datahoraConsulta: consultaExistente.datahoraConsulta,
+            descricao: consultaExistente.descricao,
+            duracaoConsulta: consultaExistente.duracaoConsulta,
+            especificacaoMedica: { id: consultaExistente.especificacaoMedica.id },
+            medico: { id: consultaExistente.medico.id },
+            paciente: { id: consultaExistente.paciente.id },
+            statusConsulta: { id: 3 } // Atualiza o status para "Cancelada" (ID = 3)
+        };
+
+        console.log("Dados da consulta para atualizar:", consultaAtualizada);
+
+        Swal.fire({
+            title: 'Tem certeza?',
+            text: "Você não poderá reverter esta ação!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim, cancele!'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    // Envia a requisição PUT para atualizar o status da consulta
+                    const resposta = await fetch(`http://localhost:8080/consultas/${idConsulta}`, {
+                        method: 'PUT',
+                        body: JSON.stringify(consultaAtualizada),
+                        headers: {
+                            "Content-type": "application/json; charset=UTF-8",
+                            "Accept": "application/json"
+                        }
+                    });
+
+                    if (resposta.ok) {
+                        Swal.fire(
+                            'Cancelado!',
+                            'O status da consulta foi atualizado para "Cancelada".',
+                            'success'
+                        );
+                        await buscarConsultas(); // Atualiza a lista de consultas após a alteração
+                    } else {
+                        const erro = await resposta.text();
+                        Swal.fire('Erro!', `Ocorreu um erro ao cancelar a consulta: ${erro}`, 'error');
+                    }
+                } catch (error) {
+                    console.error('Erro ao cancelar consulta:', error);
+                    Swal.fire('Erro!', 'Erro ao cancelar a consulta.', 'error');
+                }
+            }
+        });
+    } catch (error) {
+        console.error('Erro ao buscar consultas:', error);
+        Swal.fire('Erro!', 'Erro ao buscar as consultas.', 'error');
+    }
+}
+
+async function alterarConsulta(idConsulta) {
+    console.log("Iniciando alteração da consulta com ID:", idConsulta);
+
+    try {
+        // Buscar todas as consultas
+        const respostaConsulta = await fetch(`http://localhost:8080/consultas`, {
+            method: 'GET',
+            headers: {
+                "Content-type": "application/json; charset=UTF-8",
+                "Accept": "application/json"
+            }
+        });
+
+        if (!respostaConsulta.ok) {
+            throw new Error(`Erro HTTP! Status: ${respostaConsulta.status}`);
+        }
+
+        const consultas = await respostaConsulta.json();
+        console.log("Consultas existentes recebidas:", consultas);
+
+        // Localizar a consulta específica pelo ID
+        const consultaExistente = consultas.find(consulta => consulta.id === idConsulta);
+        if (!consultaExistente) {
+            throw new Error('Consulta não encontrada.');
+        }
+
+        // Buscar dados para preencher selects de Médicos, Pacientes e Especializações Médicas
+        const [medicos, pacientes, especializacoes] = await Promise.all([
+            fetch("http://localhost:8080/medicos").then(res => res.json()),
+            fetch("http://localhost:8080/pacientes").then(res => res.json()),
+            fetch("http://localhost:8080/especificacoes").then(res => res.json())
+        ]);
+
+        // Preencher selects com opções
+        const medicoOptions = medicos.map(medico => `<option value="${medico.id}" ${medico.id === consultaExistente.medico.id ? 'selected' : ''}>${medico.nome} ${medico.sobrenome}</option>`).join('');
+        const pacienteOptions = pacientes.map(paciente => `<option value="${paciente.id}" ${paciente.id === consultaExistente.paciente.id ? 'selected' : ''}>${paciente.nome} ${paciente.sobrenome}</option>`).join('');
+        const especializacaoOptions = especializacoes.map(especializacao => `<option value="${especializacao.id}" ${especializacao.id === consultaExistente.especificacaoMedica.id ? 'selected' : ''}>${especializacao.area}</option>`).join('');
+
+        // Exibir popup de edição com os selects preenchidos
+        const { value: consultaAtualizada } = await Swal.fire({
+            title: 'Alterar Consulta',
+            html:
+                `<label for="datahoraConsulta">Data e Hora:</label><br><input type="datetime-local" id="datahoraConsulta" value="${consultaExistente.datahoraConsulta}" class="swal2-input"><br>` +
+                `<label for="descricao">Descrição:</label><br><textarea id="descricao" class="swal2-textarea">${consultaExistente.descricao}</textarea><br>` +
+                `<label for="duracaoConsulta">Duração:</label><br><input type="time" id="duracaoConsulta" value="${consultaExistente.duracaoConsulta}" class="swal2-input"><br>` +
+                `<label for="especificacaoMedica">Especialização Médica:</label><br><select id="especificacaoMedica" class="swal2-select">${especializacaoOptions}</select><br>` +
+                `<label for="medico">Médico:</label><br><select id="medico" class="swal2-select">${medicoOptions}</select><br>` +
+                `<label for="paciente">Paciente:</label><br><select id="paciente" class="swal2-select">${pacienteOptions}</select><br>` +
+                `<label for="statusConsulta">Status:</label><br><select id="statusConsulta" class="swal2-select">
+                    <option value="1" ${consultaExistente.statusConsulta.id === 1 ? 'selected' : ''}>Agendada</option>
+                    <option value="2" ${consultaExistente.statusConsulta.id === 2 ? 'selected' : ''}>Concluída</option>
+                    <option value="3" ${consultaExistente.statusConsulta.id === 3 ? 'selected' : ''}>Cancelada</option>
+                </select><br>`,
+            focusConfirm: false,
+            preConfirm: () => ({
+                datahoraConsulta: document.getElementById('datahoraConsulta').value || consultaExistente.datahoraConsulta,
+                descricao: document.getElementById('descricao').value || consultaExistente.descricao,
+                duracaoConsulta: document.getElementById('duracaoConsulta').value || consultaExistente.duracaoConsulta,
+                especificacaoMedica: { id: document.getElementById('especificacaoMedica').value || consultaExistente.especificacaoMedica.id },
+                medico: { id: document.getElementById('medico').value || consultaExistente.medico.id },
+                paciente: { id: document.getElementById('paciente').value || consultaExistente.paciente.id },
+                statusConsulta: { id: parseInt(document.getElementById('statusConsulta').value) || consultaExistente.statusConsulta.id }
+            })
+        });
+
+        if (consultaAtualizada) {
+            console.log("Dados da consulta a serem enviados:", consultaAtualizada); // Adicionado para verificar o objeto de dados
+
             try {
-                // Recupera a consulta existente específica pelo ID
-                const respostaConsulta = await fetch(`http://localhost:8080/consultas/${idConsulta}`);
-                if (!respostaConsulta.ok) {
-                    throw new Error(`Erro HTTP! Status: ${respostaConsulta.status}`);
-                }
-
-                const consultaExistente = await respostaConsulta.json();
-                console.log(consultaExistente);
-
-                // Confirma que a consulta é válida
-                if (!consultaExistente || !consultaExistente.id) {
-                    throw new Error('Consulta inválida ou não encontrada');
-                }
-
-                // Atualiza o campo statusConsulta para "Cancelada" (ID = 3)
-                consultaExistente.statusConsulta = { id: 3 };
-
-                // Envia a requisição PUT para atualizar o status da consulta
+                // Envia a requisição PUT para atualizar a consulta
                 const resposta = await fetch(`http://localhost:8080/consultas/${idConsulta}`, {
                     method: 'PUT',
-                    body: JSON.stringify(consultaExistente),
+                    body: JSON.stringify(consultaAtualizada),
                     headers: {
                         "Content-type": "application/json; charset=UTF-8",
                         "Accept": "application/json"
@@ -336,31 +467,21 @@ async function excluirConsulta(idConsulta) {
                 });
 
                 if (resposta.ok) {
-                    Swal.fire(
-                        'Cancelado!',
-                        'O status da consulta foi atualizado para "Cancelada".',
-                        'success'
-                    );
+                    Swal.fire('Alterada!', 'A consulta foi atualizada com sucesso.', 'success');
                     await buscarConsultas(); // Atualiza a lista de consultas após a alteração
                 } else {
                     const erro = await resposta.text();
-                    Swal.fire('Erro!', `Ocorreu um erro ao cancelar a consulta: ${erro}`, 'error');
+                    Swal.fire('Erro!', `Ocorreu um erro ao alterar a consulta: ${erro}`, 'error');
                 }
             } catch (error) {
-                console.error('Erro ao cancelar consulta:', error);
-                Swal.fire('Erro!', 'Erro ao cancelar a consulta.', 'error');
+                console.error('Erro ao alterar consulta:', error);
+                Swal.fire('Erro!', 'Erro ao alterar a consulta.', 'error');
             }
         }
-    });
-}
-
-
-
-
-
-function alterarConsulta(id) {
-    console.log("Alterar consulta:", id);
-    Swal.fire('Em breve', 'A funcionalidade de alteração está em desenvolvimento.', 'info');
+    } catch (error) {
+        console.error('Erro ao buscar consultas:', error);
+        Swal.fire('Erro!', 'Erro ao buscar as consultas.', 'error');
+    }
 }
 
 // Inicialização da página

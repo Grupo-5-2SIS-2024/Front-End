@@ -22,6 +22,65 @@ body {
     align-items: center;
 }
 
+
+
+
+
+/* Estilos para o Popup de Edição */
+.swal2-popup {
+    width: 500px; /* Aumenta a largura do popup */
+    padding: 30px; /* Adiciona espaço ao redor do conteúdo */
+    border-radius: 10px; /* Arredonda as bordas do popup */
+    border: 2px solid #2E7D32; /* Borda verde ao redor do popup */
+    
+}
+
+.swal2-html-container {
+    display: flex;
+    flex-direction: column; /* Coloca os elementos em uma coluna */
+    align-items: center; /* Centraliza os elementos horizontalmente */
+    gap: 15px; /* Espaçamento entre os elementos */
+
+        margin-top: 20px; /* Adiciona espaçamento superior */
+    
+    
+}
+
+/* Espaçamento acima dos inputs */
+.swal2-html-container label {
+    margin-top: 20px; /* Adiciona espaçamento superior antes do primeiro label */
+}
+
+
+.swal2-popup .swal2-html-container {
+    margin-top: 20px; /* Adiciona espaçamento superior */
+}
+
+
+.swal2-input, .swal2-textarea, .swal2-select {
+    width: 90%; /* Define o mesmo tamanho para todas as inputs */
+    margin: 0 auto; /* Centraliza as inputs horizontalmente */
+    padding: 8px; /* Adiciona preenchimento dentro das inputs */
+    border: 1px solid #ccc; /* Borda leve ao redor das inputs */
+    border-radius: 5px; /* Arredonda as bordas das inputs */
+    box-sizing: border-box; /* Garante que o padding não aumente o tamanho total */
+    
+}
+
+.swal2-select {
+    appearance: none; /* Remove o estilo padrão dos selects */
+}
+
+/* Estilo para Labels */
+.swal2-container label {
+    font-weight: bold; /* Negrito para os labels */
+    margin-bottom: 5px; /* Espaçamento abaixo dos labels */
+    align-self: flex-start; /* Alinha os labels à esquerda */
+    margin-top: 20px; /* Adiciona espaçamento superior */
+}
+
+
+
 .sidebar h2 {
     margin: 0;
 }
