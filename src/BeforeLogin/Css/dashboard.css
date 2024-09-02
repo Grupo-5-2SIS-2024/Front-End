@@ -81,6 +81,42 @@ h1 {
 .upcoming-appointments {
     grid-column: 2 / 4; /* Ocupar duas colunas no meio superior */
     grid-row: 1 / 2;
+    padding: 15px; /* Ajusta o espaçamento interno da caixa */
+    display: flex;
+    flex-direction: column; /* Organiza o título e conteúdo em coluna */
+    justify-content: center; /* Centraliza o conteúdo verticalmente */
+    align-items: center; /* Centraliza o conteúdo horizontalmente */
+    background-color: #ffffff;
+    border-radius: 8px; /* Arredonda os cantos da caixa */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Adiciona sombra para destaque */
+    text-align: center; /* Centraliza o texto dentro da caixa */
+}
+
+.upcoming-appointments h2 {
+    margin: 0 0 15px 0; /* Margem inferior para separar o título dos dados */
+    font-size: 20px; /* Aumenta o tamanho da fonte do título */
+    font-weight: bold; /* Torna o título mais destacado */
+    color: #333;
+}
+
+.upcoming-appointments table {
+    width: calc(100% - 30px); /* Ajusta a largura da tabela para deixar um espaço de 15px em cada lado */
+    border-collapse: collapse;
+    margin: 0 auto; /* Centraliza a tabela horizontalmente */
+}
+
+.upcoming-appointments th, 
+.upcoming-appointments td {
+    border: 1px solid #ddd;
+    padding: 8px; /* Aumenta o espaçamento interno das células */
+    text-align: center; /* Centraliza o texto dentro das células */
+    font-size: 14px; /* Aumenta o tamanho da fonte para melhor legibilidade */
+}
+
+.upcoming-appointments th {
+    background-color: #f0f0f0; /* Ajusta a cor de fundo do cabeçalho para contraste */
+    color: #333;
+    font-weight: 600;
 }
 
 .retention {
@@ -90,7 +126,7 @@ h1 {
 
 .line-chart {
     width: 100%;
-    height: 100%;
+    height: 90%;
 }
 
 table {
