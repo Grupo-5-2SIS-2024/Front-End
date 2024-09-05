@@ -19,116 +19,68 @@
         <div id="sidebar_content">
             <div id="user">
                 <img src="../Assets/perfil.jpeg" id="user_avatar" alt="Avatar">
-
                 <p id="user_infos">
-                    <span class="item-description">
-                        Silvia
-                    </span>
-                    <span class="item-description">
-                        ADM
-                    </span>
+                    <span class="item-description">Silvia</span>
+                    <span class="item-description">ADM</span>
                 </p>
             </div>
 
             <ul id="side_items">
-                <li class="side-item">
-                    <a href="#">
-                        <i class="fa-solid fa-home"></i>
-                        <span class="item-description">
-                            Home
-                        </span>
-                    </a>
+                <li class="side-item"><a href="#"><i class="fa-solid fa-home"></i><span
+                            class="item-description">Home</span></a></li>
+                <li class="side-item"><a href="#"><i class="fa-solid fa-calendar"></i><span
+                            class="item-description">Agendamento</span></a></li>
+                <li class="side-item"><a href="listagemColaborador.html"><i class="fa-solid fa-user"></i><span
+                            class="item-description">Colaborador</span></a></li>
+                <li class="side-item active"><a href="listagemPaciente.html"><i
+                            class="fa-solid fa-hospital-user"></i><span class="item-description">Paciente</span></a>
                 </li>
-
-                <li class="side-item">
-                    <a href="#">
-                        <i class="fa-solid fa-calendar"></i>
-                        <span class="item-description">
-                            Agendamento
-                        </span>
-                    </a>
-                </li>
-
-                <li class="side-item active">
-                    <a href="listagemColaborador.html">
-                        <i class="fa-solid fa-user"></i>
-                        <span class="item-description">
-                            Colaborador
-                        </span>
-                    </a>
-                </li>
-
-                <li class="side-item">
-                    <a href="listagemPaciente.html">
-                        <i class="fa-solid fa-hospital-user"></i>
-                        <span class="item-description">
-                            Paciente
-                        </span>
-                    </a>
-                </li>
-
-                <li class="side-item">
-                    <a href="dashboards.html">
-                        <i class="fa-solid fa-chart-line"></i>
-                        <span class="item-description">
-                            Dashboards
-                        </span>
-                    </a>
-                </li>
+                <li class="side-item"><a href="dashboards.html"><i class="fa-solid fa-chart-line"></i><span
+                            class="item-description">Dashboards</span></a></li>
             </ul>
 
-            <button id="open_btn">
-                <i id="open_btn_icon" class="fa-solid fa-chevron-right"></i>
-            </button>
+            <button id="open_btn"><i id="open_btn_icon" class="fa-solid fa-chevron-right"></i></button>
         </div>
 
         <div id="logout">
-            <button id="logout_btn">
-                <a href="../../Html/index.html"> <i class="fa-solid fa-right-from-bracket"></i></a>
-                <span class="item-description">
-                    Logout
-                </span>
-            </button>
+            <button id="logout_btn"><a href="../../Html/index.html"><i class="fa-solid fa-right-from-bracket"></i></a>
+                <span class="item-description">Logout</span></button>
         </div>
     </nav>
 
     <main>
         <div class="ContainerCadastro">
             <h1>Cadastre seu <span class="equipe">Paciente</span></h1><br><br>
-            <label class="picture" for="picture__input" tabIndex="0">
-                <span class="picture__image"></span>
-            </label>
-
-            <input type="file" name="picture__input" id="picture__input">
             <div class="inputs_Container">
-                <div class="inputs_login_esquerda">
+                <div class="inputs_coluna">
                     <div class="input">
                         <input class="input__field" id="nome" type="text" required />
                         <label for="nome" class="input__label">Nome</label>
                         <small class="error" id="error-nome"></small>
                     </div>
-
                     <div class="input">
                         <input class="input__field" id="sobrenome" type="text" required />
                         <label for="sobrenome" class="input__label">Sobrenome</label>
                         <small class="error" id="error-sobrenome"></small>
                     </div>
-
                     <div class="input">
                         <input class="input__field" id="email" type="email" required />
                         <label for="email" class="input__label">E-mail</label>
                         <small class="error" id="error-email"></small>
                     </div>
+                    <div class="input">
+                        <input class="input__field" id="cns" type="text" required />
+                        <label for="cns" class="input__label">CNS</label>
+                        <small class="error" id="error-cns"></small>
+                    </div>
+                </div>
 
+                <div class="inputs_coluna">
                     <div class="input">
                         <input class="input__field" id="telefone" type="tel" required />
                         <label for="telefone" class="input__label">Telefone</label>
                         <small class="error" id="error-telefone"></small>
                     </div>
-
-                </div>
-
-                <div class="inputs_login_esquerda">
                     <div class="input">
                         <input class="input__field" id="cpf" type="text" required />
                         <label for="cpf" class="input__label">CPF</label>
@@ -140,7 +92,7 @@
                             <option value="masculino">Masculino</option>
                             <option value="feminino">Feminino</option>
                         </select>
-                        <label for="genero" class="input__label">Genero</label>
+                        <label for="genero" class="input__label">Gênero</label>
                         <small class="error" id="error-especialidade"></small>
                     </div>
                     <div class="input">
@@ -148,21 +100,44 @@
                         <label for="dataNascimento" class="input__labelDate">Data de Nascimento</label>
                         <small class="error" id="error-dataNascimento"></small>
                     </div>
+                </div>
+
+                <div class="inputs_coluna">
                     <div class="input">
-                        <input class="input__field" id="cns" type="text" required />
-                        <label for="cns" class="input__label">CNS</label>
-                        <small class="error" id="error-carteirinha"></small>
+                        <input class="input__field" id="cep" type="text" maxlength="9"
+                            onKeyPress="formatar('#####-###', this)" required oninput="buscarCep()" />
+                        <label for="cep" class="input__label">CEP</label>
+                    </div>
+                    <div class="input">
+                        <input class="input__field" id="rua" type="text" required />
+                        <label for="rua" class="input__label">Rua</label>
+                        <small class="error" id="error-rua"></small>
+                    </div>
+                    <div class="input">
+                        <input class="input__field" id="bairro" type="text" required />
+                        <label for="bairro" class="input__label">Bairro</label>
+                        <small class="error" id="error-bairro"></small>
+                    </div>
+                    <div class="input">
+                        <div class="input_linha_dupla">
+                        <input class="input__field" id="numero" type="number" required />
+                        <label for="numero" class="input__label">Número</label>
+                        <small class="error" id="error-numero"></small>
+                        <input class="input__field" id="complemento" type="text" required />
+                        <label for="complemento" class="input__labelComplemento">Complemento</label>
+                        <small class="error" id="error-complemento"></small>
+                    </div>
                     </div>
                 </div>
             </div>
+
             <div>
-                <Button class="registrar" onclick="cadastrarPaciente()">
-                    Cadastrar
-                </Button>
+                <button class="registrar" onclick="cadastrarPaciente(semResponsavel)">Cadastrar</button>
             </div>
         </div>
     </main>
-    <script src="../Js/cadastroColaboradorscript.js"></script>
+    <script src="../Js/viaCep.js"></script>
+    <script src="../Js/cadastroPaciente.js"></script>
     <script src="../Js/funcoesPadroes.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>

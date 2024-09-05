@@ -78,7 +78,7 @@ async function buscarPacientes() {
                 const id = card.dataset.pacienteId;
 
                 if (id) {
-                    window.location.href = `atualizarColaborador.html?id=${id}`;
+                    window.location.href = `atualizarPaciente.html?id=${id}`;
                 } else {
                     console.error('ID do paciente não encontrado.');
                 }
@@ -144,3 +144,37 @@ async function deletarPaciente(id) {
         console.error('Erro ao deletar paciente:', erro);
     }
 }
+
+const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: "btn btn-success",
+      cancelButton: "btn btn-danger"
+    },
+    buttonsStyling: false
+  });
+  swalWithBootstrapButtons.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Yes, delete it!",
+    cancelButtonText: "No, cancel!",
+    reverseButtons: true
+  }).then((result) => {
+    if (result.isConfirmed) {
+      swalWithBootstrapButtons.fire({
+        title: "Deleted!",
+        text: "Your file has been deleted.",
+        icon: "success"
+      });
+    } else if (
+      /* Read more about handling dismissals below */
+      result.dismiss === Swal.DismissReason.cancel
+    ) {
+      swalWithBootstrapButtons.fire({
+        title: "Cancelled",
+        text: "Your imaginary file is safe :)",
+        icon: "error"
+      });
+    }
+  });

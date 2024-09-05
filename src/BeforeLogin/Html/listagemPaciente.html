@@ -97,7 +97,7 @@
             <div class="header">
                 <h1>Área dos <span>Pacientes</span></h1>
                 <div class="containerBotao">
-                    <button class="registrar"><a href="cadastroPaciente.html">Adicionar Paciente</a></button>
+                    <button class="registrar" id="addPacienteBtn">Adicionar Paciente</button>
                     <button class="filtro">Filtro</button>
                 </div>
             </div>
@@ -159,6 +159,45 @@
     <script src="../Js/listagemPaciente.js"></script>
     <script src="../Js/funcoesPadroes.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Script do SweetAlert para perguntar sobre a idade do paciente -->
+    <script>
+        // Captura o botão de "Adicionar Paciente"
+        const addPacienteBtn = document.getElementById('addPacienteBtn');
+
+        // Função para exibir o SweetAlert ao clicar no botão
+        addPacienteBtn.addEventListener('click', (event) => {
+            event.preventDefault(); // Evita o comportamento padrão do botão
+
+            Swal.fire({
+                title: "O paciente é menor de 15 anos?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonText: "Sim",
+                cancelButtonText: "Não",
+                reverseButtons: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Paciente menor de 15 anos",
+                        text: "Por favor, siga as instruções específicas para pacientes menores.",
+                        icon: "info"
+                    });
+                    // Aqui você pode adicionar a lógica para pacientes menores
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    Swal.fire({
+                        title: "Paciente maior de 15 anos",
+                        text: "Continuando com o cadastro do paciente...",
+                        icon: "success"
+                    }).then(() => {
+                        // Redirecionar para a página de cadastro após a confirmação
+                        window.location.href = 'cadastroPaciente.html';
+                    });
+                }
+            });
+        });
+    </script>
+
 </body>
 
 </html>

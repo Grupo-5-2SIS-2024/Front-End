@@ -156,13 +156,12 @@ a {
     margin: 0;
 }
 
-/* Listagem de colaboradores */
+/* Listagem de Pacientes */
 
 .listagemBox {
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    /* Alinhar os cards no início */
     flex-direction: column;
     width: 78vw;
     height: 50vh;
@@ -171,16 +170,12 @@ a {
     border-radius: 2%;
     overflow-y: auto;
     padding-top: 3rem;
-    /* Espaçamento superior aumentado */
     padding-left: 1rem;
-    /* Espaçamento esquerdo adicionado */
     padding-right: 1rem;
-    /* Espaçamento direito adicionado */
 }
 
 .cardPaciente {
     width: 100%;
-    /* Largura total para ocupar toda a largura da listagem */
     border: 1px solid #ffffff;
     border-radius: 2%;
     gap: 1rem;
@@ -190,25 +185,14 @@ a {
     align-items: center;
     background-color: #fff;
     padding: 1rem;
-    /* Ajuste do espaçamento interno */
     justify-content: space-between;
     margin-bottom: 1rem;
-    /* Espaçamento inferior adicionado */
-}
-
-.cardPaciente img {
-    width: 5vw;
-    height: auto;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 15px;
 }
 
 .cardPaciente .info {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 1rem;
-    /* Ajuste do espaçamento entre as colunas */
     flex-grow: 1;
 }
 
@@ -218,7 +202,6 @@ a {
     align-items: center;
     text-align: center;
     margin: 0 0.5rem;
-    /* Margens horizontais adicionadas */
 }
 
 .cardPaciente .info .field label {
@@ -228,9 +211,7 @@ a {
 
 .cardPaciente .info .field p {
     word-wrap: break-word;
-    /* Allow text to break within words */
     text-align: center;
-    /* Center-align text */
     margin: 0;
 }
 
