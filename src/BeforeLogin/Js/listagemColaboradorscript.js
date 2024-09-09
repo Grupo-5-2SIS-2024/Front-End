@@ -26,7 +26,7 @@ async function buscarMedicos() {
                         </div>
                         <div class="field">
                             <label for="permissao">Permissão</label>
-                            <p id="permissao">${medico.permissao}</p>
+                            <p id="permissao">${medico.permissao.nome}</p>
                         </div>
                     </div>
                     <div class="actions">

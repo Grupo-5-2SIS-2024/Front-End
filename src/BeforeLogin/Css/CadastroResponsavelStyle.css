@@ -34,11 +34,17 @@ body {
 
 .inputs_Container {
     display: flex;
-    justify-content: space-between;
-    gap: 1.5rem;
+    justify-content: center;
+    gap: 2rem;
     width: 100%;
     position: relative;
     bottom: 1rem;
+}
+
+.ContainerData {
+    display: flex;
+    gap: 2rem;
+    width: 30%;
 }
 
 .inputs_coluna {
@@ -46,17 +52,6 @@ body {
     flex-direction: column;
     gap: 2rem;
     width: 32%;
-}
-
-.input_linha_dupla {
-    display: flex;
-    gap: 1.5rem;
-    width: 100%; 
-}
-
-.input_linha_dupla .input {
-    flex: 1;
-    position: relative;
 }
 
 .input {
@@ -79,15 +74,6 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    transform: translate(0.625rem, 0.625rem);
-    transform-origin: left;
-    transition: transform 0.25s;
-}
-
-.input__labelComplemento {
-    position: absolute;
-    top: 0; 
-    left: 0; 
     transform: translate(0.625rem, 0.625rem);
     transform-origin: left;
     transition: transform 0.25s;

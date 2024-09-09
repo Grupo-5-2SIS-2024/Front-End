@@ -175,13 +175,16 @@
                 showCancelButton: true,
                 confirmButtonText: "Sim",
                 cancelButtonText: "Não",
-                reverseButtons: false
+                reverseButtons: true
             }).then((result) => {
                 if (result.isConfirmed) {
                     Swal.fire({
                         title: "Paciente menor de 15 anos",
-                        text: "Por favor, siga as instruções específicas para pacientes menores.",
-                        icon: "info"
+                        text: "Por favor, Cadastre o Responsavel primeiro.",
+                        icon: "success"
+                    }).then(() => {
+                        // Redirecionar para a página de cadastro após a confirmação
+                        window.location.href = 'cadastroResponsavel.html';
                     });
                     // Aqui você pode adicionar a lógica para pacientes menores
                 } else if (result.dismiss === Swal.DismissReason.cancel) {
