@@ -1,0 +1,252 @@
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    height: 100vh;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+}
+
+.sidebar {
+    background-color: #2E7D32;
+    color: white;
+    padding: 20px;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+
+
+
+/* Estilos para o Popup de Edição */
+.swal2-popup {
+    width: 500px; /* Aumenta a largura do popup */
+    padding: 30px; /* Adiciona espaço ao redor do conteúdo */
+    border-radius: 10px; /* Arredonda as bordas do popup */
+    border: 2px solid #2E7D32; /* Borda verde ao redor do popup */
+    
+}
+
+.swal2-html-container {
+    display: flex;
+    flex-direction: column; /* Coloca os elementos em uma coluna */
+    align-items: center; /* Centraliza os elementos horizontalmente */
+    gap: 15px; /* Espaçamento entre os elementos */
+
+        margin-top: 20px; /* Adiciona espaçamento superior */
+    
+    
+}
+
+/* Espaçamento acima dos inputs */
+.swal2-html-container label {
+    margin-top: 20px; /* Adiciona espaçamento superior antes do primeiro label */
+}
+
+
+.swal2-popup .swal2-html-container {
+    margin-top: 20px; /* Adiciona espaçamento superior */
+}
+
+
+.swal2-input, .swal2-textarea, .swal2-select {
+    width: 90%; /* Define o mesmo tamanho para todas as inputs */
+    margin: 0 auto; /* Centraliza as inputs horizontalmente */
+    padding: 8px; /* Adiciona preenchimento dentro das inputs */
+    border: 1px solid #ccc; /* Borda leve ao redor das inputs */
+    border-radius: 5px; /* Arredonda as bordas das inputs */
+    box-sizing: border-box; /* Garante que o padding não aumente o tamanho total */
+    
+}
+
+.swal2-select {
+    appearance: none; /* Remove o estilo padrão dos selects */
+}
+
+/* Estilo para Labels */
+.swal2-container label {
+    font-weight: bold; /* Negrito para os labels */
+    margin-bottom: 5px; /* Espaçamento abaixo dos labels */
+    align-self: flex-start; /* Alinha os labels à esquerda */
+    margin-top: 20px; /* Adiciona espaçamento superior */
+}
+
+
+
+.sidebar h2 {
+    margin: 0;
+}
+
+.sidebar p {
+    margin: 10px 0 20px;
+}
+
+.sidebar nav ul {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+}
+
+.sidebar nav ul li {
+    margin: 10px 0;
+}
+
+.sidebar nav ul li a {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.sidebar nav ul li.active a {
+    background-color: white;
+    color: #2E7D32;
+}
+
+.main-content {
+    flex: 1;
+    padding: 40px;
+    background-color: #F5F5F5;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.main-content h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.main-content h1 span {
+    color: #2E7D32;
+}
+
+.form-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.form-container2 {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: stretch;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 400px;
+}
+
+.form-group {
+    flex: 1 1 200px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 10px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 10px;
+    border: 1px solid #CCC;
+    border-radius: 5px;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+button#agendar {
+    background-color: #2E7D32;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    align-self: flex-end;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+button#agendar:hover {
+    background-color: #1B5E20;
+}
+
+.consulta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid #CCC;
+    border-radius: 5px;
+    background-color: #FFF;
+    width: 100%;
+    box-sizing: border-box;
+    position: relative; /* Adicionado para posicionar os ícones */
+}
+
+.consulta-actions {
+    display: flex;
+    gap: 20px; /* Espaçamento maior entre os ícones */
+    position: absolute;
+    right: 10px; /* Alinha os ícones completamente à direita */
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.consulta-actions i {
+    color: #555;
+    font-size: 24px; /* Aumenta o tamanho dos ícones */
+    transition: color 0.3s;
+}
+
+.consulta-actions i:hover {
+    color: #2E7D32; /* Cor ao passar o mouse */
+}
+
+.consulta-info {
+    flex: 1; /* Permite que a informação da consulta ocupe o espaço disponível */
+    margin-right: 60px; /* Espaço para os ícones à direita */
+}
+
+.consulta img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.consulta-info h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #2E7D32;
+}
+
+.consulta-info p {
+    margin: 2px 0;
+    font-size: 14px;
+    color: #555;
+}
