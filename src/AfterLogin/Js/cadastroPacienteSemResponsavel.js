@@ -134,7 +134,7 @@ async function cadastrarPacienteSemResponsavel() {
             "endereco": {
                 "id": null,
                 "cep": cepDigitado,
-                "rua": ruaDigitada,
+                "logradouro": ruaDigitada,
                 "numero": numeroDigitado,
                 "complemento": complementoDigitado,
                 "bairro": bairroDigitado
