@@ -4,21 +4,89 @@
     <meta charset="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <title>Multiclinics Agenda</title>
-    <link rel="stylesheet" href="./css/calendario.css">
+    <link rel="stylesheet" href="../Css/calendario.css">
+    <link rel="stylesheet" href="../Css/Sidebar.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <div class="sidebar">
-            <div class="logo">Multiclinics<br>Espaço Neuroclin</div>
-            <ul class="menu">
-                <li>Início</li>
-                <li class="active">Agendamento</li>
-                <li>Funcionário</li>
-                <li>Paciente</li>
-                <li>Dashboard</li>
+    <nav id="sidebar">
+        <div id="sidebar_content">
+            <div id="user">
+                <img src="../Assets/perfil.jpeg" id="user_avatar" alt="Avatar">
+
+                <p id="user_infos">
+                    <span class="item-description">
+                        Silvia
+                    </span>
+                    <span class="item-description">
+                        ADM
+                    </span>
+                </p>
+            </div>
+
+            <ul id="side_items">
+                <li class="side-item">
+                    <a href="homePosLoginMedico.html">
+                        <i class="fa-solid fa-home"></i>
+                        <span class="item-description">
+                            Home
+                        </span>
+                    </a>
+                </li>
+
+                <li class="side-item active">
+                    <a href="calendario.html">
+                        <i class="fa-solid fa-calendar"></i>
+                        <span class="item-description">
+                            Agendamento
+                        </span>
+                    </a>
+                </li>
+
+                <li class="side-item">
+                    <a href="listagemColaborador.html">
+                        <i class="fa-solid fa-user"></i>
+                        <span class="item-description">
+                            Colaborador
+                        </span>
+                    </a>
+                </li>
+
+                <li class="side-item">
+                    <a href="listagemPaciente.html">
+                        <i class="fa-solid fa-hospital-user"></i>
+                        <span class="item-description">
+                            Paciente
+                        </span>
+                    </a>
+                </li>
+
+                <li class="side-item">
+                    <a href="dashboards.html">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span class="item-description">
+                            Dashboards
+                        </span>
+                    </a>
+                </li>
             </ul>
+
+            <button id="open_btn">
+                <i id="open_btn_icon" class="fa-solid fa-chevron-right"></i>
+            </button>
         </div>
+
+        <div id="logout">
+            <button id="logout_btn">
+               <a href="../../Html/index.html"> <i class="fa-solid fa-right-from-bracket"></i></a>
+                <span class="item-description">
+                    Logout
+                </span>
+            </button>
+        </div>
+    </nav>
+    <main>
+    <div class="container">
         <div class="main-content">
             <div class="header">
                 <h2>Veja o seu <span class="highlight">Calendário</span></h2>
@@ -100,6 +168,7 @@
             </div>
         </div>
     </div>
+</main>
 
     <script>
         let dataInicioAtual = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
@@ -414,5 +483,6 @@
             document.getElementById('modalDetalhes').style.display = 'none';
         }
     </script>
+    <script src="../Js/funcoesPadroes.js"></script>
 </body>
 </html>

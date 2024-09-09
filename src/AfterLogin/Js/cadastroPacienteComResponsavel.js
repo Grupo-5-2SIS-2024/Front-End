@@ -8,7 +8,6 @@ function validarCadastro() {
     var genero = document.getElementById('genero').value;
     var dataNascimento = document.getElementById('dataNascimento').value;
     var cns = document.getElementById('cns').value;
-    var cep = document.getElementById('cep').value;
     var rua = document.getElementById('rua').value;
     var numero = document.getElementById('numero').value;
     var bairro = document.getElementById('bairro').value;
@@ -75,13 +74,6 @@ function validarCadastro() {
         errors.push("CNS é obrigatório.");
     } else {
         document.getElementById('error-cns').textContent = "";
-    }
-
-    if (!cep.trim()) {
-        document.getElementById('error-cep').textContent = "CEP é obrigatório.";
-        errors.push("CEP é obrigatório.");
-    } else {
-        document.getElementById('error-cep').textContent = "";
     }
 
     if (!rua.trim()) {

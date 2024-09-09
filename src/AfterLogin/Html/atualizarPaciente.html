@@ -8,10 +8,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="../Css/CadastroColaboradorStyle.css">
+    <link rel="stylesheet" href="../Css/CadastroPacienteStyle.css">
     <link rel="stylesheet" href="../Css/Sidebar.css">
     <link rel="shortcut icon" href="../../Assets/logo_Multclinics_branca_sem_nome.png" type="image/x-icon">
-    <title>Multiclinics | Cadastro do Colaborador</title>
+    <title>Multiclinics | Atualizar dados do Paciente</title>
 </head>
 
 <body>
@@ -32,7 +32,7 @@
 
             <ul id="side_items">
                 <li class="side-item">
-                    <a href="#">
+                    <a href="homePosLoginMedico.html">
                         <i class="fa-solid fa-home"></i>
                         <span class="item-description">
                             Home
@@ -41,7 +41,7 @@
                 </li>
 
                 <li class="side-item">
-                    <a href="#">
+                    <a href="calendario.html">
                         <i class="fa-solid fa-calendar"></i>
                         <span class="item-description">
                             Agendamento
@@ -49,7 +49,7 @@
                     </a>
                 </li>
 
-                <li class="side-item active">
+                <li class="side-item">
                     <a href="listagemColaborador.html">
                         <i class="fa-solid fa-user"></i>
                         <span class="item-description">
@@ -58,7 +58,7 @@
                     </a>
                 </li>
 
-                <li class="side-item">
+                <li class="side-item active">
                     <a href="listagemPaciente.html">
                         <i class="fa-solid fa-hospital-user"></i>
                         <span class="item-description">
@@ -94,7 +94,7 @@
 
     <main>
         <div class="ContainerCadastro">
-            <h1>Cadastre sua <span class="equipe">Equipe</span></h1><br><br>
+            <h1>Atualize os dados do seu <span class="equipe">Paciente</span></h1><br><br>
             <label class="picture" for="picture__input" tabIndex="0">
                 <span class="picture__image"></span>
             </label>
@@ -107,27 +107,27 @@
                         <label for="nome" class="input__label">Nome</label>
                         <small class="error" id="error-nome"></small>
                     </div>
-    
+
                     <div class="input">
                         <input class="input__field" id="sobrenome" type="text" required />
                         <label for="sobrenome" class="input__label">Sobrenome</label>
                         <small class="error" id="error-sobrenome"></small>
                     </div>
-    
+
                     <div class="input">
                         <input class="input__field" id="email" type="email" required />
                         <label for="email" class="input__label">E-mail</label>
                         <small class="error" id="error-email"></small>
                     </div>
-    
+
                     <div class="input">
                         <input class="input__field" id="telefone" type="tel" required />
                         <label for="telefone" class="input__label">Telefone</label>
                         <small class="error" id="error-telefone"></small>
                     </div>
-    
+
                 </div>
-    
+
                 <div class="inputs_login_esquerda">
                     <div class="input">
                         <input class="input__field" id="cpf" type="text" required />
@@ -135,13 +135,12 @@
                         <small class="error" id="error-cpf"></small>
                     </div>
                     <div class="input">
-                        <select class="input__field" id="especialidade" required>
+                        <select class="input__field" id="genero" required>
                             <option value=""></option>
-                            <option value="psicologo">Psicólogo</option>
-                            <option value="terapeuta">Terapeuta</option>
-                            <option value="fonoaudiologia">Fonoaudióloga</option>
+                            <option value="masculino">Masculino</option>
+                            <option value="feminino">Feminino</option>
                         </select>
-                        <label for="especialidade" class="input__label">Especialidade</label>
+                        <label for="genero" class="input__label">Genero</label>
                         <small class="error" id="error-especialidade"></small>
                     </div>
                     <div class="input">
@@ -150,52 +149,21 @@
                         <small class="error" id="error-dataNascimento"></small>
                     </div>
                     <div class="input">
-                        <input class="input__field" id="carteirinha" type="text" required />
-                        <label for="carteirinha" class="input__label">Carteirinha</label>
+                        <input class="input__field" id="cns" type="text" required />
+                        <label for="cns" class="input__label">CNS</label>
                         <small class="error" id="error-carteirinha"></small>
                     </div>
                 </div>
-    
-                <div class="inputs_login_direita">
-    
-                    <div class="input">
-                        <input class="input__field" id="password" type="password" required />
-                        <label for="password" class="input__label">Senha</label>
-                        <span class="input__icon-wrapper">
-                            <i class="input__icon ri-eye-off-line"></i>
-                        </span>
-                        <small class="error" id="error-password"></small>
-                    </div>
-    
-                    <div class="input">
-                        <input class="input__field" id="confirmedPassword" type="password" required />
-                        <label for="confirmedPassword" class="input__label">Confirmar Senha</label>
-                        <span class="input__icon-wrapper">
-                            <i class="input__icon2 ri-eye-off-line"></i>
-                        </span>
-                        <small class="error" id="error-confirmedPassword"></small>
-                    </div>
-    
-                    <div class="input">
-                        <select class="input__field" id="nivelAcesso" required>
-                            <option value=""></option>
-                            <option value="Admin">Admin</option>
-                            <option value="Médico">Médico</option>
-                            <option value="Recepcionista">Recepcionista</option>
-                        </select>
-                        <label for="nivelAcesso" class="input__label">Nível de Acesso</label>
-                        <small class="error" id="error-nivelAcesso"></small>
-                    </div>
-                    <div>
-                        <Button class="registrar" onclick="cadastrarColaborador()">
-                            Cadastrar
-                        </Button>
-                    </div>
-                </div>
+            </div>
+            <div>
+                <Button class="registrar" onclick="cadastrarPaciente()">
+                    Atualizar
+                </Button>
+            </div>
             </div>
         </div>
     </main>
-    <script src="../Js/cadastroColaboradorscript.js"></script>
+    <script src="../Js/atualizarColaborador.js"></script>
     <script src="../Js/funcoesPadroes.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>

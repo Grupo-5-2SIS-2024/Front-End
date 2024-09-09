@@ -1,21 +1,17 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css'>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="../Css/listagemColaboradorStyle.css">
-    <link rel="stylesheet" href="../Css/homePosLoginMedico.css">
+    <title>Agendar Consulta</title>
+    <link rel="stylesheet" href="../Css/addAgendamento.css">
     <link rel="stylesheet" href="../Css/Sidebar.css">
     <link rel="shortcut icon" href="../../Assets/logo_Multclinics_branca_sem_nome.png" type="image/x-icon">
-    <title>Multiclinics | Área do Colaborador</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 </head>
-
 <body>
+
     <nav id="sidebar">
         <div id="sidebar_content">
             <div id="user">
@@ -33,7 +29,7 @@
 
             <ul id="side_items">
                 <li class="side-item">
-                    <a href="#">
+                    <a href="homePosLoginMedico.html">
                         <i class="fa-solid fa-home"></i>
                         <span class="item-description">
                             Home
@@ -41,8 +37,8 @@
                     </a>
                 </li>
 
-                <li class="side-item">
-                    <a href="#">
+                <li class="side-item active">
+                    <a href="calendario.html">
                         <i class="fa-solid fa-calendar"></i>
                         <span class="item-description">
                             Agendamento
@@ -50,7 +46,7 @@
                     </a>
                 </li>
 
-                <li class="side-item active">
+                <li class="side-item">
                     <a href="listagemColaborador.html">
                         <i class="fa-solid fa-user"></i>
                         <span class="item-description">
@@ -60,7 +56,7 @@
                 </li>
 
                 <li class="side-item">
-                    <a href="#">
+                    <a href="listagemPaciente.html">
                         <i class="fa-solid fa-hospital-user"></i>
                         <span class="item-description">
                             Paciente
@@ -85,7 +81,7 @@
 
         <div id="logout">
             <button id="logout_btn">
-                <a href="../../Html/index.html"> <i class="fa-solid fa-right-from-bracket"></i></a>
+               <a href="../../Html/index.html"> <i class="fa-solid fa-right-from-bracket"></i></a>
                 <span class="item-description">
                     Logout
                 </span>
@@ -93,46 +89,44 @@
         </div>
     </nav>
 
-    <main>
-        <div class="container">
-
-            <div class="banner_medico"></div>
-
-            <div class="listas">
-
-                <div class="agendaHoje">
-                    <div class="titulos">
-                        <span class="cinza">Seu</span>
-                        <span class="verde">Dia</span>
-                    </div>
-                        <div class="listaAgendaH" id="listaAgendaH">
-    
-                        </div>
+        <main class="main-content">
+            <h1>Agendar <span>Consulta</span></h1>
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="dia">Escolher Dia</label>
+                    <input type="date" id="dia">
                 </div>
-
-                <div class="agendaSemana">
-                    <div class="titulos">
-                        <span class="cinza">Sua</span>
-                        <span class="verde">Semana</span>
-                    </div>
-                    <div class="listaAgendaS" id="listaAgendaS">
-                        
-                    </div>
+                <div class="form-group">
+                    <label for="hora">Escolher Hora</label>
+                    <select id="hora">
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
                 </div>
-
-                <div class="anotacoes">
-                    <div class="titulos">
-                        <span class="verde">Anotações</span>
-                    </div>
-                    <div class="assunto"></div>
+                <div class="form-group">
+                    <label for="medico">Escolher Médico</label>
+                    <select id="medico">
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
                 </div>
-
+                <div class="form-group">
+                    <label for="paciente">Escolher Paciente</label>
+                    <select id="paciente">
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="descricao">Descrição</label>
+                    <textarea id="descricao" placeholder="Digite a descrição da consulta (opcional)" rows="3"></textarea>
+                </div>
+                <button id="agendar"><i class="fas fa-calendar-check"></i> Agendar</button>
             </div>
-        </div>
-    </main>
-    <script src="../Js/funcoesPadroes.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="../Js/buscarAgendaHoje.js"></script>
+            <div class="form-container2" id="consultas-container">
+                <!-- Consultas cadastradas serão inseridas aqui -->
+            </div>
+        </main>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="../Js/addAgendamento.js"></script>
+        <script src="../Js/funcoesPadroes.js"></script>
 </body>
-
 </html>
+

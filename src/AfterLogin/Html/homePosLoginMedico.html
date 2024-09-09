@@ -9,6 +9,7 @@
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="../Css/listagemColaboradorStyle.css">
+    <link rel="stylesheet" href="../Css/homePosLoginMedico.css">
     <link rel="stylesheet" href="../Css/Sidebar.css">
     <link rel="shortcut icon" href="../../Assets/logo_Multclinics_branca_sem_nome.png" type="image/x-icon">
     <title>Multiclinics | Área do Colaborador</title>
@@ -30,7 +31,7 @@
                 </p>
             </div>
 
-            <ul id="side_items">
+            <ul id="side_items active">
                 <li class="side-item">
                     <a href="#">
                         <i class="fa-solid fa-home"></i>
@@ -41,7 +42,7 @@
                 </li>
 
                 <li class="side-item">
-                    <a href="#">
+                    <a href="calendario.html">
                         <i class="fa-solid fa-calendar"></i>
                         <span class="item-description">
                             Agendamento
@@ -49,7 +50,7 @@
                     </a>
                 </li>
 
-                <li class="side-item active">
+                <li class="side-item">
                     <a href="listagemColaborador.html">
                         <i class="fa-solid fa-user"></i>
                         <span class="item-description">
@@ -59,7 +60,7 @@
                 </li>
 
                 <li class="side-item">
-                    <a href="listagemPaciente.html">
+                    <a href="#">
                         <i class="fa-solid fa-hospital-user"></i>
                         <span class="item-description">
                             Paciente
@@ -84,7 +85,7 @@
 
         <div id="logout">
             <button id="logout_btn">
-               <a href="../../Html/index.html"> <i class="fa-solid fa-right-from-bracket"></i></a>
+                <a href="../../Html/index.html"> <i class="fa-solid fa-right-from-bracket"></i></a>
                 <span class="item-description">
                     Logout
                 </span>
@@ -94,71 +95,44 @@
 
     <main>
         <div class="container">
-            <div class="header">
-                <h1>Área dos <span>Colaboradores</span></h1>
-                <div class="containerBotao">
-                    <button class="registrar"><a href="cadastroColaborador.html">Adicionar Colaborador</a></button>
-                    <button class="filtro">Filtro</button>
-                </div>
-            </div>
-            <div class="KPIS">
-                <div class="cardKpi">
-                    <div class="kpiContent">
-                        <div class="kpiData">
-                            <p class="kpiNumber">03</p>
-                            <p class="kpiText">Médicos</p>
-                            <p class="kpiSubtext">Número total de médicos que trabalham na clínica</p>
-                        </div>
-                        <div class="kpiIcon">
-                            <img src="../Assets/images.jfif" alt="Ícone">
-                        </div>
-                    </div>
-                </div>
-                <div class="cardKpi">
-                    <div class="kpiContent">
-                        <div class="kpiData">
-                            <p class="kpiNumber">03</p>
-                            <p class="kpiText">Médicos Ativos</p>
-                            <p class="kpiSubtext">Número de médicos ativos atualmente</p>
-                        </div>
-                        <div class="kpiIcon">
-                            <img src="../Assets/images.jfif" alt="Ícone">
-                        </div>
-                    </div>
-                </div>
-                <div class="cardKpi">
-                    <div class="kpiContent">
-                        <div class="kpiData">
-                            <p class="kpiNumber">01</p>
-                            <p class="kpiText">administradores</p>
-                            <p class="kpiSubtext">Número de admins trabalhando atualmente</p>
-                        </div>
-                        <div class="kpiIcon">
-                            <img src="../Assets/images.jfif" alt="Ícone">
-                        </div>
-                    </div>
-                </div>
-                <div class="cardKpi">
-                    <div class="kpiContent">
-                        <div class="kpiData">
-                            <p class="kpiNumber">01</p>
-                            <p class="kpiText">administradores ativos</p>
-                            <p class="kpiSubtext">Admins Ativos atualmente</p>
-                        </div>
-                        <div class="kpiIcon">
-                            <img src="../Assets/images.jfif" alt="Ícone">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="listagemBox" id="listagem"></div>
-        </div>
-        </div>
 
+            <div class="banner_medico"></div>
+
+            <div class="listas">
+
+                <div class="agendaHoje">
+                    <div class="titulos">
+                        <span class="cinza">Seu</span>
+                        <span class="verde">Dia</span>
+                    </div>
+                        <div class="listaAgendaH" id="listaAgendaH">
+    
+                        </div>
+                </div>
+
+                <div class="agendaSemana">
+                    <div class="titulos">
+                        <span class="cinza">Sua</span>
+                        <span class="verde">Semana</span>
+                    </div>
+                    <div class="listaAgendaS" id="listaAgendaS">
+                        
+                    </div>
+                </div>
+
+                <div class="anotacoes">
+                    <div class="titulos">
+                        <span class="verde">Anotações</span>
+                    </div>
+                    <div class="assunto"></div>
+                </div>
+
+            </div>
+        </div>
     </main>
-    <script src="../Js/listagemColaboradorscript.js"></script>
     <script src="../Js/funcoesPadroes.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../Js/buscarAgendaHoje.js"></script>
 </body>
 
 </html>
