@@ -1,6 +1,6 @@
 async function buscarPacientes() {
     try {
-        const resposta = await fetch("http://localhost:8080/pacientes");
+        const resposta = await fetch("http://localhost:8080/pacientes/medicoResponsavel");
         const listaPacientes = await resposta.json();
         console.log(listaPacientes);
 

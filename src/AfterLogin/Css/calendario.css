@@ -63,6 +63,12 @@ body {
     color: #007744;
 }
 
+.buttons{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
 .filter-button {
     background-color: #007744;
     color: white;
