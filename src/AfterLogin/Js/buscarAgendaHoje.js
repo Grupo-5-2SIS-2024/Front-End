@@ -15,6 +15,7 @@ cards.innerHTML = respostaDados.body.map((item) => {
     return ` 
             <div class="listaAgendaH">
                 <span class="horarioH">${formatarData(item.datahoraConsulta)}</span>
+                <span>-</span>
                 <span class="pacienteH">${item.paciente.nome} ${item.paciente.sobrenome}</span>
             </div>`;
         }).join('');
@@ -39,9 +40,10 @@ console.log(respostaDados);
 const cards = document.getElementById("listaAgendaS");
 cards.innerHTML = respostaDados.body.map((item) => {
     return ` 
-            <div class="listaAgendaH">
-                <span class="horarioH">${formatarData(item.datahoraConsulta)}</span>
-                <span class="pacienteH">${item.paciente.nome} ${item.paciente.sobrenome}</span>
+            <div class="listaAgendaS">
+                <span class="horarioS">${formatarData(item.datahoraConsulta)}</span>
+                <span>-</span>
+                <span class="pacienteS">${item.paciente.nome} ${item.paciente.sobrenome}</span>
             </div>`;
         }).join('');
     } catch (error) {
