@@ -1,15 +1,13 @@
 async function buscarPacientes() {
     try {
-        const resposta = await fetch("http://localhost:8080/pacientes/medicoResponsavel");
+        const resposta = await fetch("http://localhost:8080/pacientes");
         const listaPacientes = await resposta.json();
         console.log(listaPacientes);
 
         const cardsMedicos = document.getElementById("listagem");
-        cardsMedicos.innerHTML = listaPacientes.map((entry) => {
-            const paciente = entry.paciente;
-            const nomeMedico = entry.nomeMedico || 'Médico não associado';
-            const especialidadeMedica = entry.especialidadeMedica || 'Especialidade não informada';
-            const status = paciente.ativo ? 'Ativo' : 'Inativo';
+        cardsMedicos.innerHTML = listaPacientes.map((paciente) => {
+            // Corrigindo o acesso ao paciente e suas propriedades
+            const responsavel = paciente.responsavel ? `${paciente.responsavel.nome} ${paciente.responsavel.sobrenome}` : 'Não informado';
 
             return `
                 <div class="cardPaciente" data-paciente-id="${paciente.id}">
@@ -24,15 +22,15 @@ async function buscarPacientes() {
                         </div>
                         <div class="field">
                             <label for="responsavel">Responsável</label>
-                            <p id="responsavel">${paciente.responsavel ? paciente.responsavel.nome : 'Não informado'}</p>
+                            <p id="responsavel">${responsavel}</p>
                         </div>
                         <div class="field">
-                            <label for="medico">Médico</label>
-                            <p id="medico">${nomeMedico}</p>
+                            <label for="dataNascimento">Data de Nascimento</label>
+                            <p id="dataNascimento">${paciente.dataNascimento}</p>
                         </div>
                         <div class="field">
-                            <label for="especialidade">Especialidade</label>
-                            <p id="especialidade">${especialidadeMedica}</p>
+                            <label for="cpf">CPF</label>
+                            <p id="cpf">${paciente.cpf}</p>
                         </div>
                     </div>
                     <div class="actions">
@@ -72,6 +70,7 @@ async function buscarPacientes() {
             });
         });
 
+        // Adiciona evento de clique para os botões de atualização
         cardsMedicos.querySelectorAll('.update').forEach((botao) => {
             botao.addEventListener('click', function () {
                 const card = this.closest('.cardPaciente');
@@ -90,6 +89,7 @@ async function buscarPacientes() {
 }
 
 buscarPacientes();
+
 
 async function deletarPaciente(id) {
     try {
