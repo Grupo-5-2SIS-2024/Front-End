@@ -47,9 +47,11 @@ async function buscarConsultas() {
                         <p>Médico: ${consulta.medico.nome} ${consulta.medico.sobrenome} - ${consulta.especificacaoMedica.area}</p>
                         <p>Status: ${consulta.statusConsulta.nomeStatus}</p>
                         <div class="consulta-actions">
-                            <i class="fas fa-pen" onclick="alterarConsulta(${consulta.id})" title="Alterar Consulta"></i>
-                            <i class="fas fa-trash" onclick="excluirConsulta(${consulta.id})" title="Cancelar Consulta"></i>
-                        </div>
+    <i class="fas fa-pen" onclick="alterarConsulta(${consulta.id})" title="Alterar Consulta"></i>
+    <i class="fas fa-trash" onclick="excluirConsulta(${consulta.id})" title="Cancelar Consulta"></i>
+    <i class="fas fa-download" onclick="baixarConsultaExcel(${consulta.id})" title="Baixar Excel da Consulta"></i> <!-- Novo ícone de download -->
+</div>
+
                     </div>
                 </div>
             `;
@@ -505,3 +507,62 @@ document.getElementById('hora').addEventListener('change', () => {
 document.getElementById('medico').addEventListener('change', updateAvailablePatients);
 
 document.getElementById('agendar').addEventListener('click', agendarConsulta);
+
+function BaixarExcelGeral(){
+
+document.getElementById('download-excel').addEventListener('click', async () => {
+    const consultas = await buscarConsultas(); // Busca as consultas
+
+    // Transforma os dados em um array de objetos adequado para o Excel
+    const dadosExcel = consultas.map(consulta => ({
+        Paciente: `${consulta.paciente.nome} ${consulta.paciente.sobrenome}`,
+        "Data e Hora": formatarData(consulta.datahoraConsulta),
+        Médico: `${consulta.medico.nome} ${consulta.medico.sobrenome}`,
+        Especialização: consulta.especificacaoMedica.area,
+        Status: consulta.statusConsulta.nomeStatus,
+        Descrição: consulta.descricao
+    }));
+
+    // Cria um novo workbook (arquivo Excel)
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.json_to_sheet(dadosExcel); // Converte os dados para uma aba Excel
+    XLSX.utils.book_append_sheet(wb, ws, "Consultas"); // Adiciona a aba ao arquivo Excel
+
+    // Gera o arquivo Excel e inicia o download
+    XLSX.writeFile(wb, 'consultas.xlsx');
+});
+}
+
+
+// Função para baixar o Excel de uma consulta específica
+async function baixarConsultaExcel(consultaId) {
+    try {
+        // Busca as consultas e filtra a consulta específica pelo ID
+        const consultas = await buscarConsultas();
+        const consulta = consultas.find(c => c.id === consultaId);
+
+        if (!consulta) {
+            throw new Error("Consulta não encontrada");
+        }
+
+        // Transforma os dados da consulta em um objeto adequado para o Excel
+        const dadosExcel = [{
+            Paciente: `${consulta.paciente.nome} ${consulta.paciente.sobrenome}`,
+            "Data e Hora": formatarData(consulta.datahoraConsulta),
+            Médico: `${consulta.medico.nome} ${consulta.medico.sobrenome}`,
+            Especialização: consulta.especificacaoMedica.area,
+            Status: consulta.statusConsulta.nomeStatus,
+            Descrição: consulta.descricao
+        }];
+
+        // Cria um novo workbook (arquivo Excel)
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.json_to_sheet(dadosExcel); // Converte os dados para uma aba Excel
+        XLSX.utils.book_append_sheet(wb, ws, "Consulta"); // Adiciona a aba ao arquivo Excel
+
+        // Gera o arquivo Excel e inicia o download, nomeando o arquivo com o ID da consulta
+        XLSX.writeFile(wb, `consulta_${consultaId}.xlsx`);
+    } catch (error) {
+        console.error("Erro ao baixar consulta em Excel:", error);
+    }
+}
