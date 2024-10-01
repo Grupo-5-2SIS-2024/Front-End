@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamento de Consultas</title>
+    <link rel="stylesheet" href="./css/posLogin.css">
+</head> 
+<body>
+    <div class="grid-container">
+       
+
+        <div class="kpis">
+            <div class="kpi-item">
+                <h3>Consultas de Hoje</h3>
+                <p id="consultasHoje">0</p>
+            </div>
+            <div class="kpi-item">
+                <h3>Consultas Marcadas</h3>
+                <p id="consultasMarcadas">0</p>
+            </div>
+            <div class="kpi-item">
+                <h3>Consultas Concluídas</h3>
+                <p id="consultasConcluidas">0</p>
+            </div>
+            <div class="kpi-item">
+                <h3>Consultas Canceladas</h3>
+                <p id="consultasCanceladas">0</p>
+            </div>
+        </div>
+
+        <div class="shortcuts">
+            <h2>Atalhos</h2>
+            <button class="shortcut-btn">Dasboard</button>
+            <button class="shortcut-btn">Pacientes</button>
+            <button class="shortcut-btn">Calendario</button>
+            <button class="shortcut-btn">Relatórios</button>
+        </div>
+
+        <div class="agenda">
+            <h2>Agenda de Consultas</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Horário</th>
+                        <th>Paciente</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="agenda-body">
+                </tbody>
+            </table>
+        </div>
+
+        <div class="notificacoes">
+            <h2>Anotações das Consultas Concluídas</h2>
+            <ul id="concluidas-list">
+                <!-- Anotações serão inseridas aqui -->
+            </ul>
+        </div>
+
+        <div class="grafico">
+            <h2>Desempenho de Consultas</h2>
+            <canvas id="consultasChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 id="modal-title"></h2>
+            <p id="modal-message"></p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="posLogin.js"></script>
+</body>
+</html>
