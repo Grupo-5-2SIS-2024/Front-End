@@ -21,12 +21,8 @@
                 <img src="../Assets/perfil.jpeg" id="user_avatar" alt="Avatar">
 
                 <p id="user_infos">
-                    <span class="item-description">
-                        Silvia
-                    </span>
-                    <span class="item-description">
-                        ADM
-                    </span>
+                    <span id="user_nome" class="item-description">Silvia</span>
+                    <span id="user_permissao" class="item-description">ADM</span>
                 </p>
             </div>
 
@@ -84,7 +80,7 @@
 
         <div id="logout">
             <button id="logout_btn">
-               <a href="../../Html/index.html"> <i class="fa-solid fa-right-from-bracket"></i></a>
+                <a href="../../Html/index.html"> <i class="fa-solid fa-right-from-bracket"></i></a>
                 <span class="item-description">
                     Logout
                 </span>
@@ -97,7 +93,8 @@
             <div class="header">
                 <h1>Área dos <span>Colaboradores</span></h1>
                 <div class="containerBotao">
-                    <button class="registrar"><a href="cadastroColaborador.html">Adicionar Colaborador</a></button>
+                    <button id="btnAdicionarColaborador" class="registrar"><a href="cadastroColaborador.html">Adicionar
+                            Colaborador</a></button>
                     <button class="filtro">Filtro</button>
                 </div>
             </div>
@@ -124,7 +121,7 @@
                         <div class="kpiIcon">
                             <img src="../Assets/medico (4).png" alt="Ícone">
                         </div>
-                        
+
                     </div>
                 </div>
                 <div class="cardKpi">
@@ -159,6 +156,7 @@
     <script src="../Js/listagemColaboradorscript.js"></script>
     <script src="../Js/funcoesPadroes.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../Js/sessao.js"></script>
 </body>
 
 </html>
