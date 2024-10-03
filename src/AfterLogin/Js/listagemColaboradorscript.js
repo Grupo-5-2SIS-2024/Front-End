@@ -1,11 +1,29 @@
 async function buscarMedicos() {
     try {
+        // Obtém o nível de permissão e a especialização do supervisor
+        const nivelPermissao = sessionStorage.getItem("PERMISSIONAMENTO_MEDICO");
+        const areaEspecializacaoSupervisor = sessionStorage.getItem("ESPECIFICACAO_MEDICA");
+
         const resposta = await fetch("http://localhost:8080/medicos");
         const listaMedicos = await resposta.json();
-        console.log(listaMedicos);
+        console.log("Médicos recebidos:", listaMedicos);
+
+        // Filtra os médicos se o usuário logado for um Supervisor
+        let medicosFiltrados = listaMedicos;
+        if (nivelPermissao === "Supervisor") {
+            medicosFiltrados = listaMedicos.filter(medico => {
+                const especializacaoMedico = medico.especializacao ? medico.especializacao.toLowerCase() : '';
+                const especializacaoSupervisor = areaEspecializacaoSupervisor.toLowerCase();
+                
+                // Compara a especialização do médico com a do supervisor
+                return especializacaoMedico === especializacaoSupervisor;
+            });
+        }
+
+        console.log("Médicos filtrados:", medicosFiltrados);
 
         const cardsMedicos = document.getElementById("listagem");
-        cardsMedicos.innerHTML = listaMedicos.map((medico) => {
+        cardsMedicos.innerHTML = medicosFiltrados.map((medico) => {
             const status = medico.ativo ? 'Ativo' : 'Inativo';
 
             return `
@@ -36,54 +54,14 @@ async function buscarMedicos() {
                 </div>
             `;
         }).join('');
-
-        // Adiciona evento de clique para os botões de exclusão
-        cardsMedicos.querySelectorAll('.delete').forEach((botao) => {
-            botao.addEventListener('click', function () {
-                const card = this.closest('.cardColaborador');
-                const id = card.dataset.medicoId;
-
-                if (id) {
-                    // Mostra o modal de confirmação
-                    Swal.fire({
-                        title: 'Tem certeza?',
-                        text: "Você não poderá reverter isso!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Sim, deletar!',
-                        cancelButtonText: 'Cancelar'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Se o usuário confirmar, chama a função de deletar
-                            deletarMedico(id);
-                        }
-                    });
-                } else {
-                    console.error('ID do médico não encontrado.');
-                }
-            });
-        });
-
-        cardsMedicos.querySelectorAll('.update').forEach((botao) => {
-            botao.addEventListener('click', function () {
-                const card = this.closest('.cardColaborador');
-                const id = card.dataset.medicoId;
-
-                if (id) {
-                    window.location.href = `atualizarColaborador.html?id=${id}`;
-                } else {
-                    console.error('ID do médico não encontrado.');
-                }
-            });
-        });
     } catch (e) {
-        console.log(e);
+        console.log("Erro ao buscar médicos:", e);
     }
 }
 
 buscarMedicos();
+
+
 
 async function deletarMedico(id) {
     try {

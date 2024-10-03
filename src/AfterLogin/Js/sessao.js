@@ -1,5 +1,4 @@
 function validarSessao() {
-    // Acessando as chaves corretas do sessionStorage
     var idMedico = sessionStorage.getItem("ID_MEDICO");
     var nomeMedico = sessionStorage.getItem("NOME_MEDICO");
     var sobrenomeMedico = sessionStorage.getItem("SOBRENOME_MEDICO");
@@ -9,19 +8,6 @@ function validarSessao() {
     console.log("NOME_MEDICO:", nomeMedico);
     console.log("SOBRENOME_MEDICO:", sobrenomeMedico);
     console.log("PERMISSIONAMENTO_MEDICO:", nivelPermissao);
-
-    // Verificar se o usuário está logado
-    if (!idMedico || !nomeMedico) {
-        window.location = "../login.html"; // Redireciona se não estiver logado
-        return; // Para a execução da função
-    }
-
-    // Atualizar informações do usuário na interface
-    var b_usuario = document.getElementById("b_usuario");
-    var n_usuario = document.getElementById("n_usuario");
-
-    if (b_usuario) b_usuario.innerHTML = idMedico;
-    if (n_usuario) n_usuario.innerHTML = nomeMedico;
 
     // Atualizar o nome e a permissão na navbar
     var userNome = document.getElementById("user_nome");
@@ -46,23 +32,53 @@ function validarSessao() {
         if (adicionarColaboradorBtn) {
             adicionarColaboradorBtn.style.display = "none"; // Oculta o botão
         }
-    } else if (nivelPermissao === "Medico") {
-        // Médico: remover links de Colaboradores, Pacientes e Dashboards
-        const linkColaboradores = document.getElementById("Colaborador");
-        const linkPacientes = document.getElementById("Paciente");
-        const linkDashboards = document.getElementById("Dash");
+    } else if (nivelPermissao === "Médico") {
+        // Médico: remover botoes de Colaboradores, Pacientes e Dashboards
+        const Colaboradores = document.getElementById("Colaborador");
+        const Pacientes = document.getElementById("Paciente");
+        const Dashboards = document.getElementById("Dash");
 
-        if (linkColaboradores) {
-            linkColaboradores.remove(); // Remove o link de colaboradores
+        if (Colaboradores) {
+            Colaboradores.style.display = "none"; // Oculta o botão
         }
-        if (linkPacientes) {
-            linkPacientes.remove(); // Remove o link de pacientes
+        if (Pacientes) {
+            Pacientes.style.display = "none" // Oculta o botão
         }
-        if (linkDashboards) {
-            linkDashboards.remove(); // Remove o link de dashboards
+        if (Dashboards) {
+            Dashboards.style.display = "none" // Oculta o botão
         }
     }
 }
-
-// Chama a função ao carregar a página
 validarSessao();
+
+function deslogar() {
+
+    var emailMedico = sessionStorage.getItem("EMAIL_MEDICO");
+
+  
+    if (!emailMedico) {
+        window.location = "../../Html/index.html";
+        return;
+    }
+
+    fetch('http://localhost:8080/medicos/logout', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            email: emailMedico
+        })
+    })
+    .then(response => {
+        if (response.ok) {
+            sessionStorage.clear();
+            window.location = "../../Html/index.html";
+        } else {
+            console.error('Erro ao deslogar o médico.');
+        }
+    })
+    .catch(error => {
+        console.error('Erro na requisição de logout:', error);
+    });
+}
