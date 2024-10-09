@@ -34,7 +34,7 @@ async function buscarPacientes() {
                         </div>
                     </div>
                     <div class="actions">
-                        <button class="update"><i class="fas fa-sync-alt"></i></button>
+                        <button class="update"><i class="fas fa-pencil-alt"></i></button>
                         <button class="delete"><i class="fas fa-trash-alt"></i></button>
                     </div>
                 </div>

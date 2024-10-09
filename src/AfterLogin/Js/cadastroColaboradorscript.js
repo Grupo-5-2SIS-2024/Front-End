@@ -55,7 +55,7 @@ function validarCadastro() {
   var email = document.getElementById('email').value;
   var telefone = document.getElementById('telefone').value;
   var cpf = document.getElementById('cpf').value;
-  var especialidade = document.getElementById('especialidade').value;
+  var especificacao = document.getElementById('especificacao').value;
   var dataNascimento = document.getElementById('dataNascimento').value;
   var carteirinha = document.getElementById('carteirinha').value;
   var password = document.getElementById('password').value;
@@ -106,11 +106,11 @@ function validarCadastro() {
       document.getElementById('error-cpf').textContent = "";
   }
 
-  if (!especialidade.trim()) {
-      document.getElementById('error-especialidade').textContent = "Especialidade é obrigatória.";
-      errors.push("Especialidade é obrigatória.");
+  if (!especificacao.trim()) {
+      document.getElementById('error-especificacao').textContent = "Especificação é obrigatória.";
+      errors.push("especificacao é obrigatória.");
   } else {
-      document.getElementById('error-especialidade').textContent = "";
+      document.getElementById('error-especificacao').textContent = "";
   }
 
   if (!dataNascimento) {
@@ -161,6 +161,13 @@ function validarCadastro() {
 
 // Função assíncrona para cadastrar o colaborador
 
+const toBase64 = file => new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = () => resolve(reader.result);
+  reader.onerror = reject;
+});
+
 async function cadastrarColaborador() {
 
   if (validarCadastro()) {
@@ -171,13 +178,13 @@ async function cadastrarColaborador() {
     const telefoneDigitado = document.getElementById("telefone").value;
     const cpfDigitado = document.getElementById("cpf").value;
     const dataNascimentoDigitada = document.getElementById("dataNascimento").value;
-    const especialidadeDigitada = document.getElementById("especialidade").value;
+    const especificacaoDigitada = document.getElementById("especificacao").value;
     const carteirinhaDigitada = document.getElementById("carteirinha").value;
     const senhaDigitada = document.getElementById("password").value;
     const nivelAcessoEscolhido = document.getElementById("nivelAcesso").value;
     const fotoEscolhida = document.getElementById("picture__input").files[0];
 
-    const especialidadeMap = {
+    const especificacaoMap = {
       "psicologo": 1,
       "terapeuta": 2,
       "fonoaudiologia": 3
@@ -185,14 +192,14 @@ async function cadastrarColaborador() {
 
     const nivelAcessoMap = {
       "Admin": 1,
-      "Médico": 2,
-      "Recepcionista": 3
+      "Supervisor": 2,
+      "Médico": 3
     };
 
-    const especialidadeId = especialidadeMap[especialidadeDigitada.toLowerCase()];
+    const especificacaoId = especificacaoMap[especificacaoDigitada.toLowerCase()];
     const nivelAcessoId = nivelAcessoMap[nivelAcessoEscolhido];
 
-    if (!especialidadeId || !nivelAcessoId) {
+    if (!especificacaoId || !nivelAcessoId) {
       alert("Opções inválidas selecionadas.");
       return;
     }
@@ -205,7 +212,7 @@ async function cadastrarColaborador() {
       "cpf": cpfDigitado,
       "dataNascimento": dataNascimentoDigitada,
       "especificacaoMedica": {
-        "id": especialidadeId
+        "id": especificacaoId
       },
       "carterinha": carteirinhaDigitada,
       "senha": senhaDigitada,
@@ -213,8 +220,10 @@ async function cadastrarColaborador() {
       "permissao": {
         "id": nivelAcessoId
       },
-      "foto": fotoEscolhida
+      "foto": await toBase64(fotoEscolhida)
     };
+
+    console.log(dadosColaborador);
 
     try {
       const respostaCadastro = await fetch("http://localhost:8080/medicos", {
@@ -231,7 +240,7 @@ async function cadastrarColaborador() {
           showConfirmButton: false,
           timer: 1500
         }).then(() => {
-          window.location.href = "listagemColaborador.html";
+          //window.location.href = "listagemColaborador.html";
         });
       } else {
         alert("Ocorreu um erro ao cadastrar");

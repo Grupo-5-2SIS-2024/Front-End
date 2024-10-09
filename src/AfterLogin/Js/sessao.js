@@ -4,11 +4,6 @@ function validarSessao() {
     var sobrenomeMedico = sessionStorage.getItem("SOBRENOME_MEDICO");
     var nivelPermissao = sessionStorage.getItem("PERMISSIONAMENTO_MEDICO");
 
-    console.log("ID_MEDICO:", idMedico);
-    console.log("NOME_MEDICO:", nomeMedico);
-    console.log("SOBRENOME_MEDICO:", sobrenomeMedico);
-    console.log("PERMISSIONAMENTO_MEDICO:", nivelPermissao);
-
     // Atualizar o nome e a permissão na navbar
     var userNome = document.getElementById("user_nome");
     var userPermissao = document.getElementById("user_permissao");
@@ -18,37 +13,53 @@ function validarSessao() {
         userPermissao.textContent = nivelPermissao;
     }
 
-    // Controle de visibilidade baseado na permissão
+    // Atualizar o link "Home" baseado na permissão
+    var homeLink = document.querySelector("#side_items .side-item a");
+
+    if (homeLink) {
+        if (nivelPermissao === "Admin" || nivelPermissao === "Supervisor") {
+            homeLink.href = "HomeAdm.html"; // Altera o link para a Home de Admin
+        } else if (nivelPermissao === "Medico") {
+            homeLink.href = "homePosLoginMedico.html"; // Mantém o link para a Home de Médico
+        }
+    }
+
+
     if (nivelPermissao === "Admin") {
         // ADM pode acessar tudo, nenhuma ação necessária
     } else if (nivelPermissao === "Supervisor") {
+
         // Supervisor: remover funções de adicionar pacientes e cadastrar colaboradores
+
         const cadastrarPacienteBtn = document.getElementById("addPacienteBtn");
         const adicionarColaboradorBtn = document.getElementById("btnAdicionarColaborador");
 
         if (cadastrarPacienteBtn) {
-            cadastrarPacienteBtn.style.display = "none"; // Oculta o botão
+            cadastrarPacienteBtn.style.display = "none";
         }
         if (adicionarColaboradorBtn) {
-            adicionarColaboradorBtn.style.display = "none"; // Oculta o botão
+            adicionarColaboradorBtn.style.display = "none";
         }
     } else if (nivelPermissao === "Médico") {
+
         // Médico: remover botoes de Colaboradores, Pacientes e Dashboards
+        
         const Colaboradores = document.getElementById("Colaborador");
         const Pacientes = document.getElementById("Paciente");
         const Dashboards = document.getElementById("Dash");
 
         if (Colaboradores) {
-            Colaboradores.style.display = "none"; // Oculta o botão
+            Colaboradores.style.display = "none";
         }
         if (Pacientes) {
-            Pacientes.style.display = "none" // Oculta o botão
+            Pacientes.style.display = "none"
         }
         if (Dashboards) {
-            Dashboards.style.display = "none" // Oculta o botão
+            Dashboards.style.display = "none"
         }
     }
 }
+
 validarSessao();
 
 function deslogar() {

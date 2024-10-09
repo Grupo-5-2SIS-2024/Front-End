@@ -1,6 +1,5 @@
 async function buscarMedicos() {
     try {
-        // Obtém o nível de permissão e a especialização do supervisor
         const nivelPermissao = sessionStorage.getItem("PERMISSIONAMENTO_MEDICO");
         const areaEspecializacaoSupervisor = sessionStorage.getItem("ESPECIFICACAO_MEDICA");
 
@@ -8,27 +7,27 @@ async function buscarMedicos() {
         const listaMedicos = await resposta.json();
         console.log("Médicos recebidos:", listaMedicos);
 
-        // Filtra os médicos se o usuário logado for um Supervisor
         let medicosFiltrados = listaMedicos;
         if (nivelPermissao === "Supervisor") {
             medicosFiltrados = listaMedicos.filter(medico => {
-                const especializacaoMedico = medico.especializacao ? medico.especializacao.toLowerCase() : '';
-                const especializacaoSupervisor = areaEspecializacaoSupervisor.toLowerCase();
-                
-                // Compara a especialização do médico com a do supervisor
-                return especializacaoMedico === especializacaoSupervisor;
+                const especializacaoMedico = medico.especificacaoMedica && medico.especificacaoMedica.area ? medico.especificacaoMedica.area.trim().toLowerCase() : '';
+                const especializacaoSupervisor = areaEspecializacaoSupervisor ? areaEspecializacaoSupervisor.trim().toLowerCase() : '';
+
+                return especializacaoMedico && especializacaoMedico === especializacaoSupervisor;
             });
         }
 
         console.log("Médicos filtrados:", medicosFiltrados);
 
+
         const cardsMedicos = document.getElementById("listagem");
         cardsMedicos.innerHTML = medicosFiltrados.map((medico) => {
             const status = medico.ativo ? 'Ativo' : 'Inativo';
+            const foto = medico.foto === null || medico.foto === undefined ? "../Assets/perfil.jpeg" : medico.foto;
 
             return `
                 <div class="cardColaborador" data-medico-id="${medico.id}">
-                    <img src="../Assets/perfil.jpeg" alt="Foto do Colaborador">
+                    <img src="${foto}" alt="Foto do Colaborador">
                     <div class="info">
                         <div class="field">
                             <label for="nome">Nome</label>
@@ -37,6 +36,10 @@ async function buscarMedicos() {
                         <div class="field">
                             <label for="email">Email</label>
                             <p id="email">${medico.email}</p>
+                        </div>
+                        <div class="field">
+                            <label for="especificacaoMedica">Especificação</label>
+                            <p id="especificacaoMedica">${medico.especificacaoMedica.area}</p>
                         </div>
                         <div class="field">
                             <label for="status">Status</label>
@@ -48,14 +51,57 @@ async function buscarMedicos() {
                         </div>
                     </div>
                     <div class="actions">
-                        <button class="update"><i class="fas fa-sync-alt"></i></button>
+                        <button class="update"><i class="fas fa-pencil-alt"></i></button>
                         <button class="delete"><i class="fas fa-trash-alt"></i></button>
                     </div>
                 </div>
             `;
         }).join('');
+
+
+        // Adiciona evento de clique para os botões de exclusão
+        cardsMedicos.querySelectorAll('.delete').forEach((botao) => {
+            botao.addEventListener('click', function () {
+                const card = this.closest('.cardColaborador');
+                const id = card.dataset.medicoId;
+
+                if (id) {
+                    // Mostra o modal de confirmação
+                    Swal.fire({
+                        title: 'Tem certeza?',
+                        text: "Você não poderá reverter isso!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sim, deletar!',
+                        cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Se o usuário confirmar, chama a função de deletar
+                            deletarMedico(id);
+                        }
+                    });
+                } else {
+                    console.error('ID do médico não encontrado.');
+                }
+            });
+        });
+
+        cardsMedicos.querySelectorAll('.update').forEach((botao) => {
+            botao.addEventListener('click', function () {
+                const card = this.closest('.cardColaborador');
+                const id = card.dataset.medicoId;
+
+                if (id) {
+                    window.location.href = `atualizarColaborador.html?id=${id}`;
+                } else {
+                    console.error('ID do médico não encontrado.');
+                }
+            });
+        });
     } catch (e) {
-        console.log("Erro ao buscar médicos:", e);
+        console.log(e);
     }
 }
 

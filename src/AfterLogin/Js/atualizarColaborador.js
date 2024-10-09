@@ -54,7 +54,7 @@ function validarCadastro() {
     var email = document.getElementById('email').value;
     var telefone = document.getElementById('telefone').value;
     var cpf = document.getElementById('cpf').value;
-    var especialidade = document.getElementById('especialidade').value;
+    var especificacao = document.getElementById('especificacao').value;
     var dataNascimento = document.getElementById('dataNascimento').value;
     var carteirinha = document.getElementById('carteirinha').value;
     var password = document.getElementById('password').value;
@@ -115,13 +115,13 @@ function validarCadastro() {
         document.getElementById('error-cpf').textContent = "";
     }
 
-    if (!especialidade.trim()) {
-        document.getElementById('especialidade').classList.add('error');
-        document.getElementById('error-especialidade').textContent = "Especialidade é obrigatória.";
-        errors.push("Especialidade é obrigatória.");
+    if (!especificacao.trim()) {
+        document.getElementById('especificacao').classList.add('error');
+        document.getElementById('error-especificacao').textContent = "Especificação é obrigatória.";
+        errors.push("especificacao é obrigatória.");
     } else {
-        document.getElementById('especialidade').classList.remove('error');
-        document.getElementById('error-especialidade').textContent = "";
+        document.getElementById('especificacao').classList.remove('error');
+        document.getElementById('error-especificacao').textContent = "";
     }
 
     if (!dataNascimento) {
@@ -202,10 +202,11 @@ function buscarValores(id) {
     const telefoneInput = document.getElementById("telefone");
     const cpfInput = document.getElementById("cpf");
     const dataNascimentoInput = document.getElementById("dataNascimento");
-    const especialidadeInput = document.getElementById("especialidade");
+    const especificacaoInput = document.getElementById("especificacao");
     const carteirinhaInput = document.getElementById("carteirinha");
     const senhaInput = document.getElementById("password");
     const nivelAcessoInput = document.getElementById("nivelAcesso");
+    const pictureImage = document.querySelector(".picture__image");
 
     fetch(`http://localhost:8080/medicos/${id}`).then(res => {
         res.json().then(json => {
@@ -217,16 +218,33 @@ function buscarValores(id) {
                 telefoneInput.value = json.telefone || '';
                 cpfInput.value = json.cpf || '';
                 dataNascimentoInput.value = json.dataNascimento || '';
-                especialidadeInput.value = json.permissao.area || ''; //deixar ao contrário
+                especificacaoInput.value = json.especificacaoMedica.area || '';
                 carteirinhaInput.value = json.carterinha || '';
                 senhaInput.value = json.senha || '';
-                nivelAcessoInput.value = json.permissao.nome || ''; //deixar ao contrário
+                nivelAcessoInput.value = json.permissao.nome || '';
+
+                if (json.foto) {
+                    const img = document.createElement("img");
+                    img.src = json.foto;
+                    img.classList.add("picture__img");
+                    pictureImage.innerHTML = "";
+                    pictureImage.appendChild(img);
+                } else {
+                    pictureImage.innerHTML = "Choose an image";
+                }
             }
         }).catch(err => console.error("Erro ao processar JSON", err));
     }).catch(err => console.error("Erro ao buscar dados", err));
 }
 
 // Função assíncrona para cadastrar o colaborador
+
+const toBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+});
 
 async function atualizarColaborador() {
     const id = getIdFromURL();
@@ -243,28 +261,28 @@ async function atualizarColaborador() {
         const telefoneDigitado = document.getElementById("telefone").value;
         const cpfDigitado = document.getElementById("cpf").value;
         const dataNascimentoDigitada = document.getElementById("dataNascimento").value;
-        const especialidadeDigitada = document.getElementById("especialidade").value;
+        const especificacaoDigitada = document.getElementById("especificacao").value;
         const carteirinhaDigitada = document.getElementById("carteirinha").value;
         const senhaDigitada = document.getElementById("password").value;
         const nivelAcessoEscolhido = document.getElementById("nivelAcesso").value;
         const fotoEscolhida = document.getElementById("picture__input").files[0];
 
-        const especialidadeMap = {
-            "psicologo": 1,
-            "terapeuta": 2,
-            "fonoaudiologia": 3
-          };
+        const especificacaoMap = {
+            "Psicólogo": 1,
+            "Terapeuta": 2,
+            "Fonoaudiologa": 3
+        };
 
         const nivelAcessoMap = {
             "Admin": 1,
-            "Médico": 2,
-            "Recepcionista": 3
+            "Supervisor": 2,
+            "Médico": 3
         };
 
-        const especialidadeId = especialidadeMap[especialidadeDigitada.toLowerCase()];
+        const especificacaoId = especificacaoMap[especificacaoDigitada.toLowerCase()];
         const nivelAcessoId = nivelAcessoMap[nivelAcessoEscolhido];
 
-        if (!especialidadeId || !nivelAcessoId) {
+        if (!especificacaoId || !nivelAcessoId) {
             alert("Opções inválidas selecionadas.");
             return;
         }
@@ -274,10 +292,17 @@ async function atualizarColaborador() {
             "sobrenome": sobrenomeDigitado,
             "email": emailDigitado,
             "telefone": telefoneDigitado,
-            "senha": senhaDigitada,
-            "carterinha": carteirinhaDigitada,
-            "dataNascimento": dataNascimentoDigitada,
             "cpf": cpfDigitado,
+            "dataNascimento": dataNascimentoDigitada,
+            "especificacaoMedica": {
+                "id": especificacaoId
+            },
+            "carterinha": carteirinhaDigitada,
+            "senha": senhaDigitada,
+            "permissao": {
+                "id": nivelAcessoId
+            },
+            "foto": await toBase64(fotoEscolhida)
         };
 
         try {

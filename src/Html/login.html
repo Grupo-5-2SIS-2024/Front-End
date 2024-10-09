@@ -62,95 +62,106 @@
 
 <script>
 
-  async function fazerLogin() {
+async function fazerLogin() {
     const valorEmailLogin = document.getElementById("email").value;
     const valorSenhaLogin = document.getElementById("password").value;
 
-    switch (true) {
-      case valorEmailLogin == "":
+    // Validação dos campos de login
+    if (valorEmailLogin === "") {
         Swal.fire({
           icon: 'error',
           title: 'Erro no login',
           text: 'O campo email é obrigatório.'
         });
         return;
-      case valorSenhaLogin == "":
+    } 
+    if (valorSenhaLogin === "") {
         Swal.fire({
           icon: 'error',
           title: 'Erro no login',
           text: 'O campo senha é obrigatório.'
         });
         return;
-      case valorEmailLogin == "" && valorSenhaLogin == "":
-        Swal.fire({
-          icon: 'error',
-          title: 'Erro no login',
-          text: 'Preencha todos os campos para fazer login.'
-        });
-      case valorEmailLogin.indexOf('@') === -1:
+    } 
+    if (valorEmailLogin.indexOf('@') === -1) {
         Swal.fire({
           icon: 'error',
           title: 'Erro no login',
           text: 'O email informado é inválido. Por favor, insira um email válido.'
         });
+        return;
     }
 
     const valoresLogin = {
-      email: valorEmailLogin,
-      senha: valorSenhaLogin
+        email: valorEmailLogin,
+        senha: valorSenhaLogin
+    };
+
+    try {
+        const respostaLogin = await fetch("http://localhost:8080/medicos/login", {
+            method: "PUT",
+            body: JSON.stringify(valoresLogin),
+            headers: { "Content-type": "application/json; charset=UTF-8" }
+        });
+
+        if (respostaLogin.status === 200) {
+            const json = await respostaLogin.json(); 
+
+            // Armazenamento de dados no sessionStorage
+            sessionStorage.setItem("ID_MEDICO", json.id);
+            sessionStorage.setItem("NOME_MEDICO", json.nome);
+            sessionStorage.setItem("SOBRENOME_MEDICO", json.sobrenome);
+            sessionStorage.setItem("EMAIL_MEDICO", json.email);
+            sessionStorage.setItem("TELEFONE_MEDICO", json.telefone);
+            sessionStorage.setItem("CARTEIRA_REPRESENTANTE", json.carterinha); 
+            sessionStorage.setItem("TIPO_MEDICO", json.tipo);
+            sessionStorage.setItem("ESPECIFICACAO_MEDICA", json.especificacaoMedica.area); 
+            sessionStorage.setItem("PERMISSIONAMENTO_MEDICO", json.permissao.nome); 
+            sessionStorage.setItem("CPF_MEDICO", json.cpf);
+            sessionStorage.setItem("ATIVO_MEDICO", json.ativo);
+            sessionStorage.setItem("DT_NASC", json.dataNascimento);
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Login bem-sucedido!',
+                text: 'Redirecionando para a área do colaborador...',
+                showConfirmButton: false,
+                timer: 1500
+            }).then(() => {
+                // Verificação de permissão e redirecionamento
+                if (json.permissao.nome === "Admin" || json.permissao.nome === "Supervisor") {
+                    window.location.href = "../AfterLogin/Html/HomeAdm.html";
+                } else if (json.permissao.nome === "Médico") {
+                    window.location.href = "../AfterLogin/Html/homePosLoginMedico.html";
+                }
+            });
+
+        } else {
+            // Tratamento de erros de login
+            let mensagemErro;
+            switch (respostaLogin.status) {
+                case 401:
+                    mensagemErro = "Credenciais inválidas. Por favor, tente novamente.";
+                    break;
+                case 404:
+                    mensagemErro = "Usuário não encontrado.";
+                    break;
+                default:
+                    mensagemErro = `Erro inesperado: ${respostaLogin.status}`;
+            }
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro no login',
+                text: mensagemErro
+            });
+        }
+    } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro no login',
+            text: 'Erro ao tentar se conectar com o servidor. Por favor, tente novamente mais tarde.'
+        });
     }
-    const respostaLogin = await fetch("http://localhost:8080/medicos/login", {
-      method: "PUT",
-      body: JSON.stringify(valoresLogin),
-      headers: { "Content-type": "application/json; charset=UTF-8" }
-    });
+}
 
-    if (respostaLogin.status == 200) {
-
-      const json = await respostaLogin.json(); 
-
-      sessionStorage.setItem("ID_MEDICO", json.id);
-      sessionStorage.setItem("NOME_MEDICO", json.nome);
-      sessionStorage.setItem("SOBRENOME_MEDICO", json.sobrenome);
-      sessionStorage.setItem("EMAIL_MEDICO", json.email);
-      sessionStorage.setItem("TELEFONE_MEDICO", json.telefone);
-      sessionStorage.setItem("CARTEIRA_REPRESENTANTE", json.carterinha); // Ajustado para 'carterinha'
-      sessionStorage.setItem("TIPO_MEDICO", json.tipo);
-      sessionStorage.setItem("ESPECIFICACAO_MEDICA", json.especificacaoMedica.area); // Ajustado para 'especificacaoMedica.area'
-      sessionStorage.setItem("PERMISSIONAMENTO_MEDICO", json.permissao.nome); // Ajustado para 'permissao.nome'
-      sessionStorage.setItem("CPF_MEDICO", json.cpf);
-      sessionStorage.setItem("ATIVO_MEDICO", json.ativo);
-      sessionStorage.setItem("DT_NASC", json.dataNascimento);
-      Swal.fire({
-        icon: 'success',
-        title: 'Login bem-sucedido!',
-        text: 'Redirecionando para a área do colaborador...',
-        showConfirmButton: false,
-        timer: 1500
-      }).then(() => {
-        respostaLogin.json().then(respostaLogin => {
-          sessionStorage.setItem("idUsuario", respostaLogin.idUsuario);
-        })
-        window.location.href = "../AfterLogin/Html/homePosLoginMedico.html";
-      });
-    } else {
-      let mensagemErro;
-      switch (respostaLogin.status) {
-        case 401:
-          mensagemErro = "Credenciais inválidas. Por favor, tente novamente.";
-          break;
-        case 404:
-          mensagemErro = "Usuário não encontrado.";
-          break;
-        default:
-          mensagemErro = `Erro inesperado: ${respostaLogin.status}`;
-      }
-      Swal.fire({
-        icon: 'error',
-        title: 'Erro no login',
-
-        text: mensagemErro
-      });
-    }
-  }
 </script>
