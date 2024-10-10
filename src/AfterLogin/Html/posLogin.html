@@ -8,32 +8,36 @@
 </head> 
 <body>
     <div class="grid-container">
-       
-
         <div class="kpis">
-            <div class="kpi-item">
-                <h3>Consultas de Hoje</h3>
-                <p id="consultasHoje">0</p>
+            <div id="fotoMedico" class="foto-medico-container">
+                <img src="https://via.placeholder.com/100" alt="Foto do Médico" class="foto-medico">
+                <p class="nome-medico">Dr. Fictício</p>
             </div>
-            <div class="kpi-item">
-                <h3>Consultas Marcadas</h3>
-                <p id="consultasMarcadas">0</p>
-            </div>
-            <div class="kpi-item">
-                <h3>Consultas Concluídas</h3>
-                <p id="consultasConcluidas">0</p>
-            </div>
-            <div class="kpi-item">
-                <h3>Consultas Canceladas</h3>
-                <p id="consultasCanceladas">0</p>
+            <div class="kpi-items">
+                <div class="kpi-item">
+                    <h3>Consultas de Hoje</h3>
+                    <p id="consultasHoje">0</p>
+                </div>
+                <div class="kpi-item">
+                    <h3>Consultas Marcadas</h3>
+                    <p id="consultasMarcadas">0</p>
+                </div>
+                <div class="kpi-item">
+                    <h3>Consultas Concluídas</h3>
+                    <p id="consultasConcluidas">0</p>
+                </div>
+                <div class="kpi-item">
+                    <h3>Consultas Canceladas</h3>
+                    <p id="consultasCanceladas">0</p>
+                </div>
             </div>
         </div>
 
         <div class="shortcuts">
             <h2>Atalhos</h2>
-            <button class="shortcut-btn">Dasboard</button>
+            <button class="shortcut-btn">Dashboard</button>
             <button class="shortcut-btn">Pacientes</button>
-            <button class="shortcut-btn">Calendario</button>
+            <button class="shortcut-btn">Calendário</button>
             <button class="shortcut-btn">Relatórios</button>
         </div>
 
@@ -55,7 +59,6 @@
         <div class="notificacoes">
             <h2>Anotações das Consultas Concluídas</h2>
             <ul id="concluidas-list">
-                <!-- Anotações serão inseridas aqui -->
             </ul>
         </div>
 
@@ -65,7 +68,6 @@
         </div>
     </div>
 
-    <!-- Modal -->
     <div id="modal" class="modal">
         <div class="modal-content">
             <span class="close-btn">&times;</span>
@@ -75,6 +77,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="posLogin.js"></script>
+    <script src="../Js/posLogin.js"></script>
 </body>
 </html>

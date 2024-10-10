@@ -18,7 +18,7 @@ body {
     display: grid;
     grid-template-areas:
         'header header header'
-        'kpis shortcuts grafico'
+        'kpis grafico shortcuts'
         'agenda agenda notificacoes';
     grid-template-columns: 2fr 1fr 1fr;
     grid-template-rows: auto 1fr 2fr;
@@ -46,46 +46,55 @@ body {
     padding: 10px;
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    align-items: center; /* Centralizar verticalmente os elementos */
 }
 
+.foto-medico-container {
+    width: 50%; /* Define que a foto ocupará 50% do espaço */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.kpi-items {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Define duas colunas */
+    grid-template-rows: repeat(2, 1fr); /* Define duas linhas */
+    gap: 50px; /* Espaçamento entre os elementos */
+    width: 50%; /* Define que as KPIs ocuparão 50% do espaço */
+    margin-right: 45px;
+}
 
 .kpi-item {
     text-align: center;
-    flex: 1;
-    margin: 0 10px; /* Ligeiramente aumentar a margem */
-    background-color: #E0E0E0; /* Cinza */
+    background-color: #E0E0E0;
     border-radius: 10px;
-    padding: 10px; /* Ligeiramente aumentar o padding */
+    padding: 10px;
     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100px; /* Ligeiramente aumentar a altura */
     transition: transform 0.2s;
-    position: relative;
 }
 
 .kpi-item:hover {
-    transform: translateY(-5px); /* Reduzir o efeito de elevação */
+    transform: translateY(-5px);
 }
+
 .kpi-item h3 {
-    color: #000; /* Ajustado para preto */
-    margin-top: 10px; /* Adicionar espaço acima do título */
+    margin-top: 10px;
     font-weight: bold;
-    font-size: 0.9rem; /* Diminuir ainda mais o tamanho da fonte */
-    position: absolute; /* Colocar o título fora do bloco */
-    bottom: -25px; /* Posicionar o título abaixo da caixa */
-    text-align: center;
-    width: 100%;
+    font-size: 0.9rem;
 }
 
 #consultasHoje, #consultasMarcadas, #consultasConcluidas, #consultasCanceladas {
-    font-size: 32px; /* Ligeiramente aumentar o tamanho dos números */
+    font-size: 32px;
     font-weight: bold;
-    margin-top: 5px; /* Diminuir o espaço acima dos números */
     color: #388E3C;
 }
+
 .shortcuts {
     grid-area: shortcuts;
     background-color: #fff;
@@ -218,4 +227,27 @@ td {
 
 .close-btn:hover {
     color: #000;
+}
+
+.foto-medico-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+}
+
+.foto-medico {
+    width: 180px; 
+    height: 200px; 
+    border-radius: 0; 
+    margin-bottom: 20px;
+}
+
+
+.nome-medico {
+    font-size: 16px;
+    font-weight: bold;
+    color: #388E3C;
+    text-align: center;
 }
