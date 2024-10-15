@@ -1,16 +1,22 @@
 function validarSessao() {
-    var idMedico = sessionStorage.getItem("ID_MEDICO");
     var nomeMedico = sessionStorage.getItem("NOME_MEDICO");
     var sobrenomeMedico = sessionStorage.getItem("SOBRENOME_MEDICO");
     var nivelPermissao = sessionStorage.getItem("PERMISSIONAMENTO_MEDICO");
+    var especificacao = sessionStorage.getItem("ESPECIFICACAO_MEDICA");
+    var fotoPerfil = sessionStorage.getItem("FOTO");
 
     // Atualizar o nome e a permissão na navbar
     var userNome = document.getElementById("user_nome");
     var userPermissao = document.getElementById("user_permissao");
+    var userAvatar = document.getElementById("user_avatar");
 
     if (userNome && userPermissao) {
         userNome.textContent = `${nomeMedico} ${sobrenomeMedico}`;
-        userPermissao.textContent = nivelPermissao;
+        userPermissao.textContent = `${nivelPermissao} | ${especificacao}`;
+    }
+
+    if (userAvatar && fotoPerfil != "null") {
+        userAvatar.src = fotoPerfil; 
     }
 
     // Atualizar o link "Home" baseado na permissão
@@ -18,7 +24,7 @@ function validarSessao() {
 
     if (homeLink) {
         if (nivelPermissao === "Admin" || nivelPermissao === "Supervisor") {
-            homeLink.href = "HomeAdm.html"; // Altera o link para a Home de Admin
+            homeLink.href = "homePosLoginAdm.html"; // Altera o link para a Home de Admin
         } else if (nivelPermissao === "Medico") {
             homeLink.href = "homePosLoginMedico.html"; // Mantém o link para a Home de Médico
         }
@@ -41,9 +47,7 @@ function validarSessao() {
             adicionarColaboradorBtn.style.display = "none";
         }
     } else if (nivelPermissao === "Médico") {
-
         // Médico: remover botoes de Colaboradores, Pacientes e Dashboards
-        
         const Colaboradores = document.getElementById("Colaborador");
         const Pacientes = document.getElementById("Paciente");
         const Dashboards = document.getElementById("Dash");

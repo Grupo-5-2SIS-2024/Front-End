@@ -1,50 +1,50 @@
 // inputs especiais
 
 const inputIcon = document.querySelector(".input__icon");
-  const inputIcon2 = document.querySelector(".input__icon2");
-  const inputPassword = document.getElementById("password");
-  const inputConfirmedPassword = document.getElementById("confirmedPassword");
-  
-  inputIcon.addEventListener("click", () => {
-    inputIcon.classList.toggle("ri-eye-off-line");
-    inputIcon.classList.toggle("ri-eye-line");
-    inputPassword.type = inputPassword.type === "password" ? "text" : "password";
-  });
-  
-  inputIcon2.addEventListener("click", () => {
-    inputIcon2.classList.toggle("ri-eye-off-line");
-    inputIcon2.classList.toggle("ri-eye-line");
-    inputConfirmedPassword.type = inputConfirmedPassword.type === "password" ? "text" : "password";
-  });
-  
-  const inputFile = document.querySelector("#picture__input");
-  const pictureImage = document.querySelector(".picture__image");
-  const pictureImageTxt = "Choose an image";
-  pictureImage.innerHTML = pictureImageTxt;
-  
-  inputFile.addEventListener("change", function (e) {
-    const inputTarget = e.target;
-    const file = inputTarget.files[0];
-  
-    if (file) {
-      const reader = new FileReader();
-  
-      reader.addEventListener("load", function (e) {
-        const readerTarget = e.target;
-  
-        const img = document.createElement("img");
-        img.src = readerTarget.result;
-        img.classList.add("picture__img");
-  
-        pictureImage.innerHTML = "";
-        pictureImage.appendChild(img);
-      });
-  
-      reader.readAsDataURL(file);
-    } else {
-      pictureImage.innerHTML = pictureImageTxt;
-    }
-  });
+const inputIcon2 = document.querySelector(".input__icon2");
+const inputPassword = document.getElementById("password");
+const inputConfirmedPassword = document.getElementById("confirmedPassword");
+
+inputIcon.addEventListener("click", () => {
+  inputIcon.classList.toggle("ri-eye-off-line");
+  inputIcon.classList.toggle("ri-eye-line");
+  inputPassword.type = inputPassword.type === "password" ? "text" : "password";
+});
+
+inputIcon2.addEventListener("click", () => {
+  inputIcon2.classList.toggle("ri-eye-off-line");
+  inputIcon2.classList.toggle("ri-eye-line");
+  inputConfirmedPassword.type = inputConfirmedPassword.type === "password" ? "text" : "password";
+});
+
+const inputFile = document.querySelector("#picture__input");
+const pictureImage = document.querySelector(".picture__image");
+const pictureImageTxt = "Choose an image";
+pictureImage.innerHTML = pictureImageTxt;
+
+inputFile.addEventListener("change", function (e) {
+  const inputTarget = e.target;
+  const file = inputTarget.files[0];
+
+  if (file) {
+    const reader = new FileReader();
+
+    reader.addEventListener("load", function (e) {
+      const readerTarget = e.target;
+
+      const img = document.createElement("img");
+      img.src = readerTarget.result;
+      img.classList.add("picture__img");
+
+      pictureImage.innerHTML = "";
+      pictureImage.appendChild(img);
+    });
+
+    reader.readAsDataURL(file);
+  } else {
+    pictureImage.innerHTML = pictureImageTxt;
+  }
+});
 
 
 // Função para validar o cadastro do colaborador
@@ -72,89 +72,89 @@ function validarCadastro() {
   var errors = [];
 
   if (!nome.trim()) {
-      document.getElementById('error-nome').textContent = "Nome é obrigatório.";
-      errors.push("Nome é obrigatório.");
+    document.getElementById('error-nome').textContent = "Nome é obrigatório.";
+    errors.push("Nome é obrigatório.");
   } else {
-      document.getElementById('error-nome').textContent = "";
+    document.getElementById('error-nome').textContent = "";
   }
 
   if (!sobrenome.trim()) {
-      document.getElementById('error-sobrenome').textContent = "Sobrenome é obrigatório.";
-      errors.push("Sobrenome é obrigatório.");
+    document.getElementById('error-sobrenome').textContent = "Sobrenome é obrigatório.";
+    errors.push("Sobrenome é obrigatório.");
   } else {
-      document.getElementById('error-sobrenome').textContent = "";
+    document.getElementById('error-sobrenome').textContent = "";
   }
 
   if (!emailRegex.test(email)) {
-      document.getElementById('error-email').textContent = "E-mail inválido.";
-      errors.push("E-mail inválido.");
+    document.getElementById('error-email').textContent = "E-mail inválido.";
+    errors.push("E-mail inválido.");
   } else {
-      document.getElementById('error-email').textContent = "";
+    document.getElementById('error-email').textContent = "";
   }
 
   if (!telefoneRegex.test(telefone)) {
-      document.getElementById('error-telefone').textContent = "Telefone inválido.";
-      errors.push("Telefone inválido.");
+    document.getElementById('error-telefone').textContent = "Telefone inválido.";
+    errors.push("Telefone inválido.");
   } else {
-      document.getElementById('error-telefone').textContent = "";
+    document.getElementById('error-telefone').textContent = "";
   }
 
   if (!cpfRegex.test(cpf)) {
-      document.getElementById('error-cpf').textContent = "CPF inválido.";
-      errors.push("CPF inválido.");
+    document.getElementById('error-cpf').textContent = "CPF inválido.";
+    errors.push("CPF inválido.");
   } else {
-      document.getElementById('error-cpf').textContent = "";
+    document.getElementById('error-cpf').textContent = "";
   }
 
   if (!especificacao.trim()) {
-      document.getElementById('error-especificacao').textContent = "Especificação é obrigatória.";
-      errors.push("especificacao é obrigatória.");
+    document.getElementById('error-especificacao').textContent = "Especificação é obrigatória.";
+    errors.push("especificacao é obrigatória.");
   } else {
-      document.getElementById('error-especificacao').textContent = "";
+    document.getElementById('error-especificacao').textContent = "";
   }
 
   if (!dataNascimento) {
-      document.getElementById('error-dataNascimento').textContent = "Data de nascimento é obrigatória.";
-      errors.push("Data de nascimento é obrigatória.");
+    document.getElementById('error-dataNascimento').textContent = "Data de nascimento é obrigatória.";
+    errors.push("Data de nascimento é obrigatória.");
   } else {
-      document.getElementById('error-dataNascimento').textContent = "";
+    document.getElementById('error-dataNascimento').textContent = "";
   }
 
   if (!carteirinha.trim()) {
-      document.getElementById('error-carteirinha').textContent = "Carteirinha é obrigatória.";
-      errors.push("Carteirinha é obrigatória.");
+    document.getElementById('error-carteirinha').textContent = "Carteirinha é obrigatória.";
+    errors.push("Carteirinha é obrigatória.");
   } else {
-      document.getElementById('error-carteirinha').textContent = "";
+    document.getElementById('error-carteirinha').textContent = "";
   }
 
   if (!passwordRegex.test(password)) {
-      document.getElementById('error-password').textContent = "Senha: 8+ caracteres, 1 maiúscula, 1 minúscula, 1 número.";
-      errors.push("Senha: 8+ caracteres, 1 maiúscula, 1 minúscula, 1 número.");
+    document.getElementById('error-password').textContent = "Senha: 8+ caracteres, 1 maiúscula, 1 minúscula, 1 número.";
+    errors.push("Senha: 8+ caracteres, 1 maiúscula, 1 minúscula, 1 número.");
   } else {
-      document.getElementById('error-password').textContent = "";
+    document.getElementById('error-password').textContent = "";
   }
 
   if (password !== confirmedPassword) {
-      document.getElementById('error-confirmedPassword').textContent = "As senhas não coincidem.";
-      errors.push("As senhas não coincidem.");
+    document.getElementById('error-confirmedPassword').textContent = "As senhas não coincidem.";
+    errors.push("As senhas não coincidem.");
   } else {
-      document.getElementById('error-confirmedPassword').textContent = "";
+    document.getElementById('error-confirmedPassword').textContent = "";
   }
 
   if (!nivelAcesso.trim()) {
-      document.getElementById('error-nivelAcesso').textContent = "Nível de acesso é obrigatório.";
-      errors.push("Nível de acesso é obrigatório.");
+    document.getElementById('error-nivelAcesso').textContent = "Nível de acesso é obrigatório.";
+    errors.push("Nível de acesso é obrigatório.");
   } else {
-      document.getElementById('error-nivelAcesso').textContent = "";
+    document.getElementById('error-nivelAcesso').textContent = "";
   }
 
   // Exibir os erros se houverem
   if (errors.length > 0) {
-      const errorMessage = errors.join("<br>");
-      document.querySelector('.error-message').innerHTML = errorMessage;
-      return false;
+    const errorMessage = errors.join("<br>");
+    document.querySelector('.error-message').innerHTML = errorMessage;
+    return false;
   } else {
-      return true; 
+    return true;
   }
 }
 
@@ -167,6 +167,30 @@ const toBase64 = file => new Promise((resolve, reject) => {
   reader.onload = () => resolve(reader.result);
   reader.onerror = reject;
 });
+
+function carregarEspecificacoes() {
+  fetch("http://localhost:8080/especificacoes")
+    .then(response => response.json())
+    .then(especificacoes => {
+      const especificacaoSelect = document.getElementById("especificacao");
+
+      especificacoes.forEach(especificacao => {
+        const option = document.createElement("option");
+        option.value = especificacao.id;
+        option.textContent = especificacao.area;
+        especificacaoSelect.appendChild(option);
+      });
+    })
+    .catch(error => {
+      console.error("Erro ao carregar especificações:", error);
+      alert("Erro ao carregar especificações. Tente novamente mais tarde.");
+    });
+}
+
+// Chamar a função ao carregar a página
+window.onload = function () {
+  carregarEspecificacoes();
+};
 
 async function cadastrarColaborador() {
 
@@ -184,22 +208,15 @@ async function cadastrarColaborador() {
     const nivelAcessoEscolhido = document.getElementById("nivelAcesso").value;
     const fotoEscolhida = document.getElementById("picture__input").files[0];
 
-    const especificacaoMap = {
-      "psicologo": 1,
-      "terapeuta": 2,
-      "fonoaudiologia": 3
-    };
-
     const nivelAcessoMap = {
       "Admin": 1,
       "Supervisor": 2,
       "Médico": 3
     };
 
-    const especificacaoId = especificacaoMap[especificacaoDigitada.toLowerCase()];
     const nivelAcessoId = nivelAcessoMap[nivelAcessoEscolhido];
 
-    if (!especificacaoId || !nivelAcessoId) {
+    if (!nivelAcessoId) {
       alert("Opções inválidas selecionadas.");
       return;
     }
@@ -212,7 +229,7 @@ async function cadastrarColaborador() {
       "cpf": cpfDigitado,
       "dataNascimento": dataNascimentoDigitada,
       "especificacaoMedica": {
-        "id": especificacaoId
+        "id": especificacaoDigitada
       },
       "carterinha": carteirinhaDigitada,
       "senha": senhaDigitada,
@@ -231,7 +248,7 @@ async function cadastrarColaborador() {
         body: JSON.stringify(dadosColaborador),
         headers: { "Content-type": "application/json; charset=UTF-8" }
       });
-      
+
       if (respostaCadastro.status == 201) {
         Swal.fire({
           icon: 'success',
@@ -240,7 +257,7 @@ async function cadastrarColaborador() {
           showConfirmButton: false,
           timer: 1500
         }).then(() => {
-          //window.location.href = "listagemColaborador.html";
+          window.location.href = "listagemColaborador.html";
         });
       } else {
         alert("Ocorreu um erro ao cadastrar");

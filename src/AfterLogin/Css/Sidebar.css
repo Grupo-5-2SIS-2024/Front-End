@@ -59,6 +59,7 @@ main {
     height: 3.125rem;
     object-fit: cover;
     border-radius: 1.25rem;
+    border: #1d1d1d solid 1px;
 }
 
 #user_infos {

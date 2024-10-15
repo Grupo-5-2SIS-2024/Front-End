@@ -189,6 +189,7 @@ a {
     width: 5vw;
     height: auto;
     border-radius: 50%;
+    border: #000 solid 3px;
     object-fit: cover;
     margin-bottom: 15px;
 }
