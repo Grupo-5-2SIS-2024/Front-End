@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,14 +15,15 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
     <nav id="sidebar">
         <div id="sidebar_content">
             <div id="user">
                 <img src="../Assets/perfil.jpeg" id="user_avatar" alt="Avatar">
                 <p id="user_infos">
-                    <span class="item-description">Silvia</span>
-                    <span class="item-description">ADM</span>
+                    <span id="user_nome" class="item-description">Silvia</span>
+                    <span id="user_permissao" class="item-description">ADM</span>
                 </p>
             </div>
             <ul id="side_items">
@@ -61,8 +63,8 @@
             </button>
         </div>
         <div id="logout">
-            <button id="logout_btn">
-               <a href="../../Html/index.html"> <i class="fa-solid fa-right-from-bracket"></i></a>
+            <button onclick="deslogar()" id="logout_btn">
+                <i class="fa-solid fa-right-from-bracket"></i>
                 <span class="item-description">
                     Logout
                 </span>
@@ -112,5 +114,7 @@
     <script src="../Js/dashboards.js"></script>
     <script src="../Js/funcoesPadroes.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../Js/sessao.js"></script>
 </body>
+
 </html>

@@ -160,24 +160,20 @@ a {
 
 .listagemBox {
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
     flex-direction: column;
     width: 78vw;
     height: 50vh;
-    gap: 1rem;
+    gap: 2rem;
     background-color: #ffffff;
-    border-radius: 2%;
+    border-radius: 10px;
     overflow-y: auto;
-    padding-top: 3rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    align-items: center;
+    justify-content: flex-start; 
 }
 
 .cardPaciente {
-    width: 100%;
-    border: 1px solid #ffffff;
-    border-radius: 2%;
+    width: 98%;
+    border-radius: 15px;
     gap: 1rem;
     box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);
     display: flex;

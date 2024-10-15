@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="../Css/HomeAdm.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Multiclinics | Home Adm</title>
-
     <link rel="shortcut icon" href="../../Assets/logo_Multclinics_branca_sem_nome.png" type="image/x-icon">
 </head>
 
@@ -23,17 +22,13 @@
                 <img src="../Assets/perfil.jpeg" id="user_avatar" alt="Avatar">
 
                 <p id="user_infos">
-                    <span class="item-description">
-                        Silvia
-                    </span>
-                    <span class="item-description">
-                        ADM
-                    </span>
+                    <span id="user_nome" class="item-description">Silvia</span>
+                    <span id="user_permissao" class="item-description">ADM</span>
                 </p>
             </div>
 
-            <ul id="side_items active">
-                <li class="side-item">
+            <ul id="side_items">
+                <li class="side-item active">
                     <a href="#">
                         <i class="fa-solid fa-home"></i>
                         <span class="item-description">
@@ -85,8 +80,8 @@
         </div>
 
         <div id="logout">
-            <button id="logout_btn">
-                <a href="../../Html/index.html"> <i class="fa-solid fa-right-from-bracket"></i></a>
+            <button onclick="deslogar()" id="logout_btn">
+                <i class="fa-solid fa-right-from-bracket"></i>
                 <span class="item-description">
                     Logout
                 </span>
@@ -285,7 +280,7 @@
     </div>
     <script src="../Js/HomeAdm.js"></script>
     <script src="../Js/funcoesPadroes.js"></script>
-
+    <script src="../Js/sessao.js"></script>
 </body>
 
 </html>
