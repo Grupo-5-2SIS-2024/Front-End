@@ -1,0 +1,253 @@
+/* Estilos gerais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f4f4f4;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-areas:
+        'header header header'
+        'kpis grafico shortcuts'
+        'agenda agenda notificacoes';
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: auto 1fr 2fr;
+    gap: 20px;
+    width: 100%;
+    height: 100vh;
+    padding: 20px;
+    background-color: #def5e0; /* Aplicado o novo background */
+}
+
+.header {
+    grid-area: header;
+    background-color: #388E3C; /* Verde mais escuro */
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.kpis {
+    grid-area: kpis;
+    display: flex;
+    justify-content: space-between;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    align-items: center; /* Centralizar verticalmente os elementos */
+}
+
+.foto-medico-container {
+    width: 50%; /* Define que a foto ocupará 50% do espaço */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.kpi-items {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Define duas colunas */
+    grid-template-rows: repeat(2, 1fr); /* Define duas linhas */
+    gap: 50px; /* Espaçamento entre os elementos */
+    width: 50%; /* Define que as KPIs ocuparão 50% do espaço */
+    margin-right: 45px;
+}
+
+.kpi-item {
+    text-align: center;
+    background-color: #E0E0E0;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s;
+}
+
+.kpi-item:hover {
+    transform: translateY(-5px);
+}
+
+.kpi-item h3 {
+    margin-top: 10px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+#consultasHoje, #consultasMarcadas, #consultasConcluidas, #consultasCanceladas {
+    font-size: 32px;
+    font-weight: bold;
+    color: #388E3C;
+}
+
+.shortcuts {
+    grid-area: shortcuts;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.shortcuts h2,
+.agenda h2,
+.notificacoes h2,
+.grafico h2 {
+    color: #000; /* Títulos em preto */
+    font-weight: bold;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.shortcut-btn {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #388E3C;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.shortcut-btn:hover {
+    background-color: #2E7D32;
+}
+
+.agenda {
+    grid-area: agenda;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background-color: #388E3C;
+    color: white;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+td {
+    background-color: #f4f4f4;
+}
+
+.notificacoes {
+    grid-area: notificacoes;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.notificacoes ul {
+    list-style: none;
+    padding: 0;
+}
+
+.notificacoes li {
+    background-color: #E0E0E0; /* Cinza */
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    position: relative;
+}
+
+.notificacoes li h3 {
+    margin: 0;
+    padding: 0;
+    font-size: 18px;
+}
+
+.grafico {
+    grid-area: grafico;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    color: #000;
+}
+
+.foto-medico-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+}
+
+.foto-medico {
+    width: 180px; 
+    height: 200px; 
+    border-radius: 0; 
+    margin-bottom: 20px;
+}
+
+
+.nome-medico {
+    font-size: 16px;
+    font-weight: bold;
+    color: #388E3C;
+    text-align: center;
+}

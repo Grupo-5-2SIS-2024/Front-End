@@ -10,7 +10,7 @@
     <link rel="shortcut icon" href="../../Assets/logo_Multclinics_branca_sem_nome.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <link rel="shortcut icon" href="../../Assets/logo_Multclinics_branca_sem_nome.png" type="image/x-icon">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script> <!-- SheetJS -->
 </head>
 
 <body>
@@ -119,14 +119,22 @@
             </div>
             <button id="agendar"><i class="fas fa-calendar-check"></i> Agendar</button>
         </div>
+
         <div class="form-container2" id="consultas-container">
             <!-- Consultas cadastradas serão inseridas aqui -->
         </div>
+
+        <!-- Botão para baixar o Excel -->
+        <button id="download-excel" class="btn-download"
+        onclick="BaixarExcelGeral()">
+            <i class="fas fa-download"></i> Baixar Excel
+        </button>
     </main>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../Js/addAgendamento.js"></script>
     <script src="../Js/funcoesPadroes.js"></script>
-    <script src="../Js/sessao.js"></script>
-</body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
+</body>
 </html>
