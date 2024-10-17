@@ -62,73 +62,49 @@
 
 <script>
 
-async function fazerLogin() {
+  async function fazerLogin() {
     const valorEmailLogin = document.getElementById("email").value;
     const valorSenhaLogin = document.getElementById("password").value;
 
     // Validação dos campos de login
     if (valorEmailLogin === "") {
-        Swal.fire({
-          icon: 'error',
-          title: 'Erro no login',
-          text: 'O campo email é obrigatório.'
-        });
-        return;
-    } 
-    if (valorSenhaLogin === "") {
-        Swal.fire({
-          icon: 'error',
-          title: 'Erro no login',
-          text: 'O campo senha é obrigatório.'
-        });
-        return;
-    } 
-    if (valorEmailLogin.indexOf('@') === -1) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Erro no login',
-          text: 'O email informado é inválido. Por favor, insira um email válido.'
-        });
-        return;
-    }
-
-    const valoresLogin = {
-        email: valorEmailLogin,
-        senha: valorSenhaLogin
-    };
-
-    if (respostaLogin.status == 200) {
-      Swal.fire({
-        icon: 'success',
-        title: 'Login bem-sucedido!',
-        text: 'Redirecionando para a área do colaborador...',
-        showConfirmButton: false,
-        timer: 1500
-      }).then(() => {
-        respostaLogin.json().then(respostaLogin => {
-          sessionStorage.setItem("idUsuario", respostaLogin.idUsuario);
-        })
-        window.location.href = "../AfterLogin/Html/posLogin.html";
-      });
-    } else {
-      let mensagemErro;
-      switch (respostaLogin.status) {
-        case 401:
-          mensagemErro = "Credenciais inválidas. Por favor, tente novamente.";
-          break;
-        case 404:
-          mensagemErro = "Usuário não encontrado.";
-          break;
-        default:
-          mensagemErro = `Erro inesperado: ${respostaLogin.status}`;
-      }
       Swal.fire({
         icon: 'error',
         title: 'Erro no login',
+        text: 'O campo email é obrigatório.'
+      });
+      return;
+    }
+    if (valorSenhaLogin === "") {
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro no login',
+        text: 'O campo senha é obrigatório.'
+      });
+      return;
+    }
+    if (valorEmailLogin.indexOf('@') === -1) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro no login',
+        text: 'O email informado é inválido. Por favor, insira um email válido.'
+      });
+      return;
+    }
 
+    const valoresLogin = {
+      email: valorEmailLogin,
+      senha: valorSenhaLogin
+    };
+    
+    try {
+        const respostaLogin = await fetch("http://localhost:8080/medicos/login", {
+            method: "PUT",
+            body: JSON.stringify(valoresLogin),
+            headers: { "Content-type": "application/json; charset=UTF-8" }
+        });
         if (respostaLogin.status === 200) {
             const json = await respostaLogin.json(); 
-
             // Armazenamento de dados no sessionStorage
             sessionStorage.setItem("ID_MEDICO", json.id);
             sessionStorage.setItem("NOME_MEDICO", json.nome);
@@ -143,7 +119,6 @@ async function fazerLogin() {
             sessionStorage.setItem("ATIVO_MEDICO", json.ativo);
             sessionStorage.setItem("DT_NASC", json.dataNascimento);
             sessionStorage.setItem("FOTO", json.foto);
-
             Swal.fire({
                 icon: 'success',
                 title: 'Login bem-sucedido!',
@@ -158,7 +133,6 @@ async function fazerLogin() {
                     window.location.href = "../AfterLogin/Html/homePosLoginMedico.html";
                 }
             });
-
         } else {
             // Tratamento de erros de login
             let mensagemErro;
@@ -185,6 +159,6 @@ async function fazerLogin() {
             text: 'Erro ao tentar se conectar com o servidor. Por favor, tente novamente mais tarde.'
         });
     }
-}
+  }
 
 </script>
