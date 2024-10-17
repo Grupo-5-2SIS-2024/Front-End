@@ -145,36 +145,36 @@ async function deletarPaciente(id) {
     }
 }
 
-const swalWithBootstrapButtons = Swal.mixin({
-    customClass: {
-      confirmButton: "btn btn-success",
-      cancelButton: "btn btn-danger"
-    },
-    buttonsStyling: false
-  });
-  swalWithBootstrapButtons.fire({
-    title: "Are you sure?",
-    text: "You won't be able to revert this!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonText: "Yes, delete it!",
-    cancelButtonText: "No, cancel!",
-    reverseButtons: true
-  }).then((result) => {
-    if (result.isConfirmed) {
-      swalWithBootstrapButtons.fire({
-        title: "Deleted!",
-        text: "Your file has been deleted.",
-        icon: "success"
-      });
-    } else if (
-      /* Read more about handling dismissals below */
-      result.dismiss === Swal.DismissReason.cancel
-    ) {
-      swalWithBootstrapButtons.fire({
-        title: "Cancelled",
-        text: "Your imaginary file is safe :)",
-        icon: "error"
-      });
+  async function buscarKPIsPaciente() {
+    try {
+        // Buscar a porcentagem de pacientes em tratamento ABA
+        const respostaPorcentagemABA = await fetch("http://localhost:8080/pacientes/porcentagem-aba");
+        const porcentagemABA = await respostaPorcentagemABA.json();
+
+        // Buscar o número total de pacientes ativos
+        const respostaPacientesAtivos = await fetch("http://localhost:8080/pacientes/ativos");
+        const pacientesAtivos = await respostaPacientesAtivos.json();
+
+        // Buscar o número total de pacientes do último trimestre
+        const respostaPacientesUltimoTrimestre = await fetch("http://localhost:8080/pacientes/ultimo-trimestre");
+        const pacientesUltimoTrimestre = await respostaPacientesUltimoTrimestre.json();
+
+        // Buscar o número de agendamentos vencidos
+        const respostaAgendamentosVencidos = await fetch("http://localhost:8080/pacientes/agendamentos-vencidos");
+        const agendamentosVencidos = await respostaAgendamentosVencidos.json();
+
+        // Função para adicionar zero à esquerda se necessário
+        const formatarNumero = (numero) => numero.toString().padStart(2, '0');
+
+        // Atualiza os elementos de KPI no HTML, com formatação
+        document.querySelector(".cardKpi:nth-child(1) .kpiNumber").textContent = porcentagemABA + '%';
+        document.querySelector(".cardKpi:nth-child(2) .kpiNumber").textContent = formatarNumero(pacientesAtivos);
+        document.querySelector(".cardKpi:nth-child(3) .kpiNumber").textContent = formatarNumero(pacientesUltimoTrimestre);
+        document.querySelector(".cardKpi:nth-child(4) .kpiNumber").textContent = formatarNumero(agendamentosVencidos);
+
+    } catch (error) {
+        console.error('Erro ao buscar KPIs:', error);
     }
-  });
+}
+
+buscarKPIsPaciente();

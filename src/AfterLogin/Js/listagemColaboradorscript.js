@@ -84,7 +84,6 @@ async function buscarMedicos() {
                             cancelButtonText: 'Cancelar'
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                // Se o usuário confirmar, chama a função de deletar
                                 deletarMedico(id);
                             }
                         });
@@ -113,8 +112,6 @@ async function buscarMedicos() {
 }
 
 buscarMedicos();
-
-
 
 
 async function deletarMedico(id) {
@@ -170,6 +167,41 @@ async function deletarMedico(id) {
         console.error('Erro ao deletar médico:', erro);
     }
 }
+
+async function buscarKPIsMedico() {
+    try {
+        // Buscar o número total de médicos
+        const respostaTotalMedicos = await fetch('http://localhost:8080/medicos');
+        const listaMedicos = await respostaTotalMedicos.json();
+        const totalMedicos = listaMedicos.length;
+
+        // Buscar o número de médicos ativos
+        const medicosAtivos = listaMedicos.filter(medico => medico.ativo).length;
+
+        // Buscar o total de administradores
+        const respostaTotalAdmins = await fetch('http://localhost:8080/medicos/totalAdministradores');
+        const totalAdmins = await respostaTotalAdmins.json();
+        console.log('Total de administradores:', totalAdmins);
+
+        // Buscar o número de administradores ativos
+        const respostaAdminsAtivos = await fetch('http://localhost:8080/medicos/totalAdministradoresAtivos');
+        const totalAdminsAtivos = await respostaAdminsAtivos.json();
+
+        // Função para adicionar zero à esquerda se necessário
+        const formatarNumero = (numero) => numero.toString().padStart(2, '0');
+
+        // Atualizar os valores nos elementos HTML, com zero à esquerda
+        document.querySelector('.cardKpi:nth-child(1) .kpiNumber').textContent = formatarNumero(totalMedicos);
+        document.querySelector('.cardKpi:nth-child(2) .kpiNumber').textContent = formatarNumero(medicosAtivos);
+        document.querySelector('.cardKpi:nth-child(3) .kpiNumber').textContent = formatarNumero(totalAdmins);
+        document.querySelector('.cardKpi:nth-child(4) .kpiNumber').textContent = formatarNumero(totalAdminsAtivos);
+
+    } catch (erro) {
+        console.error('Erro ao buscar os dados dos KPIs:', erro);
+    }
+}
+
+buscarKPIsMedico();
 
 
 
