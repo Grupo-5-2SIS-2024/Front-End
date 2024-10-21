@@ -226,13 +226,13 @@ async function updateAvailablePatients() {
         }
     }
 }
-
 async function agendarConsulta() {
     const dia = document.getElementById('dia').value;
     const hora = document.getElementById('hora').value;
     const medicoId = document.getElementById('medico').value;
     const pacienteId = document.getElementById('paciente').value;
     const descricao = document.getElementById('descricao').value || "Sem descrição";
+    const recorrente = document.getElementById('recorrente').checked; // Verifica se o checkbox está marcado
 
     try {
         const respostaEspec = await fetch("http://localhost:8080/medicos");
@@ -254,16 +254,19 @@ async function agendarConsulta() {
 
         const especificacaoMedicaId = medicoSelecionado.especificacaoMedica.id;
 
-        const dadosConsulta = {
-            datahoraConsulta: `${dia}T${hora}:00`,
+        // Função para criar o objeto da consulta
+        const criarDadosConsulta = (dataConsulta) => ({
+            datahoraConsulta: `${dataConsulta}T${hora}:00`,
             descricao: descricao,
             medico: { id: medicoId },
             especificacaoMedica: { id: especificacaoMedicaId },
             statusConsulta: { id: 1 },
             paciente: { id: pacienteId },
             duracaoConsulta: "01:00:00"
-        };
+        });
 
+        // Agendar a consulta original
+        const dadosConsulta = criarDadosConsulta(dia);
         const respostaCadastro = await fetch("http://localhost:8080/consultas", {
             method: "POST",
             body: JSON.stringify(dadosConsulta),
@@ -273,22 +276,47 @@ async function agendarConsulta() {
             }
         });
 
-        if (respostaCadastro.status == 201 || respostaCadastro.ok) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Consulta agendada com sucesso!',
-                showConfirmButton: false,
-                timer: 1500,
-            }).then(() => {
-                window.location.reload();
-            });
-        } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Erro',
-                text: 'Ocorreu um erro ao cadastrar a consulta.',
-            });
+        if (!respostaCadastro.ok) {
+            throw new Error('Ocorreu um erro ao cadastrar a consulta.');
         }
+
+        // Se o checkbox de recorrente estiver marcado, agendar as próximas 30 semanas
+        if (recorrente) {
+            const dataOriginal = new Date(dia);
+            
+            // Agendar para as próximas 30 semanas (7 dias de diferença entre cada consulta)
+            for (let i = 1; i <= 30; i++) {
+                const novaData = new Date(dataOriginal);
+                novaData.setDate(novaData.getDate() + (i * 7)); // Incrementar 7 dias para cada semana
+
+                const novaDataISO = novaData.toISOString().split('T')[0]; // Formata para 'yyyy-mm-dd'
+                const novaConsulta = criarDadosConsulta(novaDataISO);
+
+                // Faz a requisição para cadastrar a nova consulta
+                const respostaNovaConsulta = await fetch("http://localhost:8080/consultas", {
+                    method: "POST",
+                    body: JSON.stringify(novaConsulta),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8",
+                        "Accept": "application/json"
+                    }
+                });
+
+                if (!respostaNovaConsulta.ok) {
+                    throw new Error(`Erro ao agendar a consulta para ${novaDataISO}`);
+                }
+            }
+        }
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Consulta agendada com sucesso!',
+            showConfirmButton: false,
+            timer: 1500,
+        }).then(() => {
+            window.location.reload();
+        });
+
     } catch (error) {
         console.error('Erro ao agendar consulta:', error);
         Swal.fire({
@@ -298,12 +326,6 @@ async function agendarConsulta() {
         });
     }
 }
-
-// Função para "cancelar" consulta, alterando o status para "Cancelada"
-// Função para "cancelar" consulta, alterando o status para "Cancelada"
-// Função para "cancelar" consulta, alterando o status para "Cancelada"
-// Função para "cancelar" consulta, alterando o status para "Cancelada"
-// Função para "cancelar" consulta, alterando o status para "Cancelada"
 async function excluirConsulta(idConsulta) {
     console.log("Iniciando exclusão da consulta com ID:", idConsulta);
 

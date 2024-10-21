@@ -78,6 +78,21 @@ body {
     color: #2E7D32;
 }
 
+
+input[type="checkbox"] {
+    width: 40px;
+    height: 40px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+/* Estilo para o label do checkbox */
+label[for="recorrente"] {
+    font-weight: bold;
+    font-size: 16px;
+    color: #2E7D32;
+}
+
 .form-container {
     background-color: white;
     padding: 20px;
@@ -86,11 +101,12 @@ body {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
+    width: 90%;
 }
 
 .form-container2 {
     background-color: white;
-    width: 80%;
+    
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -102,7 +118,8 @@ body {
     overflow-y: auto;
     overflow-x: hidden;
     max-height: 400px;
-    width: 80%;
+    width: 90%;
+    height: 90%;
 }
 
 .form-group {
