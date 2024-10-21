@@ -2,14 +2,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Função para buscar dados de consultas do backend para o médico específico
     async function buscarConsultas(idMedico) {
         try {
-            const response = await fetch(`http://localhost:8080/consultas/medico/${idMedico}`);
+            const response = await fetch(`http://localhost:8080/consultas/listarConsultasMedicoID/${idMedico}`);
             if (!response.ok) throw new Error(`Erro HTTP! Status: ${response.status}`);
-            return await response.json();
+            const data = await response.json();
+            // Garante que seja um array
+            return Array.isArray(data) ? data : [data];
         } catch (error) {
             console.error('Erro ao buscar consultas:', error);
             return [];
         }
     }
+    
 
     // Função para buscar foto do médico do backend
     async function buscarFotoMedico(idMedico) {
@@ -43,6 +46,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Atualizar KPIs
     async function atualizarKPIs(consultas) {
         const consultasHoje = consultas.length;
+
+
+        console.log(consultas)
         const consultasMarcadas = consultas.filter(c => c.statusConsulta.nomeStatus === 'Agendada').length;
         const consultasConcluidas = consultas.filter(c => c.statusConsulta.nomeStatus === 'Realizada').length;
         const consultasCanceladas = consultas.filter(c => c.statusConsulta.nomeStatus === 'Cancelada').length;
@@ -136,8 +142,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Inicialização
-    const idMedico = sessionStorage.getItem('idMedico'); // Pega o ID do médico armazenado no sessionStorage
-
+    const idMedico = sessionStorage.getItem('ID_MEDICO'); // Pega o ID do médico armazenado no sessionStorage
+console.log(idMedico)
     if (idMedico) {
         const consultas = await buscarConsultas(idMedico); // Busca os dados das consultas do backend para o médico específico
         atualizarKPIs(consultas); // Atualiza os KPIs
