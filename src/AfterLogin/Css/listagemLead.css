@@ -25,7 +25,7 @@ body {
     width: 85%;
     padding: 1rem;
     position: relative;
-    bottom: 3rem;
+    bottom: 2rem;
 }
 
 .header h1 {
@@ -36,51 +36,6 @@ body {
 
 .header h1 span {
     color: #2f8333;
-}
-
-.containerBotao {
-    display: flex;
-    gap: 1rem;
-}
-
-.registrar {
-    width: 15vw;
-    height: 7vh;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    font-size: 1rem;
-    background-color: #43A046;
-    font-weight: bold;
-    outline: none;
-    border: none;
-    cursor: pointer;
-    color: whitesmoke;
-}
-
-.filtro {
-    width: 8vw;
-    height: 7vh;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    font-size: 1rem;
-    background-color: #ffffff;
-    font-weight: bold;
-    outline: none;
-    border: none;
-    cursor: pointer;
-    color: rgb(0, 0, 0);
-}
-
-.filtro:hover {
-    transform: translateY(-0.4rem);
-    transition: 0.2s;
-    box-shadow: 0rem 0.5rem 0.8rem rgb(0, 0, 0);
-}
-
-.registrar:hover {
-    transform: translateY(-0.4rem);
-    transition: 0.2s;
-    box-shadow: 0rem 0.5rem 0.8rem rgb(0, 0, 0);
 }
 
 a {
@@ -96,19 +51,19 @@ a {
 
 .KPIS {
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
     width: 85%;
     margin-top: 2rem;
-    gap: 2rem;
+    gap: 7rem;
     flex-direction: row;
     position: relative;
     bottom: 3rem;
 }
 
 .cardKpi {
-    width: 20vw;
-    height: 25vh;
+    width: 22vw;
+    height: 27vh;
     background-color: #ffffff;
     border-radius: 15px;
     display: flex;
@@ -156,7 +111,7 @@ a {
     margin: 0;
 }
 
-/* Listagem de colaboradores */
+/* Listagem de Pacientes */
 
 .listagemBox {
     display: flex;
@@ -171,8 +126,8 @@ a {
     justify-content: flex-start; 
 }
 
-.cardColaborador {
-    width: 100%;
+.cardPaciente {
+    width: 98%;
     border-radius: 15px;
     gap: 1rem;
     box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);
@@ -185,23 +140,14 @@ a {
     margin-bottom: 1rem;
 }
 
-.cardColaborador img {
-    width: 5vw;
-    height: auto;
-    border-radius: 50%;
-    border: #000 solid 3px;
-    object-fit: cover;
-    margin-bottom: 15px;
-}
-
-.cardColaborador .info {
+.cardPaciente .info {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 1rem;
     flex-grow: 1;
 }
 
-.cardColaborador .info .field {
+.cardPaciente .info .field {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -209,23 +155,23 @@ a {
     margin: 0 0.5rem;
 }
 
-.cardColaborador .info .field label {
+.cardPaciente .info .field label {
     font-weight: bold;
     margin-bottom: 0.25rem;
 }
 
-.cardColaborador .info .field p {
+.cardPaciente .info .field p {
     word-wrap: break-word;
     text-align: center;
     margin: 0;
 }
 
-.cardColaborador .actions {
+.cardPaciente .actions {
     display: flex;
     gap: 0.5rem;
 }
 
-.cardColaborador .actions button {
+.cardPaciente .actions button {
     background: none;
     border: none;
     cursor: pointer;
@@ -234,7 +180,7 @@ a {
     transition: color 0.3s;
 }
 
-.cardColaborador .actions button:hover {
+.cardPaciente .actions button:hover {
     color: #276E2A;
 }
 
@@ -351,16 +297,16 @@ a {
         padding-right: 1rem;
     }
 
-    .cardColaborador {
+    .cardPaciente {
         flex-direction: column;
     }
 
-    .cardColaborador .info {
+    .cardPaciente .info {
         display: flex;
         flex-direction: column;
     }
 
-    .cardColaborador img {
+    .cardPaciente img {
         width: 50vw;
         height: auto;
         border-radius: 50%;

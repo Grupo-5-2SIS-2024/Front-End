@@ -6,14 +6,8 @@ async function buscarPacientes() {
 
         const cardsMedicos = document.getElementById("listagem");
         cardsMedicos.innerHTML = listaPacientes.map((paciente) => {
+            // Corrigindo o acesso ao paciente e suas propriedades
             const responsavel = paciente.responsavel ? `${paciente.responsavel.nome} ${paciente.responsavel.sobrenome}` : 'Não informado';
-            
-            // Formatando a data de nascimento para o formato "dd/mm/yyyy"
-            const dataNascimento = new Date(paciente.dataNascimento).toLocaleDateString('pt-BR', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric',
-            });
 
             return `
                 <div class="cardPaciente" data-paciente-id="${paciente.id}">
@@ -32,7 +26,7 @@ async function buscarPacientes() {
                         </div>
                         <div class="field">
                             <label for="dataNascimento">Data de Nascimento</label>
-                            <p id="dataNascimento">${dataNascimento}</p>
+                            <p id="dataNascimento">${paciente.dataNascimento}</p>
                         </div>
                         <div class="field">
                             <label for="cpf">CPF</label>

@@ -4,16 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css">
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="../Css/dashboard.css">
+    <link rel="stylesheet" href="../Css/listagemLead.css">
     <link rel="stylesheet" href="../Css/Sidebar.css">
     <link rel="shortcut icon" href="../../Assets/logo_Multclinics_branca_sem_nome.png" type="image/x-icon">
-    <title>Multiclinics | Dashboard</title>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Multiclinics | Área dos Leads</title>
 </head>
 
 <body>
@@ -21,43 +19,60 @@
         <div id="sidebar_content">
             <div id="user">
                 <img src="../Assets/perfil.jpeg" id="user_avatar" alt="Avatar">
+
                 <p id="user_infos">
                     <span id="user_nome" class="item-description">Silvia</span>
                     <span id="user_permissao" class="item-description">ADM</span>
                 </p>
             </div>
+
             <ul id="side_items">
                 <li class="side-item">
                     <a href="homePosLoginMedico.html">
                         <i class="fa-solid fa-home"></i>
-                        <span class="item-description">Home</span>
+                        <span class="item-description">
+                            Home
+                        </span>
                     </a>
                 </li>
+
                 <li class="side-item">
                     <a href="calendario.html">
                         <i class="fa-solid fa-calendar"></i>
-                        <span class="item-description">Agendamento</span>
+                        <span class="item-description">
+                            Agendamento
+                        </span>
                     </a>
                 </li>
+
                 <li class="side-item">
                     <a href="listagemColaborador.html">
                         <i class="fa-solid fa-user"></i>
-                        <span class="item-description">Colaborador</span>
+                        <span class="item-description">
+                            Colaborador
+                        </span>
                     </a>
                 </li>
+
                 <li class="side-item">
                     <a href="listagemPaciente.html">
                         <i class="fa-solid fa-hospital-user"></i>
-                        <span class="item-description">Paciente</span>
+                        <span class="item-description">
+                            Paciente
+                        </span>
                     </a>
                 </li>
-                <li class="side-item active">
+
+                <li class="side-item">
                     <a href="dashboards.html">
                         <i class="fa-solid fa-chart-line"></i>
-                        <span class="item-description">Dashboards</span>
+                        <span class="item-description">
+                            Dashboards
+                        </span>
                     </a>
                 </li>
-                <li class="side-item">
+
+                <li class="side-item active">
                     <a href="listagemLead.html">
                         <i class="fa-solid fa-filter"></i>
                         <span class="item-description">
@@ -66,10 +81,12 @@
                     </a>
                 </li>
             </ul>
+
             <button id="open_btn">
                 <i id="open_btn_icon" class="fa-solid fa-chevron-right"></i>
             </button>
         </div>
+
         <div id="logout">
             <button onclick="deslogar()" id="logout_btn">
                 <i class="fa-solid fa-right-from-bracket"></i>
@@ -80,49 +97,47 @@
         </div>
     </nav>
 
-    <main onload="buscar(), buscarRosca()">
-        <div class="dashboard">
-            <h1>DASHBOARD</h1>
-            <div class="grid-container">
-                <div class="card executed-appointments">
-                    <div id="rosca" class="line-chart">
-                        <canvas id="GraficoRosca"></canvas>
-                    </div>
-                </div>
-                <div class="card upcoming-appointments">
-                    <p>Agendamentos recorrentes próximos ao vencimento:</p>
-                    <table id="tableUpcomingAppointments">
-                        <tr>
-                            <th>Paciente</th>
-                            <th>Vencimento</th>
-                            <th>Especialidade</th>
-                        </tr>
-                    </table>
-                </div>
-                <div class="card patients-released">
-                    <div class="line-chart">
-                        <canvas id="GraficoBarraHorizontal"></canvas>
-                    </div>
-                </div>
-                <div class="card retention">
-                    <div class="line-chart">
-                        <canvas id="GraficoBarraDePe"></canvas>
-                    </div>
-                </div>
-
-                <div class="card grande">
-                    <div class="line-chart">
-                        <canvas id="GraficoLinhaFidelizacao"></canvas>
-                    </div>
-                </div>
-
+    <main>
+        <div class="container">
+            <div class="header">
+                <h1>Área dos <span>Leads</span></h1>
             </div>
+            <div class="KPIS">
+                <div class="cardKpi">
+                    <div class="kpiContent">
+                        <div class="kpiData">
+                            <p class="kpiNumber"></p>
+                            <p class="kpiText">Leads</p>
+                            <p class="kpiSubtext">Quantidade de leads dos ultimos 3 meses</p>
+                        </div>
+                        <div class="kpiIcon">
+                            <img src="../Assets/images.jfif" alt="Ícone">
+                        </div>
+                    </div>
+                </div>
+                <div class="cardKpi">
+                    <div class="kpiContent">
+                        <div class="kpiData">
+                            <p class="kpiNumber"></p>
+                            <p class="kpiText">Taxa de conversão</p>
+                            <p class="kpiSubtext">% de Leads Convertidos em Pacientes (ultimos 6 meses)</p>
+                        </div>
+                        <div class="kpiIcon">
+                            <img src="../Assets/images.jfif" alt="Ícone">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="listagemBox" id="listagem"></div>
         </div>
+        </div>
+
     </main>
-    <script src="../Js/dashboards.js"></script>
+    <script src="../Js/listagemLead.js"></script>
     <script src="../Js/funcoesPadroes.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../Js/sessao.js"></script>
+
 </body>
 
 </html>

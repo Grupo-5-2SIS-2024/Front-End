@@ -51,6 +51,7 @@ function validarSessao() {
         const Colaboradores = document.getElementById("Colaborador");
         const Pacientes = document.getElementById("Paciente");
         const Dashboards = document.getElementById("Dash");
+        const Leads = document.getElementById("Lead");
 
         if (Colaboradores) {
             Colaboradores.style.display = "none";
@@ -60,6 +61,9 @@ function validarSessao() {
         }
         if (Dashboards) {
             Dashboards.style.display = "none"
+        }
+        if (Leads) {
+            Leads.style.display = "none"
         }
     }
 }

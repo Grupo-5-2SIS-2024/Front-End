@@ -1,0 +1,498 @@
+body {
+    display: flex;
+    height: 100vh;
+    background-color: #def5e0;
+    background-size: cover;
+    background-position: 100%;
+    overflow-x: hidden;
+}
+
+.container {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+/* Header com os botoes */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 85%;
+    padding: 1rem;
+    position: relative;
+    bottom: 3rem;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 2rem;
+    color: #000;
+}
+
+.header h1 span {
+    color: #2f8333;
+}
+
+.containerBotao {
+    display: flex;
+    gap: 1rem;
+}
+
+.registrar {
+    width: 15vw;
+    height: 7vh;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    background-color: #43A046;
+    font-weight: bold;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    color: whitesmoke;
+}
+
+.registrarArea {
+    width: 11vw;
+    height: 7vh;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    background-color: #43A046;
+    font-weight: bold;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    color: whitesmoke;
+}
+
+.filtro {
+    width: 8vw;
+    height: 7vh;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    background-color: #ffffff;
+    font-weight: bold;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    color: rgb(0, 0, 0);
+}
+
+.filtro:hover {
+    transform: translateY(-0.4rem);
+    transition: 0.2s;
+    box-shadow: 0rem 0.5rem 0.8rem rgb(0, 0, 0);
+}
+
+.registrar:hover, .registrarArea:hover {
+    transform: translateY(-0.4rem);
+    transition: 0.2s;
+    box-shadow: 0rem 0.5rem 0.8rem rgb(0, 0, 0);
+}
+
+a {
+    list-style: none;
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+}
+
+/* Parte das KPIS */
+
+.KPIS {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 85%;
+    margin-top: 2rem;
+    gap: 2rem;
+    flex-direction: row;
+    position: relative;
+    bottom: 3rem;
+}
+
+.cardKpi {
+    width: 20vw;
+    height: 25vh;
+    background-color: #ffffff;
+    border-radius: 15px;
+    display: flex;
+    padding: 1.2rem;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.kpiContent {
+    display: flex;
+    align-items: start;
+    gap: 1rem;
+}
+
+.kpiIcon img {
+    width: 3.5vw;
+    height: 6vh;
+    position: relative;
+    top: 0.5rem;
+}
+
+.kpiData {
+    text-align: start;
+    width: 100%;
+    position: relative;
+    bottom: 0.5rem;
+}
+
+.kpiNumber {
+    font-size: 3rem;
+    font-weight: bold;
+    margin: 0;
+    color: #43A046;
+}
+
+.kpiText {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+.kpiSubtext {
+    font-size: 12px;
+    color: #999999;
+    margin: 0;
+}
+
+/* Listagem de colaboradores */
+
+.listagemBox {
+    display: flex;
+    flex-direction: column;
+    width: 78vw;
+    height: 50vh;
+    gap: 2rem;
+    background-color: #ffffff;
+    border-radius: 10px;
+    overflow-y: auto;
+    align-items: center;
+    justify-content: flex-start; 
+}
+
+.cardColaborador {
+    width: 100%;
+    border-radius: 15px;
+    gap: 1rem;
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #fff;
+    padding: 1rem;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.cardColaborador img {
+    width: 5vw;
+    height: auto;
+    border-radius: 50%;
+    border: #000 solid 3px;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+
+.cardColaborador .info {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+    flex-grow: 1;
+}
+
+.cardColaborador .info .field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: 0 0.5rem;
+}
+
+.cardColaborador .info .field label {
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+}
+
+.cardColaborador .info .field p {
+    word-wrap: break-word;
+    text-align: center;
+    margin: 0;
+}
+
+.cardColaborador .actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.cardColaborador .actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.25rem;
+    color: #555;
+    transition: color 0.3s;
+}
+
+.cardColaborador .actions button:hover {
+    color: #276E2A;
+}
+
+/* Estilos básicos para o modal */
+.modal {
+    display: none; /* Oculto por padrão */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo com transparência */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Estilos para o conteúdo do modal */
+.modalContent {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    text-align: center;
+}
+
+/* Estilos para o título do modal */
+.modalContent h2, .modalContent h3 {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 20px;
+}
+
+/* Estilos para o formulário de adicionar nova área */
+.modalContent form {
+    margin-bottom: 15px;
+}
+
+/* Estilos para os campos do formulário */
+.modalContent label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    display: block;
+    color: #666;
+}
+
+.modalContent input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.modalContent button {
+    background-color: #43A046;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.modalContent button:hover {
+    background-color: #43A046;
+}
+
+/* Estilos para o select das áreas existentes */
+#listaAreas {
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-bottom: 15px;
+    background-color: #f9f9f9;
+}
+
+/* Estilos para os botões de fechar */
+.modalContent button.fecharModal {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    font-size: 20px;
+    color: #aaa;
+    cursor: pointer;
+}
+
+.modalContent button.fecharModal:hover {
+    color: #000;
+}
+
+/* Estilos para garantir que o modal seja centralizado */
+.modal.show {
+    display: flex;
+}
+
+/* Estilos para os alertas e feedback */
+.swal2-popup {
+    font-size: 16px !important;
+}
+
+.swal2-confirm {
+    background-color: #28a745 !important;
+}
+
+.swal2-cancel {
+    background-color: #dc3545 !important;
+}
+
+
+/* Media Query para dispositivos com largura máxima de 440px */
+@media (max-width: 440px) {
+
+    .container {
+        flex-direction: column;
+        width: 100%;
+        height: 150%;
+        position: relative;
+        top: 17rem;
+    }
+
+    .header {
+        padding: 1rem;
+        position: relative;
+        top: 0.1rem;
+        text-align: center;
+        z-index: -1;
+    }
+
+    .header h1 {
+        font-size: 2.5rem;
+        position: relative;
+        bottom: 5rem;
+        left: 4rem;
+
+    }
+
+    .containerBotao {
+        flex-direction: row;
+        align-items: center;
+        width: 90%;
+        position: relative;
+        top: 1rem;
+        right: 6rem;
+    }
+
+    .registrar,
+    .filtro {
+        width: 80%;
+        height: 4vh;
+        text-align: center;
+    }
+
+    .KPIS {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 90%;
+        margin-top: 2rem;
+        gap: 2rem;
+        flex-direction: column;
+        position: relative;
+        bottom: 3rem;
+    }
+
+    .cardKpi {
+        width: 90vw;
+        height: auto;
+        background-color: #ffffff;
+        border-radius: 15px;
+        display: flex;
+        padding: 1rem;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .kpiIcon img {
+        width: 10vw;
+        height: 6vh;
+
+    }
+
+    .kpiData {
+        text-align: start;
+        width: 100%;
+        gap: 2rem;
+    }
+
+    .kpiNumber {
+        font-size: 2rem;
+    }
+
+    .kpiText {
+        font-size: 14px;
+        margin: 5px 0;
+    }
+
+    .kpiSubtext {
+        font-size: 12px;
+        color: #999999;
+    }
+
+
+
+
+    .listagemBox {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        flex-direction: column;
+        width: 78vw;
+        height: 100%;
+        gap: 1rem;
+        background-color: #ffffff;
+        border-radius: 2%;
+        overflow-y: auto;
+        padding-top: 3rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .cardColaborador {
+        flex-direction: column;
+    }
+
+    .cardColaborador .info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .cardColaborador img {
+        width: 50vw;
+        height: auto;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 15px;
+    }
+}

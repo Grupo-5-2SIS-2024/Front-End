@@ -181,7 +181,6 @@ async function buscarKPIsMedico() {
         // Buscar o total de administradores
         const respostaTotalAdmins = await fetch('http://localhost:8080/medicos/totalAdministradores');
         const totalAdmins = await respostaTotalAdmins.json();
-        console.log('Total de administradores:', totalAdmins);
 
         // Buscar o número de administradores ativos
         const respostaAdminsAtivos = await fetch('http://localhost:8080/medicos/totalAdministradoresAtivos');
@@ -202,6 +201,70 @@ async function buscarKPIsMedico() {
 }
 
 buscarKPIsMedico();
+
+async function buscarAreasClinica() {
+    try {
+        const resposta = await fetch('http://localhost:8080/especificacoes');
+        const listaAreas = await resposta.json();
+        console.log('Áreas recebidas:', listaAreas);
+
+        const selectAreas = document.getElementById("listaAreas");
+        selectAreas.innerHTML = listaAreas.map(especificacoes => `
+            <option value="${especificacoes.id}">${especificacoes.area}</option>
+        `).join('');
+
+    } catch (erro) {
+        console.error('Erro ao buscar áreas:', erro);
+    }
+}
+
+function abrirModal() {
+    buscarAreasClinica();
+    document.getElementById("modalArea").style.display = "flex";
+}
+
+function fecharModal() {
+    document.getElementById("modalArea").style.display = "none";
+}
+
+async function cadastrarArea() {
+    const nomeArea = document.getElementById("nomeArea").value;
+
+    if (nomeArea.trim() === "") {
+        alert("O nome da área não pode estar vazio.");
+        return;
+    }
+
+    const dadosArea = {
+        "area": nomeArea
+    };
+
+    try {
+        const respostaCadastro = await fetch('http://localhost:8080/especificacoes', {
+            method: "POST",
+            body: JSON.stringify(dadosArea),
+            headers: { "Content-type": "application/json; charset=UTF-8" }
+        });
+
+        console.log(respostaCadastro);
+        console.log(respostaCadastro.status);
+
+        if (respostaCadastro.ok) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Área cadastrada com sucesso!',
+                text: 'A nova área foi adicionada.',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        } else {
+            alert("Ocorreu um erro ao cadastrar a área.");
+        }
+    } catch (error) {
+        console.error("Erro ao realizar o cadastro:", error);
+        alert("Erro de comunicação com o servidor.");
+    }
+}
 
 
 

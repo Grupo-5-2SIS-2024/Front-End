@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="../Css/listagemPacienteStyle.css">
+    <link rel="stylesheet" href="../Css/listagemPaciente.css">
     <link rel="stylesheet" href="../Css/Sidebar.css">
     <link rel="shortcut icon" href="../../Assets/logo_Multclinics_branca_sem_nome.png" type="image/x-icon">
     <title>Multiclinics | Área do Paciente</title>
@@ -68,6 +68,15 @@
                         <i class="fa-solid fa-chart-line"></i>
                         <span class="item-description">
                             Dashboards
+                        </span>
+                    </a>
+                </li>
+
+                <li class="side-item">
+                    <a href="listagemLead.html">
+                        <i class="fa-solid fa-filter"></i>
+                        <span class="item-description">
+                            Leads
                         </span>
                     </a>
                 </li>
@@ -163,38 +172,75 @@
         const addPacienteBtn = document.getElementById('addPacienteBtn');
 
         // Função para exibir o SweetAlert ao clicar no botão
-        addPacienteBtn.addEventListener('click', (event) => {
+        addPacienteBtn.addEventListener('click', async (event) => {
             event.preventDefault(); // Evita o comportamento padrão do botão
 
-            Swal.fire({
+            const result = await Swal.fire({
                 title: "O paciente é menor de 15 anos?",
                 icon: "question",
                 showCancelButton: true,
                 confirmButtonText: "Sim",
                 cancelButtonText: "Não",
                 reverseButtons: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire({
-                        title: "Paciente menor de 15 anos",
-                        text: "Por favor, Cadastre o Responsavel primeiro.",
-                        icon: "success"
-                    }).then(() => {
-                        // Redirecionar para a página de cadastro após a confirmação
-                        window.location.href = 'cadastroResponsavel.html';
-                    });
-                    // Aqui você pode adicionar a lógica para pacientes menores
-                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                    Swal.fire({
-                        title: "Paciente maior de 15 anos",
-                        text: "Continuando com o cadastro do paciente...",
-                        icon: "success"
-                    }).then(() => {
-                        // Redirecionar para a página de cadastro após a confirmação
-                        window.location.href = 'cadastroPaciente.html';
-                    });
-                }
             });
+
+            if (result.isConfirmed) {
+                // Perguntar o CPF do responsável
+                const { value: cpfResponsavel } = await Swal.fire({
+                    title: "Digite o CPF do responsável",
+                    input: 'text',
+                    inputLabel: 'CPF do responsável',
+                    inputPlaceholder: 'Digite o CPF aqui',
+                    showCancelButton: true,
+                    confirmButtonText: 'Verificar',
+                    cancelButtonText: 'Cancelar',
+                    inputValidator: (value) => {
+                        if (!value) {
+                            return 'Você deve inserir um CPF!';
+                        }
+                    }
+                });
+
+                if (cpfResponsavel) {
+                    // Verificar se o CPF do responsável já existe
+                    try {
+                        const response = await fetch(`http://localhost:8080/responsaveis/cpf?cpf=${cpfResponsavel}`);
+                        if (response.ok) {
+                            const responsavel = await response.json();
+
+                            if (responsavel && responsavel.id) {
+                                // Se o responsável já existe, redirecionar para a página de cadastro do paciente com o ID do responsável
+                                window.location.href = `cadastroPacienteComResponsavel.html?idResponsavel=${responsavel.id}`;
+                            }
+                        } else if (response.status === 404) {
+                            // Se não existir, redirecionar para a tela de cadastro do responsável
+                            Swal.fire({
+                                icon: 'info',
+                                title: 'Responsável não encontrado',
+                                text: 'Por favor, cadastre o responsável primeiro.',
+                            }).then(() => {
+                                window.location.href = 'cadastroResponsavel.html';
+                            });
+                        }
+                    } catch (error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Erro ao verificar CPF',
+                            text: 'Ocorreu um erro ao tentar verificar o CPF: ' + error.message,
+                        });
+                    }
+                }
+            } else {
+                // Para pacientes maiores de 15 anos
+                Swal.fire({
+                    title: "Paciente maior de 15 anos",
+                    text: "Continuando com o cadastro do paciente...",
+                    icon: "success"
+                }).then(() => {
+                    // Redirecionar para a página de cadastro após a confirmação
+                    window.location.href = 'cadastroPaciente.html';
+                });
+            }
         });
     </script>
 
