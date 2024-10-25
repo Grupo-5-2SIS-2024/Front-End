@@ -12,11 +12,11 @@ async function buscarMedicos() {
         let medicosFiltrados = listaMedicos.filter(medico => medico.id !== idMedicoLogado);
 
         // 2. Se for Supervisor, filtrar pela especialização correspondente
-        if (nivelPermissao === "Supervisor" && areaEspecializacaoSupervisor) {
-            const especializacaoSupervisor = areaEspecializacaoSupervisor.trim().toLowerCase();
+        if (nivelPermissao === "Supervisor") {
             medicosFiltrados = medicosFiltrados.filter(medico => {
                 const especializacaoMedico = medico.especificacaoMedica && medico.especificacaoMedica.area ? medico.especificacaoMedica.area.trim().toLowerCase() : '';
-                return especializacaoMedico === especializacaoSupervisor;
+                const isAdmin = medico.permissao.nome === "Admin"; // Verifica se o médico é Admin
+                return especializacaoMedico === areaEspecializacaoSupervisor.toLowerCase() && !isAdmin; // Exclui médicos Admin
             });
         }
 

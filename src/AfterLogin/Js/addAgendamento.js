@@ -1,3 +1,13 @@
+document.addEventListener("DOMContentLoaded", () => {
+    const diaInput = document.getElementById("dia");
+    const diaConsulta = sessionStorage.getItem('DIA_CONSULTA');
+    if (diaConsulta) {
+        diaInput.value = diaConsulta;
+        sessionStorage.removeItem('DIA_CONSULTA');
+        updateAvailableHours(dia);
+    }
+});
+
 function formatarData(dataISO){
     const data = new Date(dataISO)
     const dia = String(data.getDate()).padStart(2,'0');
@@ -299,10 +309,6 @@ async function agendarConsulta() {
     }
 }
 
-// Função para "cancelar" consulta, alterando o status para "Cancelada"
-// Função para "cancelar" consulta, alterando o status para "Cancelada"
-// Função para "cancelar" consulta, alterando o status para "Cancelada"
-// Função para "cancelar" consulta, alterando o status para "Cancelada"
 // Função para "cancelar" consulta, alterando o status para "Cancelada"
 async function excluirConsulta(idConsulta) {
     console.log("Iniciando exclusão da consulta com ID:", idConsulta);

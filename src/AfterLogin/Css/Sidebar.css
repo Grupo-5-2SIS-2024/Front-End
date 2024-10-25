@@ -149,8 +149,8 @@ main {
 
 #open_btn_icon {
     transition: transform 0.5s;
-    width: 0.625rem;
-    height: 0.625rem;
+    width: 0.725rem;
+    height: 0.725rem;
 }
 
 #sidebar.open-sidebar #open_btn_icon {
