@@ -208,15 +208,73 @@ async function buscarAreasClinica() {
         const listaAreas = await resposta.json();
         console.log('Áreas recebidas:', listaAreas);
 
-        const selectAreas = document.getElementById("listaAreas");
-        selectAreas.innerHTML = listaAreas.map(especificacoes => `
-            <option value="${especificacoes.id}">${especificacoes.area}</option>
-        `).join('');
+        const listaAreasContainer = document.getElementById("listagemAreas");
+        listaAreasContainer.innerHTML = listaAreas.map((especificacao) => {
+            return `
+                <div class="cardArea" data-area-id="${especificacao.id}">
+                    <div class="info">
+                        <div class="field">
+                            <p id="areaNome">${especificacao.area}</p>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <button class="delete"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+                </div>`;
+        }).join('');
+
+        // Adiciona eventos de clique para os botões de exclusão de área
+        listaAreasContainer.querySelectorAll('.delete').forEach((botao) => {
+            botao.addEventListener('click', function () {
+                const card = this.closest('.cardArea');
+                const idArea = card.dataset.areaId;
+
+                if (idArea) {
+                    Swal.fire({
+                        title: 'Tem certeza?',
+                        text: "Você não poderá reverter isso!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sim, deletar!',
+                        cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            deletarArea(idArea);
+                        }
+                    });
+                } else {
+                    console.error('ID da área não encontrado.');
+                }
+            });
+        });
 
     } catch (erro) {
         console.error('Erro ao buscar áreas:', erro);
     }
 }
+
+async function deletarArea(idArea) {
+    try {
+        const resposta = await fetch(`http://localhost:8080/especificacoes/${idArea}`, {
+            method: 'DELETE'
+        });
+
+        if (!resposta.ok) {
+            throw new Error(`Erro ao deletar área: ${resposta.statusText}`);
+        }
+
+        console.log('Área deletada com sucesso.');
+        buscarAreasClinica(); // Recarrega a lista de áreas após a exclusão
+    } catch (erro) {
+        console.error('Erro ao deletar área:', erro);
+    }
+}
+
+// Chama a função para listar as áreas ao carregar a página
+buscarAreasClinica();
+
 
 function abrirModal() {
     buscarAreasClinica();
@@ -256,6 +314,9 @@ async function cadastrarArea() {
                 text: 'A nova área foi adicionada.',
                 showConfirmButton: false,
                 timer: 1500
+            }).then(() => {
+                buscarAreasClinica(); // Recarrega a lista de áreas
+                document.getElementById("nomeArea").value = ""; // Limpa o input
             });
         } else {
             alert("Ocorreu um erro ao cadastrar a área.");

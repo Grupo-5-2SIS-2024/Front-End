@@ -104,22 +104,19 @@
                 <div class="containerBotao">
                     <button id="btnAdicionarColaborador" class="registrar"><a href="cadastroColaborador.html">Adicionar
                             Colaborador</a></button>
-                            <button id="btnAdicionarArea" class="registrarArea" onclick="abrirModal()">Adicionar Área</button>
+                    <button id="btnAdicionarArea" class="registrarArea" onclick="abrirModal()">Adicionar Área</button>
                     <button class="filtro">Filtro</button>
                 </div>
             </div>
 
             <div id="modalArea" class="modal">
-                <div class="modalContent">
-                    <h2>Adicionar Nova Área</h2>
-                    <form id="formAdicionarArea">
-                        <label for="nomeArea">Nome da Nova Área:</label>
-                        <input type="text" id="nomeArea" required>
-                        <button onclick="cadastrarArea()">Adicionar</button>
-                    </form>
-                    <h3>Áreas Existentes</h3>
-                    <select id="listaAreas" size="5">
-                    </select>
+                <div class="modal-content">
+                    <span class="close" onclick="fecharModal()">&times;</span>
+                    <h2>Gerenciar Áreas</h2>
+                    <input type="text" id="nomeArea" placeholder="Nome da Nova Área">
+                    <button onclick="cadastrarArea()">Cadastrar Nova Área</button><br><br>
+                    <label for="listaAreas">Áreas Existentes:</label>
+                    <div id="listagemAreas"></div><br>
                     <button onclick="fecharModal()">Fechar</button>
                 </div>
             </div>

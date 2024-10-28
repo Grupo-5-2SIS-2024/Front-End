@@ -252,106 +252,93 @@ a {
     color: #276E2A;
 }
 
-/* Estilos básicos para o modal */
+/* Modal de Cadastro de Área */
 .modal {
-    display: none; /* Oculto por padrão */
+    display: none;
     position: fixed;
     z-index: 1;
     left: 0;
     top: 0;
     width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Fundo com transparência */
-    justify-content: center;
-    align-items: center;
+    height: 115%;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
-/* Estilos para o conteúdo do modal */
-.modalContent {
+.modal-content {
     background-color: #fff;
+    margin: 15% auto;
     padding: 20px;
     border-radius: 8px;
-    width: 400px;
-    max-width: 90%;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    position: relative;
+    width: 90%; /* Ajuste a largura do modal para 90% */
+    max-width: 600px; /* Máxima largura */
     text-align: center;
 }
 
-/* Estilos para o título do modal */
-.modalContent h2, .modalContent h3 {
-    margin: 0 0 15px 0;
-    color: #333;
-    font-size: 20px;
-}
-
-/* Estilos para o formulário de adicionar nova área */
-.modalContent form {
-    margin-bottom: 15px;
-}
-
-/* Estilos para os campos do formulário */
-.modalContent label {
-    font-size: 14px;
-    margin-bottom: 5px;
+.modal-content label {
     display: block;
-    color: #666;
+    margin-bottom: 5px;
 }
 
-.modalContent input[type="text"] {
-    width: 100%;
-    padding: 10px;
+.modal-content input {
+    width: 80%; /* Aumente a largura dos inputs */
+    padding: 8px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-size: 14px;
 }
 
-.modalContent button {
+.modal-content button {
+    padding: 8px 16px;
     background-color: #43A046;
-    color: white;
-    padding: 10px 15px;
+    color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
 }
 
-.modalContent button:hover {
-    background-color: #43A046;
-}
-
-/* Estilos para o select das áreas existentes */
-#listaAreas {
-    width: 100%;
-    height: auto;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-    margin-bottom: 15px;
-    background-color: #f9f9f9;
-}
-
-/* Estilos para os botões de fechar */
-.modalContent button.fecharModal {
+.close {
     position: absolute;
     top: 10px;
-    right: 10px;
-    background-color: transparent;
-    border: none;
+    right: 20px;
     font-size: 20px;
-    color: #aaa;
     cursor: pointer;
 }
 
-.modalContent button.fecharModal:hover {
-    color: #000;
+#listagemAreas {
+    max-height: 130px; /* Defina a altura máxima para a lista de áreas */
+    overflow-y: auto; /* Ativa o scroll vertical */
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
-/* Estilos para garantir que o modal seja centralizado */
-.modal.show {
+.cardArea {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #ddd;
+    font-size: 1rem;
 }
+
+.cardArea .info {
+    flex-grow: 1;
+    text-align: left;
+}
+
+.cardArea .actions {
+    display: flex;
+    justify-content: flex-end;
+    flex-shrink: 0;
+}
+
+.delete:hover {
+    transition: 0.5s;
+    color: #a00;
+}
+
 
 /* Estilos para os alertas e feedback */
 .swal2-popup {
