@@ -41,6 +41,7 @@ function validarSessao() {
         const adicionarColaboradorBtn = document.getElementById("btnAdicionarColaborador");
         const adicionarAreaBtn = document.getElementById("btnAdicionarArea");
         const adicionarConsultaBtn = document.getElementById("btnAdicionarConsulta");
+        const Leads = document.getElementById("Lead");
 
         if (cadastrarPacienteBtn) {
             cadastrarPacienteBtn.style.display = "none";
@@ -53,6 +54,9 @@ function validarSessao() {
         }
         if (adicionarColaboradorBtn) {
             adicionarColaboradorBtn.style.display = "none";
+        }
+        if (Leads) {
+            Leads.style.display = "none"
         }
     } else if (nivelPermissao === "Médico") {
         // Médico: remover botoes de Colaboradores, Pacientes e Dashboards
