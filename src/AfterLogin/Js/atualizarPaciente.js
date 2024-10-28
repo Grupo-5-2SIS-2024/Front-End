@@ -22,30 +22,6 @@ inputIcon2.addEventListener("click", () => {
     inputConfirmedPassword.type = inputConfirmedPassword.type === "password" ? "text" : "password";
 });
 
-inputFile.addEventListener("change", function (e) {
-    const inputTarget = e.target;
-    const file = inputTarget.files[0];
-
-    if (file) {
-        const reader = new FileReader();
-
-        reader.addEventListener("load", function (e) {
-            const readerTarget = e.target;
-
-            const img = document.createElement("img");
-            img.src = readerTarget.result;
-            img.classList.add("picture__img");
-
-            pictureImage.innerHTML = "";
-            pictureImage.appendChild(img);
-        });
-
-        reader.readAsDataURL(file);
-    } else {
-        pictureImage.innerHTML = pictureImageTxt;
-    }
-});
-
 // Função para validar o cadastro do colaborador
 
 function validarCadastro() {
@@ -207,7 +183,7 @@ function buscarValores(id) {
     const senhaInput = document.getElementById("password");
     const nivelAcessoInput = document.getElementById("nivelAcesso");
 
-    fetch(`http://localhost:8080/medicos/${id}`).then(res => {
+    fetch(`http://localhost:8080/pacientes/${id}`).then(res => {
         res.json().then(json => {
             if (json) {
                 // Atribui valores nas inputs
@@ -281,7 +257,7 @@ async function atualizarColaborador() {
         };
 
         try {
-            const respostaCadastro = await fetch(`http://localhost:8080/medicos/${id}`, {
+            const respostaCadastro = await fetch(`http://localhost:8080/pacientes/${id}`, {
                 method: "PUT",
                 body: JSON.stringify(dadosColaborador),
                 headers: { "Content-type": "application/json; charset=UTF-8" }

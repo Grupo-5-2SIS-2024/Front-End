@@ -1,33 +1,78 @@
-async function buscarMedicos() {
+function abrirModalFiltro() {
+    document.getElementById("modalFiltro").style.display = "block";
+}
+
+function fecharModalFiltro() {
+    document.getElementById("modalFiltro").style.display = "none";
+}
+
+function limparFiltros() {
+    document.getElementById('filtroNome').value = '';
+    document.getElementById('filtroEmail').value = '';
+    document.getElementById('filtroEspecialidade').value = '';
+    document.getElementById('listaFiltrosAtivos').innerHTML = ''; 
+    buscarMedicos()
+}
+
+function aplicarFiltros() {
+    const nome = document.getElementById('filtroNome').value.toLowerCase().trim();
+    const email = document.getElementById('filtroEmail').value.toLowerCase().trim();
+    const especialidade = document.getElementById('filtroEspecialidade').value.toLowerCase().trim();
+
+    const filtrosAtivos = [];
+
+    if (nome) filtrosAtivos.push(`Nome: ${nome}`);
+    if (email) filtrosAtivos.push(`Email: ${email}`);
+    if (especialidade) filtrosAtivos.push(`Especialidade: ${especialidade}`);
+
+    // Atualiza a lista de filtros ativos
+    const listaFiltrosAtivos = document.getElementById('listaFiltrosAtivos');
+    listaFiltrosAtivos.innerHTML = '';
+    filtrosAtivos.forEach(filtro => {
+        const li = document.createElement('li');
+        li.textContent = filtro;
+        listaFiltrosAtivos.appendChild(li);
+    });
+
+    // Chama buscarMedicos com os valores dos filtros
+    buscarMedicos(nome, email, especialidade, status);
+}
+
+async function buscarMedicos(nomeFiltro = '', emailFiltro = '', especialidadeFiltro = '', statusFiltro = '') {
     try {
         const nivelPermissao = sessionStorage.getItem("PERMISSIONAMENTO_MEDICO");
         const areaEspecializacaoSupervisor = sessionStorage.getItem("ESPECIFICACAO_MEDICA");
-        const idMedicoLogado = Number(sessionStorage.getItem("ID_MEDICO")); // Convertendo o ID do médico logado para número
+        const idMedicoLogado = Number(sessionStorage.getItem("ID_MEDICO"));
 
         const resposta = await fetch("http://localhost:8080/medicos");
         const listaMedicos = await resposta.json();
-        console.log("Médicos recebidos:", listaMedicos);
 
-        // 1. Filtrar o médico logado
         let medicosFiltrados = listaMedicos.filter(medico => medico.id !== idMedicoLogado);
 
-        // 2. Se for Supervisor, filtrar pela especialização correspondente
         if (nivelPermissao === "Supervisor") {
             medicosFiltrados = medicosFiltrados.filter(medico => {
-                const especializacaoMedico = medico.especificacaoMedica && medico.especificacaoMedica.area ? medico.especificacaoMedica.area.trim().toLowerCase() : '';
-                const isAdmin = medico.permissao.nome === "Admin"; // Verifica se o médico é Admin
-                return especializacaoMedico === areaEspecializacaoSupervisor.toLowerCase() && !isAdmin; // Exclui médicos Admin
+                const especializacaoMedico = medico.especificacaoMedica?.area.trim().toLowerCase() || '';
+                const isAdmin = medico.permissao.nome === "Admin";
+                return especializacaoMedico === areaEspecializacaoSupervisor.toLowerCase() && !isAdmin;
             });
         }
 
-        console.log("Médicos filtrados:", medicosFiltrados);
+        const medicosFiltradosFinal = medicosFiltrados.filter(medico => {
+            const nomeCompleto = `${medico.nome} ${medico.sobrenome}`.toLowerCase();
+            const isAtivo = medico.ativo ? 'Ativo' : 'Inativo';
+
+            return (
+                (nomeCompleto.includes(nomeFiltro) || nomeFiltro === '') &&
+                (medico.email.toLowerCase().includes(emailFiltro) || emailFiltro === '') &&
+                (medico.especificacaoMedica?.area.toLowerCase().includes(especialidadeFiltro) || especialidadeFiltro === '') &&
+                (isAtivo === statusFiltro || statusFiltro === '')
+            );
+        });
 
         const cardsMedicos = document.getElementById("listagem");
-        cardsMedicos.innerHTML = medicosFiltrados.map((medico) => {
+        cardsMedicos.innerHTML = medicosFiltradosFinal.map((medico) => {
             const status = medico.ativo ? 'Ativo' : 'Inativo';
-            const foto = medico.foto === null || medico.foto === undefined ? "../Assets/perfil.jpeg" : medico.foto;
-
-            // Verifica se o nível de permissão é Supervisor e remove os botões de atualizar e deletar
+            const foto = medico.foto || "../Assets/perfil.jpeg";
             const acoes = nivelPermissao === "Supervisor" ? '' : `
                 <div class="actions">
                     <button class="update"><i class="fas fa-pencil-alt"></i></button>
@@ -38,76 +83,44 @@ async function buscarMedicos() {
                 <div class="cardColaborador" data-medico-id="${medico.id}">
                     <img src="${foto}" alt="Foto do Colaborador">
                     <div class="info">
-                        <div class="field">
-                            <label for="nome">Nome</label>
-                            <p id="nome">${medico.nome} ${medico.sobrenome}</p>
-                        </div>
-                        <div class="field">
-                            <label for="email">Email</label>
-                            <p id="email">${medico.email}</p>
-                        </div>
-                        <div class="field">
-                            <label for="especificacaoMedica">Especificação</label>
-                            <p id="especificacaoMedica">${medico.especificacaoMedica.area}</p>
-                        </div>
-                        <div class="field">
-                            <label for="status">Status</label>
-                            <p id="status">${status}</p>
-                        </div>
-                        <div class="field">
-                            <label for="permissao">Permissão</label>
-                            <p id="permissao">${medico.permissao.nome}</p>
-                        </div>
+                        <div class="field"><label>Nome</label><p>${medico.nome} ${medico.sobrenome}</p></div>
+                        <div class="field"><label>Email</label><p>${medico.email}</p></div>
+                        <div class="field"><label>Especificação</label><p>${medico.especificacaoMedica.area}</p></div>
+                        <div class="field"><label>Status</label><p>${status}</p></div>
+                        <div class="field"><label>Permissão</label><p>${medico.permissao.nome}</p></div>
                     </div>
-                    ${acoes} <!-- Inclui ou remove ações baseado na permissão -->
-                </div>
-            `;
+                    ${acoes}
+                </div>`;
         }).join('');
 
-        // Adiciona eventos de clique para os botões de exclusão e atualização, se não for Supervisor
         if (nivelPermissao !== "Supervisor") {
             cardsMedicos.querySelectorAll('.delete').forEach((botao) => {
                 botao.addEventListener('click', function () {
-                    const card = this.closest('.cardColaborador');
-                    const id = card.dataset.medicoId;
-
+                    const id = this.closest('.cardColaborador').dataset.medicoId;
                     if (id) {
-                        // Mostra o modal de confirmação
                         Swal.fire({
                             title: 'Tem certeza?',
                             text: "Você não poderá reverter isso!",
                             icon: 'warning',
                             showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
                             confirmButtonText: 'Sim, deletar!',
                             cancelButtonText: 'Cancelar'
                         }).then((result) => {
-                            if (result.isConfirmed) {
-                                deletarMedico(id);
-                            }
+                            if (result.isConfirmed) deletarMedico(id);
                         });
-                    } else {
-                        console.error('ID do médico não encontrado.');
                     }
                 });
             });
 
             cardsMedicos.querySelectorAll('.update').forEach((botao) => {
                 botao.addEventListener('click', function () {
-                    const card = this.closest('.cardColaborador');
-                    const id = card.dataset.medicoId;
-
-                    if (id) {
-                        window.location.href = `atualizarColaborador.html?id=${id}`;
-                    } else {
-                        console.error('ID do médico não encontrado.');
-                    }
+                    const id = this.closest('.cardColaborador').dataset.medicoId;
+                    if (id) window.location.href = `atualizarColaborador.html?id=${id}`;
                 });
             });
         }
     } catch (e) {
-        console.log(e);
+        console.error('Erro ao buscar médicos:', e);
     }
 }
 

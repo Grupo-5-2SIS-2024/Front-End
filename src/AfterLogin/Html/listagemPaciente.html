@@ -103,7 +103,48 @@
                 <h1>Área dos <span>Pacientes</span></h1>
                 <div class="containerBotao">
                     <button class="registrar" id="addPacienteBtn">Adicionar Paciente</button>
-                    <button class="filtro">Filtro</button>
+                    <button class="filtro" onclick="abrirModalFiltro()">Filtro</button>
+                </div>
+            </div>
+            <div id="modalFiltro" class="modal">
+                <div class="modal-content">
+                    <button class="btn-fechar" onclick="fecharModalFiltro()">&times;</button>
+                    <h2>Filtrar Pacientes</h2>
+            
+                    <div class="input-group">
+                        <label for="filtroNome">Nome:</label>
+                        <input type="text" id="filtroNome" placeholder="Nome do Paciente">
+                    </div>
+            
+                    <div class="input-group">
+                        <label for="filtroEmail">Email:</label>
+                        <input type="text" id="filtroEmail" placeholder="Email do Paciente">
+                    </div>
+            
+                    <div class="input-group">
+                        <label for="filtroCPF">CPF:</label>
+                        <input type="text" id="filtroCPF" placeholder="CPF do Paciente">
+                    </div>
+            
+                    <div class="input-group">
+                        <label for="filtroTelefone">Telefone:</label>
+                        <input type="text" id="filtroTelefone" placeholder="Telefone do Paciente">
+                    </div>
+            
+                    <div class="input-group">
+                        <label for="filtroDataNascimento">Data de Nascimento:</label>
+                        <input type="date" id="filtroDataNascimento" placeholder="Data de Nascimento">
+                    </div>
+            
+                    <div id="filtrosAtivosContainer">
+                        <h3>Filtros Ativos</h3>
+                        <ul id="listaFiltrosAtivos" class="lista-filtros-ativos"></ul>
+                    </div>
+            
+                    <div class="botoes-container">
+                        <button onclick="aplicarFiltros()" class="btn-aplicar">Aplicar Filtros</button>
+                        <button onclick="limparFiltros()" class="btn-limpar">Limpar Filtros</button>
+                    </div>
                 </div>
             </div>
             <div class="KPIS">
@@ -115,7 +156,7 @@
                             <p class="kpiSubtext">Número de pacientes que fazem tratamento ABA</p>
                         </div>
                         <div class="kpiIcon">
-                            <img src="../Assets/images.jfif" alt="Ícone">
+                            <img src="../Assets/cruz.png" alt="Ícone">
                         </div>
                     </div>
                 </div>
@@ -127,7 +168,7 @@
                             <p class="kpiSubtext">Número de pacientes ativos fazendo tratamento</p>
                         </div>
                         <div class="kpiIcon">
-                            <img src="../Assets/images.jfif" alt="Ícone">
+                            <img src="../Assets/cruz.png" alt="Ícone">
                         </div>
                     </div>
                 </div>
@@ -139,7 +180,7 @@
                             <p class="kpiSubtext">Número de agendamentos expirando essa semana</p>
                         </div>
                         <div class="kpiIcon">
-                            <img src="../Assets/images.jfif" alt="Ícone">
+                            <img src="../Assets/cruz.png" alt="Ícone">
                         </div>
                     </div>
                 </div>
@@ -151,7 +192,7 @@
                             <p class="kpiSubtext">Pacientes adicionados no último trimestre</p>
                         </div>
                         <div class="kpiIcon">
-                            <img src="../Assets/images.jfif" alt="Ícone">
+                            <img src="../Assets/cruz.png" alt="Ícone">
                         </div>
                     </div>
                 </div>

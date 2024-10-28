@@ -139,7 +139,7 @@ a {
 }
 
 .kpiIcon img {
-    width: 3.5vw;
+    width: 3vw;
     height: 6vh;
     position: relative;
     top: 0.5rem;
@@ -269,8 +269,8 @@ a {
     margin: 15% auto;
     padding: 20px;
     border-radius: 8px;
-    width: 90%; /* Ajuste a largura do modal para 90% */
-    max-width: 600px; /* Máxima largura */
+    width: 90%; 
+    max-width: 600px; 
     text-align: center;
 }
 
@@ -280,7 +280,7 @@ a {
 }
 
 .modal-content input {
-    width: 80%; /* Aumente a largura dos inputs */
+    width: 80%;
     padding: 8px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
@@ -297,16 +297,12 @@ a {
 }
 
 .close {
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 20px;
-    cursor: pointer;
+    display: none;
 }
 
 #listagemAreas {
-    max-height: 130px; /* Defina a altura máxima para a lista de áreas */
-    overflow-y: auto; /* Ativa o scroll vertical */
+    max-height: 130px;
+    overflow-y: auto; 
     padding: 10px;
     display: flex;
     flex-direction: column;
@@ -339,6 +335,81 @@ a {
     color: #a00;
 }
 
+#filtrosAtivosContainer {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.lista-filtros-ativos {
+    display: flex; 
+    flex-wrap: wrap;
+    list-style-type: none;
+    padding: 0;
+    margin: 0; 
+}
+
+.lista-filtros-ativos li {
+    background-color: #e0e7ff;
+    border-radius: 5px;
+    padding: 8px 12px;
+    margin: 5px;
+    color: #333;
+    font-size: 14px;
+    font-weight: bold;
+    height: 5vh;
+    flex: 1 1 auto;
+    max-width: calc(43.33% - 10px); 
+    box-sizing: border-box; 
+}
+
+.botoes-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.botoes-container .btn-aplicar,
+.botoes-container .btn-limpar {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.botoes-container .btn-aplicar {
+    background-color: #4CAF50;
+}
+
+.botoes-container .btn-limpar {
+    background-color: #f44336;
+  
+}
+
+.botoes-container .btn-aplicar:hover,
+.botoes-container .btn-limpar:hover {
+    transform: translateY(-0.4rem);
+    transition: 0.2s;
+    box-shadow: 0rem 0.5rem 0.8rem rgb(0, 0, 0);
+}
+
+.btn-fechar {
+    position: absolute;
+    top: 225px;
+    right: 450px;
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    color: #333;
+    cursor: pointer;
+    font-weight: bold;
+    transition: color 0.3s;
+}
 
 /* Estilos para os alertas e feedback */
 .swal2-popup {
