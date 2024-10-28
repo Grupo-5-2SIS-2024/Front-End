@@ -20,6 +20,8 @@ async function buscarLeads() {
         const listaContainer = document.getElementById("listagem");
         listaContainer.innerHTML = listaLeads.map((lead) => {
 
+            const dataEntradaFormatada = new Date(lead.dataEntrada).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
             console.log(lead);
             return `
                 <div class="cardLead" data-lead-id="${lead.id}">
@@ -33,8 +35,8 @@ async function buscarLeads() {
                             <p id="email">${lead.email}</p>
                         </div>
                         <div class="field">
-                            <label for="cpf">CPF</label>
-                            <p id="cpf">${formatarCPF(lead.cpf)}</p>
+                            <label for="cpf">Data de Entrada</label>
+                            <p id="cpf">${dataEntradaFormatada}</p>
                         </div>
                         <div class="field">
                             <label for="telefone">Telefone</label>
@@ -104,22 +106,32 @@ buscarLeads();
 
 async function buscarKPIsLeads() {
     try {
-        // Buscar o número total de médicos
-        const respostaTotalMedicos = await fetch('http://localhost:8080/leads');
-        const listaMedicos = await respostaTotalMedicos.json();
-        const totalMedicos = listaMedicos.length;
+        // Buscar o número total de leads
+        const respostaTotalLeads = await fetch('http://localhost:8080/leads');
+        const listaLeads = await respostaTotalLeads.json();
+        const totalLeads = listaLeads.length;
 
-        // Buscar o total de administradores
-        const respostaporcentagemConvertidos = await fetch('http://localhost:8080/leads/percentual-convertidos');
-        const porcentagemConvertidos = await respostaporcentagemConvertidos.json();
+        // Buscar a porcentagem de leads convertidos
+        const respostaPorcentagemConvertidos = await fetch('http://localhost:8080/leads/percentual-convertidos');
+        const porcentagemConvertidos = await respostaPorcentagemConvertidos.json();
+
+        // Filtrar leads com mais de 6 meses de cadastro
+        const seisMesesAtras = new Date();
+        seisMesesAtras.setMonth(seisMesesAtras.getMonth() - 6);
+
+        const leadsMaisDeSeisMeses = listaLeads.filter(lead => {
+            const dataEntrada = new Date(lead.dataEntrada);
+            return dataEntrada < seisMesesAtras;
+        });
+        const totalLeadsMaisDeSeisMeses = leadsMaisDeSeisMeses.length;
 
         // Função para adicionar zero à esquerda se necessário
         const formatarNumero = (numero) => numero.toString().padStart(2, '0');
 
         // Atualizar os valores nos elementos HTML, com zero à esquerda
-        document.querySelector('.cardKpi:nth-child(1) .kpiNumber').textContent = formatarNumero(totalMedicos);
+        document.querySelector('.cardKpi:nth-child(1) .kpiNumber').textContent = formatarNumero(totalLeads);
         document.querySelector('.cardKpi:nth-child(2) .kpiNumber').textContent = porcentagemConvertidos + '%';
-        document.querySelector('.cardKpi:nth-child(3) .kpiNumber').textContent = formatarNumero(totalAdmins);
+        document.querySelector('.cardKpi:nth-child(3) .kpiNumber').textContent = formatarNumero(totalLeadsMaisDeSeisMeses);
 
     } catch (erro) {
         console.error('Erro ao buscar os dados dos KPIs:', erro);
