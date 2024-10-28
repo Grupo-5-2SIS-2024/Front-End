@@ -24,14 +24,12 @@ function obterIconeGenero(genero) {
 }
 
 let consultas = []; // Variável global para armazenar as consultas
-
-// Função para buscar dados da API para consultas e atualizar a variável global
 async function buscarConsultas() {
     console.log("Buscando consultas...");
     try {
         const resposta = await fetch("http://localhost:8080/consultas");
         if (!resposta.ok) {
-            throw new Error(`HTTP error! Status: ${resposta.status}`);
+            throw new Error(`Erro HTTP! Status: ${resposta.status}`);
         }
         consultas = await resposta.json(); // Armazena as consultas na variável global
         console.log(consultas);
@@ -39,6 +37,13 @@ async function buscarConsultas() {
         // Atualiza a listagem de consultas
         const consultasContainer = document.getElementById("consultas-container");
         consultasContainer.innerHTML = consultas.map((consulta) => {
+            // Verifica o status da consulta para mostrar ícones diferentes
+            const iconeAcao = consulta.statusConsulta.nomeStatus === 'Agendada'
+                ? `<i class="fas fa-notes-medical" onclick="alterarFConsulta(${consulta.id})" title="Bloco de Notas"></i>`
+                : consulta.statusConsulta.nomeStatus === 'Realizada'
+                ? `<i class="fas fa-eye" onclick="verFeedback(${consulta.id})" title="Visualizar Feedback"></i>`
+                : "";
+
             return `
                 <div class="consulta">
                     ${obterIconeGenero(consulta.paciente.genero)}
@@ -51,6 +56,7 @@ async function buscarConsultas() {
                             <i class="fas fa-pen" onclick="alterarConsulta(${consulta.id})" title="Alterar Consulta"></i>
                             <i class="fas fa-trash" onclick="excluirConsulta(${consulta.id})" title="Cancelar Consulta"></i>
                             <i class="fas fa-download" onclick="baixarConsultaExcel(${consulta.id})" title="Baixar Excel da Consulta"></i>
+                            ${iconeAcao} <!-- Ícone para editar ou visualizar feedback -->
                         </div>
                     </div>
                 </div>
@@ -62,6 +68,19 @@ async function buscarConsultas() {
         return []; // Retorna um array vazio em caso de erro
     }
 }
+
+// Função para redirecionar para a página de feedback no modo de visualização
+function verFeedback(idConsulta) {
+    // Redireciona para FeedbackConsulta.html com a consultaId e o parâmetro viewOnly=true
+    window.location.href = `FeedbackConsulta.html?consultaId=${idConsulta}&viewOnly=true`;
+}
+
+// Função para redirecionar para a página de feedback no modo de edição
+function alterarFConsulta(idConsulta) {
+    // Redireciona para a mesma página de feedback, mas sem o parâmetro viewOnly
+    window.location.href = `FeedbackConsulta.html?consultaId=${idConsulta}`;
+}
+
 
 // Função para buscar dados da API para pacientes e médicos e popular os selects
 async function buscarPacientesEMedicos() {
@@ -723,3 +742,4 @@ async function excluirPrimeiraConsulta() {
 function atualizarListagemConsultas() {
     buscarConsultas(); // Atualiza a lista de consultas na tela
 } 
+
