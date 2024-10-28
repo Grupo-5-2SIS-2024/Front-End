@@ -54,6 +54,14 @@ async function buscarConsultas() {
                                 ? `<i class="fas fa-notes-medical" onclick="AnaliseConsultasx(${consulta.id})" title="Bloco De Notas"></i>` 
                                 : ''
                             }
+
+
+
+                              ${
+                                consulta.statusConsulta.nomeStatus === 'Realizada' 
+                                ? `<i class="fas fa-eye" onclick="verFeedback(${consulta.id})" title="Visualizar Feedback"></i>`
+                                : ''
+                            }
                         </div>
                     </div>
                 </div>
@@ -65,6 +73,13 @@ async function buscarConsultas() {
         return []; // Retorna um array vazio em caso de erro
     }
 }
+
+
+function verFeedback(consultaId) {
+    window.location.href = `FeedbackConsulta.html?consultaId=${consultaId}&viewOnly=true`;
+}
+
+
 // Função para buscar dados da API para pacientes e médicos e popular os selects
 async function buscarPacientesEMedicos() {
     console.log("Buscando pacientes e médicos...");

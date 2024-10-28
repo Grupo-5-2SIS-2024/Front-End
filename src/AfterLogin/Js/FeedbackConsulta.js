@@ -3,10 +3,7 @@ const consultaId = parseInt(urlParams.get('consultaId'), 10);  // Converte consu
 const viewOnly = urlParams.get('viewOnly') === 'true';
 
 // Variável para armazenar os dados da consulta
-let consultaAtual;
-
-// Função para buscar todas as consultas, filtrar pelo ID e preencher o formulário
-async function carregarDadosConsulta() {
+let consultaAtual;async function carregarDadosConsulta() {
     try {
         const resposta = await fetch("http://localhost:8080/consultas");
         if (!resposta.ok) {
@@ -46,21 +43,48 @@ async function carregarDadosConsulta() {
             document.getElementById("paciente").value = "Paciente não disponível";
         }
 
-        // Se o acompanhamento existir, preenche os campos "resumo" e "relatorio"
-        if (consultaAtual.acompanhamento) {
-            document.getElementById("resumo").value = consultaAtual.acompanhamento.resumo || "";
-            document.getElementById("relatorio").value = consultaAtual.acompanhamento.relatorio || "";
-        }
-
-        // Se estiver no modo de visualização, desative os campos
+        // Se estiver no modo de visualização, desative os campos e carregue o acompanhamento
         if (viewOnly) {
             document.getElementById("resumo").disabled = true;
             document.getElementById("relatorio").disabled = true;
-            document.getElementById("salvarBtn").style.display = "none";  // Oculta o botão de salvar
+            
+            const salvarBtn = document.getElementById("salvarBtn");
+            if (salvarBtn) {
+                salvarBtn.style.display = "none";  // Oculta o botão de salvar
+            }
+
+            // Carrega o acompanhamento se a consulta estiver concluída
+            await carregarDadosAcompanhamento();
         }
 
     } catch (error) {
         console.error('Erro ao carregar os dados da consulta:', error);
+    }
+}
+
+// Função para buscar os dados do acompanhamento relacionado à consulta
+async function carregarDadosAcompanhamento() {
+    try {
+        const resposta = await fetch("http://localhost:8080/acompanhamentos");
+        if (!resposta.ok) {
+            throw new Error(`Erro ao buscar dados dos acompanhamentos. Status: ${resposta.status}`);
+        }
+
+        const acompanhamentos = await resposta.json();
+        console.log("Dados de todos os acompanhamentos recebidos:", acompanhamentos);
+
+        // Filtra o acompanhamento com o ID da consulta
+        const acompanhamentoAtual = acompanhamentos.find(a => a.consulta.id === consultaId);
+
+        if (acompanhamentoAtual) {
+            document.getElementById("resumo").value = acompanhamentoAtual.resumo || "";
+            document.getElementById("relatorio").value = acompanhamentoAtual.relatorio || "";
+            console.log("Acompanhamento encontrado e carregado:", acompanhamentoAtual);
+        } else {
+            console.warn("Acompanhamento não encontrado para a consulta especificada.");
+        }
+    } catch (error) {
+        console.error('Erro ao carregar os dados do acompanhamento:', error);
     }
 }
 
@@ -69,8 +93,7 @@ carregarDadosConsulta();
 
 
 
-
-
+// Função para concluir a consulta e adicionar o feedback
 async function concluirConsultaEAdicionarFeedback(idConsulta) {
     console.log("Iniciando conclusão da consulta com ID:", idConsulta);
 
@@ -130,7 +153,6 @@ async function concluirConsultaEAdicionarFeedback(idConsulta) {
 }
 
 // Função para adicionar o feedback na tabela de acompanhamento
-// Função para adicionar o feedback na tabela de acompanhamento
 async function adicionarAcompanhamento(idConsulta) {
     const resumo = document.getElementById("resumo").value;
     const relatorio = document.getElementById("relatorio").value;
@@ -167,10 +189,6 @@ async function adicionarAcompanhamento(idConsulta) {
         alert("Ocorreu um erro ao salvar o feedback. Tente novamente.");
     }
 }
-
-
-
-
 
 // Chamar a função para carregar dados da consulta ao abrir a página
 carregarDadosConsulta();
