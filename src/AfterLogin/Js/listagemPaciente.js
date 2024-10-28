@@ -1,12 +1,44 @@
 async function buscarPacientes() {
-    try {
-        const resposta = await fetch("http://localhost:8080/pacientes");
-        const listaPacientes = await resposta.json();
-        console.log(listaPacientes);
+    // Obtenha os dados do sessionStorage
+    const permissionamentoMedico = sessionStorage.getItem("PERMISSIONAMENTO_MEDICO");
+    const especificacaoMedicaArea = sessionStorage.getItem("ESPECIFICACAO_MEDICA");
 
+    try {
+        let listaPacientes = [];
+
+        
+        if (permissionamentoMedico === "Admin") {
+            const resposta = await fetch("http://localhost:8080/pacientes");
+            listaPacientes = await resposta.json();
+        } 
+     
+        else if (permissionamentoMedico === "Supervisor" && especificacaoMedicaArea) {
+         
+            const respostaPacientes = await fetch("http://localhost:8080/pacientes");
+            const todosPacientes = await respostaPacientes.json();
+
+          
+            const respostaConsultas = await fetch("http://localhost:8080/consultas");
+            const todasConsultas = await respostaConsultas.json();
+
+        
+            listaPacientes = todosPacientes.filter(paciente => {
+            
+                return todasConsultas.some(consulta => 
+                    consulta.paciente.id === paciente.id &&
+                    consulta.especificacaoMedica.area === especificacaoMedicaArea 
+                );
+            });
+        } else {
+            console.warn("Permissão ou especificação médica não definida.");
+            return;
+        }
+
+        console.log("Pacientes filtrados:", listaPacientes);
+
+       
         const cardsMedicos = document.getElementById("listagem");
         cardsMedicos.innerHTML = listaPacientes.map((paciente) => {
-            // Corrigindo o acesso ao paciente e suas propriedades
             const responsavel = paciente.responsavel ? `${paciente.responsavel.nome} ${paciente.responsavel.sobrenome}` : 'Não informado';
 
             return `
@@ -41,53 +73,12 @@ async function buscarPacientes() {
             `;
         }).join('');
 
-        // Adiciona evento de clique para os botões de exclusão
-        cardsMedicos.querySelectorAll('.delete').forEach((botao) => {
-            botao.addEventListener('click', function () {
-                const card = this.closest('.cardPaciente');
-                const id = card.dataset.pacienteId;
-
-                if (id) {
-                    // Mostra o modal de confirmação
-                    Swal.fire({
-                        title: 'Tem certeza?',
-                        text: "Você não poderá reverter isso!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Sim, deletar!',
-                        cancelButtonText: 'Cancelar'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Se o usuário confirmar, chama a função de deletar
-                            deletarPaciente(id);
-                        }
-                    });
-                } else {
-                    console.error('ID do paciente não encontrado.');
-                }
-            });
-        });
-
-        // Adiciona evento de clique para os botões de atualização
-        cardsMedicos.querySelectorAll('.update').forEach((botao) => {
-            botao.addEventListener('click', function () {
-                const card = this.closest('.cardPaciente');
-                const id = card.dataset.pacienteId;
-
-                if (id) {
-                    window.location.href = `atualizarPaciente.html?id=${id}`;
-                } else {
-                    console.error('ID do paciente não encontrado.');
-                }
-            });
-        });
+        
+        adicionarEventosBotoes(cardsMedicos);
     } catch (e) {
         console.log(e);
     }
 }
-
 buscarPacientes();
 
 
@@ -144,37 +135,3 @@ async function deletarPaciente(id) {
         console.error('Erro ao deletar paciente:', erro);
     }
 }
-
-const swalWithBootstrapButtons = Swal.mixin({
-    customClass: {
-      confirmButton: "btn btn-success",
-      cancelButton: "btn btn-danger"
-    },
-    buttonsStyling: false
-  });
-  swalWithBootstrapButtons.fire({
-    title: "Are you sure?",
-    text: "You won't be able to revert this!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonText: "Yes, delete it!",
-    cancelButtonText: "No, cancel!",
-    reverseButtons: true
-  }).then((result) => {
-    if (result.isConfirmed) {
-      swalWithBootstrapButtons.fire({
-        title: "Deleted!",
-        text: "Your file has been deleted.",
-        icon: "success"
-      });
-    } else if (
-      /* Read more about handling dismissals below */
-      result.dismiss === Swal.DismissReason.cancel
-    ) {
-      swalWithBootstrapButtons.fire({
-        title: "Cancelled",
-        text: "Your imaginary file is safe :)",
-        icon: "error"
-      });
-    }
-  });
