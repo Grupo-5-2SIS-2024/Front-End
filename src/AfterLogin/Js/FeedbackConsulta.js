@@ -1,5 +1,5 @@
 const urlParams = new URLSearchParams(window.location.search);
-const consultaId = urlParams.get('consultaId');
+const consultaId = parseInt(urlParams.get('consultaId'), 10);  // Converte consultaId para número
 const viewOnly = urlParams.get('viewOnly') === 'true';
 
 // Variável para armazenar os dados da consulta
@@ -12,16 +12,22 @@ async function carregarDadosConsulta() {
         if (!resposta.ok) {
             throw new Error(`Erro ao buscar dados das consultas. Status: ${resposta.status}`);
         }
+
         const consultas = await resposta.json();
         console.log("Dados de todas as consultas recebidos:", consultas);
 
+        // Filtra a consulta com o ID correto
         consultaAtual = consultas.find(c => c.id === consultaId);
+        
+        console.log("Consulta encontrada:", consultaAtual);
+
         if (!consultaAtual) {
-            console.warn("Consulta não encontrada com o ID especificado.");
+            console.warn("Consulta não encontrada com o ID especificado:", consultaId);
             alert("Consulta não encontrada.");
             return;
         }
 
+        // Preenchendo o formulário com os dados da consulta
         if (consultaAtual.medico) {
             document.getElementById("medico").value = `${consultaAtual.medico.nome} ${consultaAtual.medico.sobrenome}`;
         } else {
@@ -45,10 +51,27 @@ async function carregarDadosConsulta() {
             document.getElementById("resumo").value = consultaAtual.acompanhamento.resumo || "";
             document.getElementById("relatorio").value = consultaAtual.acompanhamento.relatorio || "";
         }
+
+        // Se estiver no modo de visualização, desative os campos
+        if (viewOnly) {
+            document.getElementById("resumo").disabled = true;
+            document.getElementById("relatorio").disabled = true;
+            document.getElementById("salvarBtn").style.display = "none";  // Oculta o botão de salvar
+        }
+
     } catch (error) {
         console.error('Erro ao carregar os dados da consulta:', error);
     }
-}async function concluirConsultaEAdicionarFeedback(idConsulta) {
+}
+
+// Chama a função para carregar dados da consulta ao abrir a página
+carregarDadosConsulta();
+
+
+
+
+
+async function concluirConsultaEAdicionarFeedback(idConsulta) {
     console.log("Iniciando conclusão da consulta com ID:", idConsulta);
 
     try {
