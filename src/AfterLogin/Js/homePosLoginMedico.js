@@ -150,3 +150,4 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('ID do médico não encontrado no sessionStorage.');
     }
 });
+
