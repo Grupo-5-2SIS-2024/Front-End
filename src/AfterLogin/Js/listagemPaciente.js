@@ -1,13 +1,75 @@
-async function buscarPacientes() {
+// Funções para abrir e fechar o modal de filtros
+function abrirModalFiltro() {
+    document.getElementById("modalFiltro").style.display = "block";
+}
+
+function fecharModalFiltro() {
+    document.getElementById("modalFiltro").style.display = "none";
+}
+
+// Funções para limpar e aplicar filtros
+function limparFiltros() {
+    document.getElementById('filtroNome').value = '';
+    document.getElementById('filtroEmail').value = '';
+    document.getElementById('filtroCPF').value = '';
+    document.getElementById('filtroTelefone').value = '';
+    document.getElementById('filtroDataNascimento').value = '';
+    document.getElementById('listaFiltrosAtivos').innerHTML = ''; // Limpa a lista de filtros ativos
+    buscarPacientes(); // Busca os pacientes sem filtros
+}
+
+function aplicarFiltros() {
+    const nome = document.getElementById('filtroNome').value.toLowerCase();
+    const email = document.getElementById('filtroEmail').value.toLowerCase();
+    const cpf = document.getElementById('filtroCPF').value;
+    const telefone = document.getElementById('filtroTelefone').value;
+    const dataNascimento = document.getElementById('filtroDataNascimento').value;
+
+    const filtrosAtivos = [];
+
+    if (nome) filtrosAtivos.push(`Nome: ${nome}`);
+    if (email) filtrosAtivos.push(`Email: ${email}`);
+    if (cpf) filtrosAtivos.push(`CPF: ${cpf}`);
+    if (telefone) filtrosAtivos.push(`Telefone: ${telefone}`);
+    if (dataNascimento) filtrosAtivos.push(`Data de Nascimento: ${dataNascimento}`);
+
+    const listaFiltrosAtivos = document.getElementById('listaFiltrosAtivos');
+    listaFiltrosAtivos.innerHTML = '';
+    filtrosAtivos.forEach(filtro => {
+        const li = document.createElement('li');
+        li.textContent = filtro;
+        listaFiltrosAtivos.appendChild(li);
+    });
+
+    buscarPacientes(nome, email, cpf, telefone, dataNascimento);
+}
+
+// Função para buscar pacientes com filtros específicos
+async function buscarPacientes(nomeFiltro = '', emailFiltro = '', cpfFiltro = '', telefoneFiltro = '', dataNascimentoFiltro = '') {
     try {
         const resposta = await fetch("http://localhost:8080/pacientes");
         const listaPacientes = await resposta.json();
-        console.log(listaPacientes);
 
-        const cardsMedicos = document.getElementById("listagem");
-        cardsMedicos.innerHTML = listaPacientes.map((paciente) => {
-            // Corrigindo o acesso ao paciente e suas propriedades
+        const pacientesFiltrados = listaPacientes.filter(paciente => {
+            const nomeCompleto = `${paciente.nome} ${paciente.sobrenome}`.toLowerCase();
+            const dataNascimento = new Date(paciente.dataNascimento).toISOString().split('T')[0]; // Formato yyyy-mm-dd
+
+            return (
+                (nomeCompleto.includes(nomeFiltro) || nomeFiltro === '') &&
+                (paciente.email.toLowerCase().includes(emailFiltro) || emailFiltro === '') &&
+                (paciente.cpf.includes(cpfFiltro) || cpfFiltro === '') &&
+                (paciente.telefone.includes(telefoneFiltro) || telefoneFiltro === '') &&
+                (dataNascimento === dataNascimentoFiltro || dataNascimentoFiltro === '')
+            );
+        });
+
+        const cardsPacientes = document.getElementById("listagem");
+        cardsPacientes.innerHTML = pacientesFiltrados.map((paciente) => {
             const responsavel = paciente.responsavel ? `${paciente.responsavel.nome} ${paciente.responsavel.sobrenome}` : 'Não informado';
+            const dataNascimentoFormatada = new Date(paciente.dataNascimento).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+            const formatarCPF = (cpf) => cpf ? cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') : '';
+            const formatarTelefone = (telefone) => telefone ? telefone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3') : '';
 
             return `
                 <div class="cardPaciente" data-paciente-id="${paciente.id}">
@@ -18,7 +80,7 @@ async function buscarPacientes() {
                         </div>
                         <div class="field">
                             <label for="contato">Contato</label>
-                            <p id="contato">${paciente.telefone}</p>
+                            <p id="contato">${formatarTelefone(paciente.telefone)}</p>
                         </div>
                         <div class="field">
                             <label for="responsavel">Responsável</label>
@@ -26,11 +88,11 @@ async function buscarPacientes() {
                         </div>
                         <div class="field">
                             <label for="dataNascimento">Data de Nascimento</label>
-                            <p id="dataNascimento">${paciente.dataNascimento}</p>
+                            <p id="dataNascimento">${dataNascimentoFormatada}</p>
                         </div>
                         <div class="field">
                             <label for="cpf">CPF</label>
-                            <p id="cpf">${paciente.cpf}</p>
+                            <p id="cpf">${formatarCPF(paciente.cpf)}</p>
                         </div>
                     </div>
                     <div class="actions">
@@ -42,7 +104,7 @@ async function buscarPacientes() {
         }).join('');
 
         // Adiciona evento de clique para os botões de exclusão
-        cardsMedicos.querySelectorAll('.delete').forEach((botao) => {
+        cardsPacientes.querySelectorAll('.delete').forEach((botao) => {
             botao.addEventListener('click', function () {
                 const card = this.closest('.cardPaciente');
                 const id = card.dataset.pacienteId;
@@ -71,7 +133,7 @@ async function buscarPacientes() {
         });
 
         // Adiciona evento de clique para os botões de atualização
-        cardsMedicos.querySelectorAll('.update').forEach((botao) => {
+        cardsPacientes.querySelectorAll('.update').forEach((botao) => {
             botao.addEventListener('click', function () {
                 const card = this.closest('.cardPaciente');
                 const id = card.dataset.pacienteId;
@@ -145,36 +207,36 @@ async function deletarPaciente(id) {
     }
 }
 
-const swalWithBootstrapButtons = Swal.mixin({
-    customClass: {
-      confirmButton: "btn btn-success",
-      cancelButton: "btn btn-danger"
-    },
-    buttonsStyling: false
-  });
-  swalWithBootstrapButtons.fire({
-    title: "Are you sure?",
-    text: "You won't be able to revert this!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonText: "Yes, delete it!",
-    cancelButtonText: "No, cancel!",
-    reverseButtons: true
-  }).then((result) => {
-    if (result.isConfirmed) {
-      swalWithBootstrapButtons.fire({
-        title: "Deleted!",
-        text: "Your file has been deleted.",
-        icon: "success"
-      });
-    } else if (
-      /* Read more about handling dismissals below */
-      result.dismiss === Swal.DismissReason.cancel
-    ) {
-      swalWithBootstrapButtons.fire({
-        title: "Cancelled",
-        text: "Your imaginary file is safe :)",
-        icon: "error"
-      });
+  async function buscarKPIsPaciente() {
+    try {
+        // Buscar a porcentagem de pacientes em tratamento ABA
+        const respostaPorcentagemABA = await fetch("http://localhost:8080/pacientes/porcentagem-aba");
+        const porcentagemABA = await respostaPorcentagemABA.json();
+
+        // Buscar o número total de pacientes ativos
+        const respostaPacientesAtivos = await fetch("http://localhost:8080/pacientes/ativos");
+        const pacientesAtivos = await respostaPacientesAtivos.json();
+
+        // Buscar o número total de pacientes do último trimestre
+        const respostaPacientesUltimoTrimestre = await fetch("http://localhost:8080/pacientes/ultimo-trimestre");
+        const pacientesUltimoTrimestre = await respostaPacientesUltimoTrimestre.json();
+
+        // Buscar o número de agendamentos vencidos
+        const respostaAgendamentosVencidos = await fetch("http://localhost:8080/pacientes/agendamentos-vencidos");
+        const agendamentosVencidos = await respostaAgendamentosVencidos.json();
+
+        // Função para adicionar zero à esquerda se necessário
+        const formatarNumero = (numero) => numero.toString().padStart(2, '0');
+
+        // Atualiza os elementos de KPI no HTML, com formatação
+        document.querySelector(".cardKpi:nth-child(1) .kpiNumber").textContent = porcentagemABA + '%';
+        document.querySelector(".cardKpi:nth-child(2) .kpiNumber").textContent = formatarNumero(pacientesAtivos);
+        document.querySelector(".cardKpi:nth-child(3) .kpiNumber").textContent = formatarNumero(pacientesUltimoTrimestre);
+        document.querySelector(".cardKpi:nth-child(4) .kpiNumber").textContent = formatarNumero(agendamentosVencidos);
+
+    } catch (error) {
+        console.error('Erro ao buscar KPIs:', error);
     }
-  });
+}
+
+buscarKPIsPaciente();

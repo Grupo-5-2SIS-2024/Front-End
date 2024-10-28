@@ -39,18 +39,36 @@ function validarSessao() {
 
         const cadastrarPacienteBtn = document.getElementById("addPacienteBtn");
         const adicionarColaboradorBtn = document.getElementById("btnAdicionarColaborador");
+        const adicionarAreaBtn = document.getElementById("btnAdicionarArea");
+        const adicionarConsultaBtn = document.getElementById("btnAdicionarConsulta");
+        const Leads = document.getElementById("Lead");
 
         if (cadastrarPacienteBtn) {
             cadastrarPacienteBtn.style.display = "none";
         }
+        if (adicionarAreaBtn) {
+            adicionarAreaBtn.style.display = "none";
+        }
+        if (adicionarConsultaBtn) {
+            adicionarConsultaBtn.style.display = "none";
+        }
         if (adicionarColaboradorBtn) {
             adicionarColaboradorBtn.style.display = "none";
+        }
+        if (Leads) {
+            Leads.style.display = "none"
         }
     } else if (nivelPermissao === "Médico") {
         // Médico: remover botoes de Colaboradores, Pacientes e Dashboards
         const Colaboradores = document.getElementById("Colaborador");
         const Pacientes = document.getElementById("Paciente");
         const Dashboards = document.getElementById("Dash");
+        const Leads = document.getElementById("Lead");
+        const adicionarConsultaBtn = document.getElementById("btnAdicionarConsulta");
+
+        if (adicionarConsultaBtn) {
+            adicionarConsultaBtn.style.display = "none";
+        }
 
         if (Colaboradores) {
             Colaboradores.style.display = "none";
@@ -60,6 +78,9 @@ function validarSessao() {
         }
         if (Dashboards) {
             Dashboards.style.display = "none"
+        }
+        if (Leads) {
+            Leads.style.display = "none"
         }
     }
 }

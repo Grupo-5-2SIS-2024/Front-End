@@ -329,7 +329,7 @@
                 "permissao": {
                     "id": nivelAcessoId
                 },
-                "foto": selectedImage ? selectedImage : sessionStorage.getItem('FOTO') || ""
+                "foto": selectedImage
             };
     
             try {

@@ -243,10 +243,11 @@ td {
 }
 
 .foto-medico {
-    width: 180px;
+    width: 200px;
     height: 200px;
-    border-radius: 0;
+    border-radius: 100px;
     margin-bottom: 20px;
+    border: #000 solid 2px;
 }
 
 .nome-medico {
