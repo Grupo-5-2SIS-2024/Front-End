@@ -142,14 +142,13 @@
             <!-- Consultas cadastradas serão inseridas aqui -->
         </div>
 
-        <!-- Botões para excluir última e primeira consultas -->
-        <button onclick="excluirUltimaConsulta()" id="excluir-ultima" class="btn-delete-pilha" ><i class="fas fa-trash" ></i> Excluir Última Cadastrada (Pilha)</button>
-        <button onclick="excluirPrimeiraConsulta()" id="excluir-primeira" class="btn-delete-fila" ><i class="fas fa-trash" ></i> Excluir Primeira Cadastrada (Fila)</button>
-
-        <!-- Botão para baixar o Excel -->
-        <button id="download-excel" class="btn-download">
-            <i class="fas fa-download"></i> Baixar Excel
-        </button>
+        <div class="button-container">
+            <button onclick="excluirUltimaConsulta()" id="excluir-ultima" class="btn-delete-pilha"><i class="fas fa-trash"></i> Excluir Última Cadastrada (Pilha)</button>
+            <button onclick="excluirPrimeiraConsulta()" id="excluir-primeira" class="btn-delete-fila"><i class="fas fa-trash"></i> Excluir Primeira Cadastrada (Fila)</button>
+            <button id="download-excel" class="btn-download">
+                <i class="fas fa-download"></i> Baixar Excel
+            </button>
+        </div>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

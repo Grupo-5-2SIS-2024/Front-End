@@ -214,6 +214,14 @@ button#agendar:hover {
     color: #555;
 }
 
+.button-container {
+    display: flex;
+    justify-content: end;
+    gap: 10px;
+    margin-top: 20px;
+    width: 100%;
+}
+
 .btn-download {
     background-color: #2E7D32;
     color: white;

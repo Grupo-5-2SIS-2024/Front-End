@@ -28,21 +28,31 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // Atualizar foto do médico
-    async function atualizarFotoMedico(idMedico) {
-        const fotoUrl = await buscarFotoMedico(idMedico);
-        if (fotoUrl) {
-            document.querySelector('.foto-medico').src = fotoUrl;
-        }
+
+
+  // Função para buscar e exibir o nome do médico do sessionStorage
+function atualizarNomeEFotoMedico() {
+    const nomeMedico = sessionStorage.getItem('NOME_MEDICO'); // Pega o nome do médico
+    const sobrenomeMedico = sessionStorage.getItem('SOBRENOME_MEDICO'); // Pega o sobrenome do médico
+    const fotoMedico = sessionStorage.getItem('FOTO');
+    const nivelPermissao = sessionStorage.getItem('PERMISSIONAMENTO_MEDICO');
+    const especificacao = sessionStorage.getItem('ESPECIFICACAO_MEDICA');
+    var userAvatar = document.getElementById("userAvatar");
+
+    console.log(fotoMedico)
+
+    if (nomeMedico) {
+        document.querySelector('.nome-medico').textContent = `${nomeMedico} ${sobrenomeMedico}`;
     }
 
-    // Função para buscar e exibir o nome do médico do sessionStorage
-    function atualizarNomeMedico() {
-        const nomeMedico = sessionStorage.getItem('NOME_MEDICO');
-        if (nomeMedico) {
-            document.querySelector('.nome-medico').textContent = nomeMedico;
-        }
+    if (fotoMedico != 'null') {
+        userAvatar.src = fotoMedico;
     }
+
+    if (nivelPermissao && especificacao) {
+        document.querySelector('.especialidade').textContent = `${nivelPermissao} | ${especificacao}`;
+    }
+}
 
 // Atualizar KPIs
 async function atualizarKPIs(consultas) {
@@ -174,8 +184,7 @@ async function atualizarKPIs(consultas) {
         atualizarAgenda(consultas); // Preenche a tabela de agenda
         atualizarAnotacoes(consultas); // Preenche a lista de anotações
         atualizarGrafico(consultas); // Atualiza o gráfico de desempenho
-        atualizarFotoMedico(idMedico); // Atualiza a foto do médico
-        atualizarNomeMedico(); // Atualiza o nome do médico do sessionStorage
+        atualizarNomeEFotoMedico(); // Atualiza o nome do médico do sessionStorage
     } else {
         console.error('ID do médico não encontrado no sessionStorage.');
     }
