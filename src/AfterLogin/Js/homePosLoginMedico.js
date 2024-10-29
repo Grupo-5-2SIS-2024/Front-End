@@ -1,23 +1,24 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    // Função para buscar dados de consultas do backend para o médico específico
+    // Função para buscar todas as consultas e filtrar pelo ID do médico
     async function buscarConsultas(idMedico) {
         try {
-            const response = await fetch(`http://localhost:8080/consultas/listarConsultasMedicoID/${idMedico}`);
+            const response = await fetch(`http://localhost:8080/consultas`); // Busca todas as consultas
             if (!response.ok) throw new Error(`Erro HTTP! Status: ${response.status}`);
             const data = await response.json();
-            // Garante que seja um array
-            return Array.isArray(data) ? data : [data];
+
+            // Filtra apenas as consultas que pertencem ao médico com o ID especificado
+            const consultasMedico = data.filter(consulta => consulta.medico.id === parseInt(idMedico, 10));
+            return consultasMedico; // Retorna apenas as consultas do médico
         } catch (error) {
             console.error('Erro ao buscar consultas:', error);
             return [];
         }
     }
-    
 
-    // Função para buscar foto do médico do backend
+    // Função para buscar a foto do médico
     async function buscarFotoMedico(idMedico) {
         try {
-            const response = await fetch(`http://localhost:8080/medico/${idMedico}/foto`);
+            const response = await fetch(`http://localhost:8080/medicos/${idMedico}/foto`);
             if (!response.ok) throw new Error(`Erro HTTP! Status: ${response.status}`);
             const fotoData = await response.json();
             return fotoData.url; // Supondo que o URL da foto esteja no campo 'url'
@@ -37,34 +38,57 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Função para buscar e exibir o nome do médico do sessionStorage
     function atualizarNomeMedico() {
-        const nomeMedico = sessionStorage.getItem('nomeMedico'); // Puxa o nome do médico armazenado no sessionStorage
+        const nomeMedico = sessionStorage.getItem('NOME_MEDICO');
         if (nomeMedico) {
             document.querySelector('.nome-medico').textContent = nomeMedico;
         }
     }
 
-    // Atualizar KPIs
-    async function atualizarKPIs(consultas) {
-        const consultasHoje = consultas.length;
+// Atualizar KPIs
+async function atualizarKPIs(consultas) {
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+
+    const diaDaSemana = hoje.getDay();
+    const diasParaDomingo = 7 - diaDaSemana; // Calcula quantos dias faltam para o fim da semana
+
+    const fimDaSemana = new Date(hoje);
+    fimDaSemana.setDate(hoje.getDate() + diasParaDomingo);
+
+    // Filtra consultas para hoje
+    const consultasHoje = consultas.filter(c => {
+        const dataConsulta = new Date(c.datahoraConsulta);
+        dataConsulta.setHours(0, 0, 0, 0);
+        return dataConsulta.getTime() === hoje.getTime();
+    }).length;
+
+    // Filtra consultas restantes na semana
+    const consultasSemana = consultas.filter(c => {
+        const dataConsulta = new Date(c.datahoraConsulta);
+        return dataConsulta >= hoje && dataConsulta <= fimDaSemana;
+    }).length;
+
+    const consultasMarcadas = consultas.filter(c => c.statusConsulta.nomeStatus === 'Agendada').length;
+    const consultasConcluidas = consultas.filter(c => c.statusConsulta.nomeStatus === 'Realizada').length;
+    const consultasCanceladas = consultas.filter(c => c.statusConsulta.nomeStatus === 'Cancelada').length;
+
+    document.getElementById('consultasHoje').textContent = consultasHoje;
+    document.getElementById('consultasMarcadas').textContent = consultasMarcadas;
+    document.getElementById('consultasConcluidas').textContent = consultasConcluidas;
+    document.getElementById('consultasCanceladas').textContent = consultasCanceladas;
+
+    // Atualiza o número de consultas restantes na semana
+    document.getElementById('consultasRestantesSemana').textContent = consultasSemana;
+}
 
 
-        console.log(consultas)
-        const consultasMarcadas = consultas.filter(c => c.statusConsulta.nomeStatus === 'Agendada').length;
-        const consultasConcluidas = consultas.filter(c => c.statusConsulta.nomeStatus === 'Realizada').length;
-        const consultasCanceladas = consultas.filter(c => c.statusConsulta.nomeStatus === 'Cancelada').length;
-
-        document.getElementById('consultasHoje').textContent = consultasHoje;
-        document.getElementById('consultasMarcadas').textContent = consultasMarcadas;
-        document.getElementById('consultasConcluidas').textContent = consultasConcluidas;
-        document.getElementById('consultasCanceladas').textContent = consultasCanceladas;
-    }
 
     // Atualizar tabela de agenda
     async function atualizarAgenda(consultas) {
         const agendaBody = document.getElementById('agenda-body');
         agendaBody.innerHTML = ''; // Limpa a tabela
 
-        consultas.forEach(consulta => {
+        consultas.filter(c => c.statusConsulta.nomeStatus === 'Agendada').forEach(consulta => {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${new Date(consulta.datahoraConsulta).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
@@ -123,7 +147,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Marcadas', 'Concluídas', 'Canceladas'],
+                labels: ['Agendadas', 'Realizadas', 'Canceladas'],
                 datasets: [{
                     label: 'Consultas',
                     data: [consultasMarcadas, consultasConcluidas, consultasCanceladas],
@@ -143,7 +167,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Inicialização
     const idMedico = sessionStorage.getItem('ID_MEDICO'); // Pega o ID do médico armazenado no sessionStorage
-console.log(idMedico)
+    console.log(idMedico);
     if (idMedico) {
         const consultas = await buscarConsultas(idMedico); // Busca os dados das consultas do backend para o médico específico
         atualizarKPIs(consultas); // Atualiza os KPIs

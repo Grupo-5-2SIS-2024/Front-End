@@ -304,3 +304,42 @@ td {
     height: 50vh;
     display: flex;
 }
+
+
+/* Bloco de atalhos geral */
+.shortcuts {
+    background-color: #f4f4f4; /* Fundo leve para destaque */
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.shortcuts h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.shortcuts .shortcut-number {
+    font-size: 78px; /* Número grande para chamar atenção */
+    color: #388E3C; /* Verde escuro para representar progresso */
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* Responsivo para telas menores */
+@media (max-width: 768px) {
+    .shortcuts {
+        padding: 15px;
+    }
+
+    .shortcuts h2 {
+        font-size: 20px;
+    }
+
+    .shortcuts .shortcut-number {
+        font-size: 36px;
+    }
+}
