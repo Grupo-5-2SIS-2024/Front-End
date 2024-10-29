@@ -40,11 +40,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     function atualizarNomeMedico() {
         const nomeMedico = sessionStorage.getItem('NOME_MEDICO');
         if (nomeMedico) {
-            document.querySelector('.nome-medico').textContent = nomeMedico; // Atualiza o nome na tela
-        }
-
-        if (fotoMedico) {
-            document.querySelector('.foto-medico').src = fotoMedico; // Atualiza a foto na tela
+            document.querySelector('.nome-medico').textContent = nomeMedico;
         }
     }
 
@@ -174,11 +170,13 @@ async function atualizarKPIs(consultas) {
     console.log(idMedico);
     if (idMedico) {
         const consultas = await buscarConsultas(idMedico); // Busca os dados das consultas do backend para o médico específico
-        atualizarNomeEFotoMedico(); // Atualiza o nome do médico
         atualizarKPIs(consultas); // Atualiza os KPIs
         atualizarAgenda(consultas); // Preenche a tabela de agenda
         atualizarAnotacoes(consultas); // Preenche a lista de anotações
         atualizarGrafico(consultas); // Atualiza o gráfico de desempenho
+        atualizarFotoMedico(idMedico); // Atualiza a foto do médico
+        atualizarNomeMedico(); // Atualiza o nome do médico do sessionStorage
     } else {
         console.error('ID do médico não encontrado no sessionStorage.');
     }
+});
