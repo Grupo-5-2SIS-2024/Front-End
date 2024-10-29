@@ -33,16 +33,15 @@ function obterIconeGenero(genero) {
     }
 }
 
-// Função para buscar dados da API para consultas
+let consultas = []; // Variável global para armazenar as consultas
 async function buscarConsultas() {
     console.log("Buscando consultas...");
-
     try {
         const resposta = await fetch("http://localhost:8080/consultas");
         if (!resposta.ok) {
             throw new Error(`HTTP error! Status: ${resposta.status}`);
         }
-        const consultas = await resposta.json();
+        consultas = await resposta.json(); // Armazena as consultas na variável global
         console.log(consultas);
 
         // Atualiza a listagem de consultas
@@ -53,15 +52,27 @@ async function buscarConsultas() {
                     ${obterIconeGenero(consulta.paciente.genero)}
                     <div class="consulta-info">
                         <h3>${consulta.paciente.nome} ${consulta.paciente.sobrenome}</h3>
-                        <p>${formatarData(consulta.datahoraConsulta)}  </p>
+                        <p>${formatarData(consulta.datahoraConsulta)}</p>
                         <p>Médico: ${consulta.medico.nome} ${consulta.medico.sobrenome} - ${consulta.especificacaoMedica.area}</p>
                         <p>Status: ${consulta.statusConsulta.nomeStatus}</p>
                         <div class="consulta-actions">
-    <i class="fas fa-pen" onclick="alterarConsulta(${consulta.id})" title="Alterar Consulta"></i>
-    <i class="fas fa-trash" onclick="excluirConsulta(${consulta.id})" title="Cancelar Consulta"></i>
-    <i class="fas fa-download" onclick="baixarConsultaExcel(${consulta.id})" title="Baixar Excel da Consulta"></i> <!-- Novo ícone de download -->
-</div>
+                            <i class="fas fa-pen" onclick="alterarConsulta(${consulta.id})" title="Alterar Consulta"></i>
+                            <i class="fas fa-trash" onclick="excluirConsulta(${consulta.id})" title="Cancelar Consulta"></i>
+                            <i class="fas fa-download" onclick="baixarConsultaExcel(${consulta.id})" title="Baixar Excel da Consulta"></i>
+                            ${
+                                consulta.statusConsulta.nomeStatus === 'Agendada' 
+                                ? `<i class="fas fa-notes-medical" onclick="AnaliseConsultasx(${consulta.id})" title="Bloco De Notas"></i>` 
+                                : ''
+                            }
 
+
+
+                              ${
+                                consulta.statusConsulta.nomeStatus === 'Realizada' 
+                                ? `<i class="fas fa-eye" onclick="verFeedback(${consulta.id})" title="Visualizar Feedback"></i>`
+                                : ''
+                            }
+                        </div>
                     </div>
                 </div>
             `;
@@ -72,6 +83,12 @@ async function buscarConsultas() {
         return []; // Retorna um array vazio em caso de erro
     }
 }
+
+
+function verFeedback(consultaId) {
+    window.location.href = `FeedbackConsulta.html?consultaId=${consultaId}&viewOnly=true`;
+}
+
 
 // Função para buscar dados da API para pacientes e médicos e popular os selects
 async function buscarPacientesEMedicos() {
@@ -236,13 +253,13 @@ async function updateAvailablePatients() {
         }
     }
 }
-
 async function agendarConsulta() {
     const dia = document.getElementById('dia').value;
     const hora = document.getElementById('hora').value;
     const medicoId = document.getElementById('medico').value;
     const pacienteId = document.getElementById('paciente').value;
     const descricao = document.getElementById('descricao').value || "Sem descrição";
+    const recorrente = document.getElementById('recorrente').checked; // Verifica se o checkbox está marcado
 
     try {
         const respostaEspec = await fetch("http://localhost:8080/medicos");
@@ -264,16 +281,19 @@ async function agendarConsulta() {
 
         const especificacaoMedicaId = medicoSelecionado.especificacaoMedica.id;
 
-        const dadosConsulta = {
-            datahoraConsulta: `${dia}T${hora}:00`,
+        // Função para criar o objeto da consulta
+        const criarDadosConsulta = (dataConsulta) => ({
+            datahoraConsulta: `${dataConsulta}T${hora}:00`,
             descricao: descricao,
             medico: { id: medicoId },
             especificacaoMedica: { id: especificacaoMedicaId },
             statusConsulta: { id: 1 },
             paciente: { id: pacienteId },
             duracaoConsulta: "01:00:00"
-        };
+        });
 
+        // Agendar a consulta original
+        const dadosConsulta = criarDadosConsulta(dia);
         const respostaCadastro = await fetch("http://localhost:8080/consultas", {
             method: "POST",
             body: JSON.stringify(dadosConsulta),
@@ -283,22 +303,47 @@ async function agendarConsulta() {
             }
         });
 
-        if (respostaCadastro.status == 201 || respostaCadastro.ok) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Consulta agendada com sucesso!',
-                showConfirmButton: false,
-                timer: 1500,
-            }).then(() => {
-                window.location.reload();
-            });
-        } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Erro',
-                text: 'Ocorreu um erro ao cadastrar a consulta.',
-            });
+        if (!respostaCadastro.ok) {
+            throw new Error('Ocorreu um erro ao cadastrar a consulta.');
         }
+
+        // Se o checkbox de recorrente estiver marcado, agendar as próximas 30 semanas
+        if (recorrente) {
+            const dataOriginal = new Date(dia);
+            
+            // Agendar para as próximas 30 semanas (7 dias de diferença entre cada consulta)
+            for (let i = 1; i <= 30; i++) {
+                const novaData = new Date(dataOriginal);
+                novaData.setDate(novaData.getDate() + (i * 7)); // Incrementar 7 dias para cada semana
+
+                const novaDataISO = novaData.toISOString().split('T')[0]; // Formata para 'yyyy-mm-dd'
+                const novaConsulta = criarDadosConsulta(novaDataISO);
+
+                // Faz a requisição para cadastrar a nova consulta
+                const respostaNovaConsulta = await fetch("http://localhost:8080/consultas", {
+                    method: "POST",
+                    body: JSON.stringify(novaConsulta),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8",
+                        "Accept": "application/json"
+                    }
+                });
+
+                if (!respostaNovaConsulta.ok) {
+                    throw new Error(`Erro ao agendar a consulta para ${novaDataISO}`);
+                }
+            }
+        }
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Consulta agendada com sucesso!',
+            showConfirmButton: false,
+            timer: 1500,
+        }).then(() => {
+            window.location.reload();
+        });
+
     } catch (error) {
         console.error('Erro ao agendar consulta:', error);
         Swal.fire({
@@ -308,8 +353,6 @@ async function agendarConsulta() {
         });
     }
 }
-
-// Função para "cancelar" consulta, alterando o status para "Cancelada"
 async function excluirConsulta(idConsulta) {
     console.log("Iniciando exclusão da consulta com ID:", idConsulta);
 
@@ -571,4 +614,144 @@ async function baixarConsultaExcel(consultaId) {
     } catch (error) {
         console.error("Erro ao baixar consulta em Excel:", error);
     }
+}function getConsultasAgendadas() {
+    return consultas.filter(consulta => consulta.statusConsulta.nomeStatus === 'Agendada');
+}
+
+// Função para excluir a última consulta "Agendada" (Pilha) com confirmação
+async function excluirUltimaConsulta() {
+    const consultasAgendadas = getConsultasAgendadas(); // Obter somente consultas agendadas
+
+    if (consultasAgendadas.length > 0) {
+        const ultimaConsulta = consultasAgendadas[consultasAgendadas.length - 1]; // A última consulta agendada na pilha
+
+        // Exibe pop-up de confirmação
+        Swal.fire({
+            title: 'Tem certeza?',
+            text: `Deseja excluir a última consulta agendada de ${ultimaConsulta.paciente.nome}?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim, excluir!',
+            cancelButtonText: 'Cancelar'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    // Tenta excluir a consulta no backend usando o ID
+                    const resposta = await fetch(`http://localhost:8080/consultas/${ultimaConsulta.id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            "Content-type": "application/json; charset=UTF-8",
+                            "Accept": "application/json"
+                        }
+                    });
+
+                    if (resposta.ok) {
+                        // Remove a última consulta agendada do vetor original de consultas
+                        consultas = consultas.filter(consulta => consulta.id !== ultimaConsulta.id);
+
+                        // Exibe pop-up de sucesso com as informações da consulta excluída
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Consulta Excluída',
+                            html: `<h3>Última consulta agendada excluída com sucesso!</h3>`,
+                            confirmButtonText: 'Ok'
+                        });
+
+                        // Atualiza a exibição das consultas
+                        atualizarListagemConsultas();
+                    } else {
+                        throw new Error('Erro ao excluir a consulta no backend');
+                    }
+                } catch (error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro na Exclusão',
+                        text: `Erro ao excluir a última consulta agendada: ${error.message}`
+                    });
+                }
+            }
+        });
+    } else {
+        Swal.fire({
+            icon: 'info',
+            title: 'Nenhuma Consulta Agendada',
+            text: 'Não há consultas agendadas para excluir.'
+        });
+    }
+}
+
+async function excluirPrimeiraConsulta() {
+    const consultasAgendadas = getConsultasAgendadas(); // Obter somente consultas agendadas
+
+    if (consultasAgendadas.length > 0) {
+        const primeiraConsulta = consultasAgendadas[0]; // A primeira consulta agendada na fila
+
+        // Exibe pop-up de confirmação
+        Swal.fire({
+            title: 'Tem certeza?',
+            text: `Deseja excluir a primeira consulta agendada de ${primeiraConsulta.paciente.nome}?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim, excluir!',
+            cancelButtonText: 'Cancelar'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+               
+                    const consultaId = Number(primeiraConsulta.id); 
+                    console.log(consultaId)
+                    const resposta = await fetch(`http://localhost:8080/consultas/${consultaId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            "Content-type": "application/json; charset=UTF-8",
+                            "Accept": "application/json"
+                        }
+                    });
+
+                    if (resposta.ok) {
+                        // Remove a primeira consulta agendada do vetor original de consultas
+                        consultas = consultas.filter(consulta => consulta.id !== primeiraConsulta.id);
+
+                        // Exibe pop-up de sucesso com as informações da consulta excluída
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Consulta Excluída',
+                            html: `<h3>Primeira consulta agendada excluída com sucesso!</h3>`,
+                            confirmButtonText: 'Ok'
+                        });
+
+                        // Atualiza a exibição das consultas
+                        atualizarListagemConsultas();
+                    } else {
+                        throw new Error('Erro ao excluir a consulta no backend');
+                    }
+                } catch (error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro na Exclusão',
+                        text: `Erro ao excluir a primeira consulta agendada: ${error.message}`
+                    });
+                }
+            }
+        });
+    } else {
+        Swal.fire({
+            icon: 'info',
+            title: 'Nenhuma Consulta Agendada',
+            text: 'Não há consultas agendadas para excluir.'
+        });
+    }
+}
+// Função para atualizar a listagem de consultas na interface
+function atualizarListagemConsultas() {
+    buscarConsultas(); // Atualiza a lista de consultas na tela
+} 
+
+// Adiciona um ícone de bloco de notas para abrir a página de notas com o ID da consulta
+function AnaliseConsultasx(consultaId) {
+    window.location.href = `FeedbackConsulta.html?consultaId=${consultaId}`;
 }

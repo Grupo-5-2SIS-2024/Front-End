@@ -187,90 +187,28 @@
     <script>
         let dataInicioAtual = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
         let consultasOriginais = []; // Para armazenar todas as consultas
+        let bancoDeDadosFiltrado = []; // Para armazenar as consultas filtradas
 
-        async function buscarMedicos() {
-            try {
-                const resposta = await fetch("http://localhost:8080/medicos");
-                if (!resposta.ok) {
-                    throw new Error(`HTTP error! Status: ${resposta.status}`);
-                }
-                const medicos = await resposta.json();
+        // Função para filtrar as consultas com base no tipo de usuário
+        function filtrarConsultasPorPermissao() {
+    const permissao = sessionStorage.getItem('PERMISSIONAMENTO_MEDICO'); // Pega a permissão do usuário
+    const idMedico = parseInt(sessionStorage.getItem('ID_MEDICO')); // Converte o ID do médico logado para número
+    const especificacaoMedica = sessionStorage.getItem('ESPECIFICACAO_MEDICA'); // Pega a área de especialização do supervisor
 
-                const filtroMedico = document.getElementById('filtroMedico');
-                filtroMedico.innerHTML = '<option value="">Todos os Médicos</option>';
-                medicos.forEach(medico => {
-                    const option = document.createElement('option');
-                    option.value = medico.id;
-                    option.textContent = medico.nome + ' ' + medico.sobrenome;
-                    filtroMedico.appendChild(option);
-                });
-            } catch (error) {
-                console.error('Erro ao buscar médicos:', error);
-            }
-        }
+    if (permissao === 'Médico' && idMedico) {
+        // Se for médico, filtra as consultas do médico logado
+        console.log('Filtrando consultas para o médico:', idMedico);
+        return consultasOriginais.filter(consulta => consulta.medico.id === idMedico);
+    } else if (permissao === 'Supervisor') {
+        // Se for supervisor, filtra as consultas da área de especialização
+        return consultasOriginais.filter(consulta => consulta.especificacaoMedica.area === especificacaoMedica);
+    } else if (permissao === 'Admin') {
+        // Se for admin, exibe todas as consultas
+        return consultasOriginais;
+    }
+    return [];
+}
 
-        async function buscarPacientes() {
-            try {
-                const resposta = await fetch("http://localhost:8080/pacientes");
-                if (!resposta.ok) {
-                    throw new Error(`HTTP error! Status: ${resposta.status}`);
-                }
-                const pacientes = await resposta.json();
-
-                const filtroPaciente = document.getElementById('filtroPaciente');
-                filtroPaciente.innerHTML = '<option value="">Todos os Pacientes</option>';
-                pacientes.forEach(paciente => {
-                    const option = document.createElement('option');
-                    option.value = paciente.id;
-                    option.textContent = paciente.nome + ' ' + paciente.sobrenome;
-                    filtroPaciente.appendChild(option);
-                });
-            } catch (error) {
-                console.error('Erro ao buscar pacientes:', error);
-            }
-        }
-
-        async function buscarEspecificacoesMedicas() {
-            try {
-                const resposta = await fetch("http://localhost:8080/especificacoes");
-                if (!resposta.ok) {
-                    throw new Error(`HTTP error! Status: ${resposta.status}`);
-                }
-                const especificacoes = await resposta.json();
-
-                const filtroAreaConsulta = document.getElementById('filtroAreaConsulta');
-                filtroAreaConsulta.innerHTML = '<option value="">Todas as Áreas</option>';
-                especificacoes.forEach(especificacao => {
-                    const option = document.createElement('option');
-                    option.value = especificacao.id;
-                    option.textContent = especificacao.area;
-                    filtroAreaConsulta.appendChild(option);
-                });
-            } catch (error) {
-                console.error('Erro ao buscar áreas de consulta:', error);
-            }
-        }
-
-        async function buscarStatusConsulta() {
-            try {
-                const resposta = await fetch("http://localhost:8080/statusConsultas");
-                if (!resposta.ok) {
-                    throw new Error(`HTTP error! Status: ${resposta.status}`);
-                }
-                const statusConsultas = await resposta.json();
-
-                const filtroStatus = document.getElementById('filtroStatus');
-                filtroStatus.innerHTML = '<option value="">Todos os Status</option>';
-                statusConsultas.forEach(status => {
-                    const option = document.createElement('option');
-                    option.value = status.id;
-                    option.textContent = status.nomeStatus;
-                    filtroStatus.appendChild(option);
-                });
-            } catch (error) {
-                console.error('Erro ao buscar status de consulta:', error);
-            }
-        }
 
         async function buscarConsultas() {
             try {
@@ -279,7 +217,7 @@
                     throw new Error(`HTTP error! Status: ${resposta.status}`);
                 }
                 consultasOriginais = await resposta.json();
-                bancoDeDadosFiltrado = consultasOriginais; // Inicialmente, o banco de dados filtrado é o original
+                bancoDeDadosFiltrado = filtrarConsultasPorPermissao(); // Aplica o filtro com base na permissão do usuário
                 atualizarDisplayData(dataInicioAtual);
             } catch (error) {
                 console.error('Erro ao buscar consultas:', error);
@@ -403,10 +341,6 @@
 
         // Inicialização
         async function inicializarPagina() {
-            await buscarMedicos();
-            await buscarPacientes();
-            await buscarEspecificacoesMedicas();
-            await buscarStatusConsulta();
             await buscarConsultas();
 
             dataInicioAtual = obterInicioDaSemana(new Date());

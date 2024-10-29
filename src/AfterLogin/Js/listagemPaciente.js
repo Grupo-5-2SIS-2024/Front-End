@@ -1,70 +1,44 @@
-// Funções para abrir e fechar o modal de filtros
-function abrirModalFiltro() {
-    document.getElementById("modalFiltro").style.display = "block";
-}
+async function buscarPacientes() {
+    // Obtenha os dados do sessionStorage
+    const permissionamentoMedico = sessionStorage.getItem("PERMISSIONAMENTO_MEDICO");
+    const especificacaoMedicaArea = sessionStorage.getItem("ESPECIFICACAO_MEDICA");
 
-function fecharModalFiltro() {
-    document.getElementById("modalFiltro").style.display = "none";
-}
-
-// Funções para limpar e aplicar filtros
-function limparFiltros() {
-    document.getElementById('filtroNome').value = '';
-    document.getElementById('filtroEmail').value = '';
-    document.getElementById('filtroCPF').value = '';
-    document.getElementById('filtroTelefone').value = '';
-    document.getElementById('filtroDataNascimento').value = '';
-    document.getElementById('listaFiltrosAtivos').innerHTML = ''; // Limpa a lista de filtros ativos
-    buscarPacientes(); // Busca os pacientes sem filtros
-}
-
-function aplicarFiltros() {
-    const nome = document.getElementById('filtroNome').value.toLowerCase();
-    const email = document.getElementById('filtroEmail').value.toLowerCase();
-    const cpf = document.getElementById('filtroCPF').value;
-    const telefone = document.getElementById('filtroTelefone').value;
-    const dataNascimento = document.getElementById('filtroDataNascimento').value;
-
-    const filtrosAtivos = [];
-
-    if (nome) filtrosAtivos.push(`Nome: ${nome}`);
-    if (email) filtrosAtivos.push(`Email: ${email}`);
-    if (cpf) filtrosAtivos.push(`CPF: ${cpf}`);
-    if (telefone) filtrosAtivos.push(`Telefone: ${telefone}`);
-    if (dataNascimento) filtrosAtivos.push(`Data de Nascimento: ${dataNascimento}`);
-
-    const listaFiltrosAtivos = document.getElementById('listaFiltrosAtivos');
-    listaFiltrosAtivos.innerHTML = '';
-    filtrosAtivos.forEach(filtro => {
-        const li = document.createElement('li');
-        li.textContent = filtro;
-        listaFiltrosAtivos.appendChild(li);
-    });
-
-    buscarPacientes(nome, email, cpf, telefone, dataNascimento);
-}
-
-// Função para buscar pacientes com filtros específicos
-async function buscarPacientes(nomeFiltro = '', emailFiltro = '', cpfFiltro = '', telefoneFiltro = '', dataNascimentoFiltro = '') {
     try {
-        const resposta = await fetch("http://localhost:8080/pacientes");
-        const listaPacientes = await resposta.json();
+        let listaPacientes = [];
 
-        const pacientesFiltrados = listaPacientes.filter(paciente => {
-            const nomeCompleto = `${paciente.nome} ${paciente.sobrenome}`.toLowerCase();
-            const dataNascimento = new Date(paciente.dataNascimento).toISOString().split('T')[0]; // Formato yyyy-mm-dd
+        
+        if (permissionamentoMedico === "Admin") {
+            const resposta = await fetch("http://localhost:8080/pacientes");
+            listaPacientes = await resposta.json();
+        } 
+     
+        else if (permissionamentoMedico === "Supervisor" && especificacaoMedicaArea) {
+         
+            const respostaPacientes = await fetch("http://localhost:8080/pacientes");
+            const todosPacientes = await respostaPacientes.json();
 
-            return (
-                (nomeCompleto.includes(nomeFiltro) || nomeFiltro === '') &&
-                (paciente.email.toLowerCase().includes(emailFiltro) || emailFiltro === '') &&
-                (paciente.cpf.includes(cpfFiltro) || cpfFiltro === '') &&
-                (paciente.telefone.includes(telefoneFiltro) || telefoneFiltro === '') &&
-                (dataNascimento === dataNascimentoFiltro || dataNascimentoFiltro === '')
-            );
-        });
+          
+            const respostaConsultas = await fetch("http://localhost:8080/consultas");
+            const todasConsultas = await respostaConsultas.json();
 
-        const cardsPacientes = document.getElementById("listagem");
-        cardsPacientes.innerHTML = pacientesFiltrados.map((paciente) => {
+        
+            listaPacientes = todosPacientes.filter(paciente => {
+            
+                return todasConsultas.some(consulta => 
+                    consulta.paciente.id === paciente.id &&
+                    consulta.especificacaoMedica.area === especificacaoMedicaArea 
+                );
+            });
+        } else {
+            console.warn("Permissão ou especificação médica não definida.");
+            return;
+        }
+
+        console.log("Pacientes filtrados:", listaPacientes);
+
+       
+        const cardsMedicos = document.getElementById("listagem");
+        cardsMedicos.innerHTML = listaPacientes.map((paciente) => {
             const responsavel = paciente.responsavel ? `${paciente.responsavel.nome} ${paciente.responsavel.sobrenome}` : 'Não informado';
             const dataNascimentoFormatada = new Date(paciente.dataNascimento).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
@@ -103,53 +77,12 @@ async function buscarPacientes(nomeFiltro = '', emailFiltro = '', cpfFiltro = ''
             `;
         }).join('');
 
-        // Adiciona evento de clique para os botões de exclusão
-        cardsPacientes.querySelectorAll('.delete').forEach((botao) => {
-            botao.addEventListener('click', function () {
-                const card = this.closest('.cardPaciente');
-                const id = card.dataset.pacienteId;
-
-                if (id) {
-                    // Mostra o modal de confirmação
-                    Swal.fire({
-                        title: 'Tem certeza?',
-                        text: "Você não poderá reverter isso!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Sim, deletar!',
-                        cancelButtonText: 'Cancelar'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Se o usuário confirmar, chama a função de deletar
-                            deletarPaciente(id);
-                        }
-                    });
-                } else {
-                    console.error('ID do paciente não encontrado.');
-                }
-            });
-        });
-
-        // Adiciona evento de clique para os botões de atualização
-        cardsPacientes.querySelectorAll('.update').forEach((botao) => {
-            botao.addEventListener('click', function () {
-                const card = this.closest('.cardPaciente');
-                const id = card.dataset.pacienteId;
-
-                if (id) {
-                    window.location.href = `atualizarPaciente.html?id=${id}`;
-                } else {
-                    console.error('ID do paciente não encontrado.');
-                }
-            });
-        });
+        
+        adicionarEventosBotoes(cardsMedicos);
     } catch (e) {
         console.log(e);
     }
 }
-
 buscarPacientes();
 
 

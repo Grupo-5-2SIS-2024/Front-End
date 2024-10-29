@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script> <!-- SheetJS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 </head>
 
 <body>
@@ -100,6 +102,7 @@
     <main class="main-content">
         <h1>Agendar <span>Consulta</span></h1>
         <div class="form-container">
+            <!-- Formulário para adicionar consultas -->
             <div class="form-group">
                 <label for="dia">Escolher Dia</label>
                 <input type="date" id="dia">
@@ -126,6 +129,12 @@
                 <label for="descricao">Descrição</label>
                 <textarea id="descricao" placeholder="Digite a descrição da consulta (opcional)" rows="3"></textarea>
             </div>
+
+            <div class="form-group">
+                <label for="recorrente" style="display:inline; margin-right: 10px;">Consulta Recorrente</label>
+                <input type="checkbox" id="recorrente" style="display:inline;">
+            </div>
+
             <button id="agendar"><i class="fas fa-calendar-check"></i> Agendar</button>
         </div>
 
@@ -133,9 +142,12 @@
             <!-- Consultas cadastradas serão inseridas aqui -->
         </div>
 
+        <!-- Botões para excluir última e primeira consultas -->
+        <button onclick="excluirUltimaConsulta()" id="excluir-ultima" class="btn-delete-pilha" ><i class="fas fa-trash" ></i> Excluir Última Cadastrada (Pilha)</button>
+        <button onclick="excluirPrimeiraConsulta()" id="excluir-primeira" class="btn-delete-fila" ><i class="fas fa-trash" ></i> Excluir Primeira Cadastrada (Fila)</button>
+
         <!-- Botão para baixar o Excel -->
-        <button id="download-excel" class="btn-download"
-        onclick="BaixarExcelGeral()">
+        <button id="download-excel" class="btn-download">
             <i class="fas fa-download"></i> Baixar Excel
         </button>
     </main>
