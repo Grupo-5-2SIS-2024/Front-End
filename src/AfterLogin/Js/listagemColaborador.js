@@ -226,64 +226,74 @@ async function buscarAreasClinica() {
             return `
                 <div class="cardArea" data-area-id="${especificacao.id}">
                     <div class="info">
-                        <div class="field">
-                            <p id="areaNome">${especificacao.area}</p>
-                        </div>
+                        <p id="areaNome_${especificacao.id}">${especificacao.area}</p>
+                        <input type="text" id="inputArea_${especificacao.id}" class="inputAtualizar" style="display: none;" placeholder="Atualizar área" value="${especificacao.area}">
                     </div>
                     <div class="actions">
-                        <button class="delete"><i class="fas fa-trash-alt"></i></button>
+                        <button class="update" onclick="toggleEditarArea(${especificacao.id})">Editar</button>
+                        <button class="confirm" onclick="atualizarArea(${especificacao.id})" style="display: none;" id="botaoConfirmar_${especificacao.id}">✔</button>
                     </div>
                 </div>`;
         }).join('');
-
-        // Adiciona eventos de clique para os botões de exclusão de área
-        listaAreasContainer.querySelectorAll('.delete').forEach((botao) => {
-            botao.addEventListener('click', function () {
-                const card = this.closest('.cardArea');
-                const idArea = card.dataset.areaId;
-
-                if (idArea) {
-                    Swal.fire({
-                        title: 'Tem certeza?',
-                        text: "Você não poderá reverter isso!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Sim, deletar!',
-                        cancelButtonText: 'Cancelar'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            deletarArea(idArea);
-                        }
-                    });
-                } else {
-                    console.error('ID da área não encontrado.');
-                }
-            });
-        });
 
     } catch (erro) {
         console.error('Erro ao buscar áreas:', erro);
     }
 }
 
-async function deletarArea(idArea) {
-    try {
-        const resposta = await fetch(`http://localhost:8080/especificacoes/${idArea}`, {
-            method: 'DELETE'
-        });
+function toggleEditarArea(areaId) {
+    const nomeArea = document.getElementById(`areaNome_${areaId}`);
+    const inputArea = document.getElementById(`inputArea_${areaId}`);
+    const botaoEditar = document.querySelector(`[onclick="toggleEditarArea(${areaId})"]`);
+    const botaoConfirmar = document.getElementById(`botaoConfirmar_${areaId}`);
 
-        if (!resposta.ok) {
-            throw new Error(`Erro ao deletar área: ${resposta.statusText}`);
-        }
+    // Alterna a exibição do nome da área e do campo de entrada
+    const isEditing = inputArea.style.display === 'inline-block';
+    nomeArea.style.display = isEditing ? 'block' : 'none';
+    inputArea.style.display = isEditing ? 'none' : 'inline-block';
+    botaoEditar.style.display = isEditing ? 'inline-block' : 'none';
+    botaoConfirmar.style.display = isEditing ? 'none' : 'inline-block';
 
-        console.log('Área deletada com sucesso.');
-        buscarAreasClinica(); // Recarrega a lista de áreas após a exclusão
-    } catch (erro) {
-        console.error('Erro ao deletar área:', erro);
+    // Se estiver editando, define o valor do campo como o nome atual
+    if (!isEditing) {
+        inputArea.value = nomeArea.textContent.trim();
     }
 }
+
+async function atualizarArea(areaId) {
+    const inputArea = document.getElementById(`inputArea_${areaId}`);
+    const novoNome = inputArea.value.trim();
+
+    try {
+        const resposta = await fetch(`http://localhost:8080/especificacoes/${areaId}`, {
+            method: "PUT",
+            body: JSON.stringify({ area: novoNome }),
+            headers: { "Content-type": "application/json; charset=UTF-8" }
+        });
+
+        if (resposta.ok) {
+            document.getElementById(`areaNome_${areaId}`).textContent = novoNome;
+            toggleEditarArea(areaId); // Volta ao modo de visualização
+            Swal.fire({
+                icon: 'success',
+                title: 'Área atualizada com sucesso!',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        } else {
+            throw new Error('Erro ao atualizar a área.');
+        }
+    } catch (error) {
+        console.error('Erro ao atualizar a área:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro ao atualizar a área.',
+            text: error.message
+        });
+    }
+}
+
+
 
 // Chama a função para listar as áreas ao carregar a página
 buscarAreasClinica();

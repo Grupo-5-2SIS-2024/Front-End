@@ -152,7 +152,7 @@ a {
 
 .kpiSubtext {
     font-size: 12px;
-    color: #999999;
+    color: #151414;
     margin: 0;
 }
 
@@ -229,6 +229,23 @@ a {
     flex: 1 1 auto;
     max-width: calc(43.33% - 10px); 
     box-sizing: border-box; 
+}
+
+.lista-filtros-ativos li button {
+    position: absolute; 
+    top: 5px; 
+    right: 5px; 
+    background: none;
+    border: none;
+    color: #555;
+    font-size: 12px; 
+    cursor: pointer;
+    padding: 0; 
+    transition: color 0.3s;
+}
+
+.lista-filtros-ativos li button:hover {
+    color: #ff0000;
 }
 
 .botoes-container {

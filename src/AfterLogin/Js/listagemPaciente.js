@@ -23,23 +23,43 @@ function aplicarFiltros() {
     const cpf = document.getElementById('filtroCPF').value;
     const telefone = document.getElementById('filtroTelefone').value;
     const dataNascimento = document.getElementById('filtroDataNascimento').value;
-    const filtrosAtivos = [];
 
-    if (nome) filtrosAtivos.push(`Nome: ${nome}`);
-    if (email) filtrosAtivos.push(`Email: ${email}`);
-    if (cpf) filtrosAtivos.push(`CPF: ${cpf}`);
-    if (telefone) filtrosAtivos.push(`Telefone: ${telefone}`);
-    if (dataNascimento) filtrosAtivos.push(`Data de Nascimento: ${dataNascimento}`);
+    const filtrosAtivos = {
+        nome: nome,
+        email: email,
+        cpf: cpf,
+        telefone: telefone,
+        dataNascimento: dataNascimento
+    };
 
     const listaFiltrosAtivos = document.getElementById('listaFiltrosAtivos');
     listaFiltrosAtivos.innerHTML = '';
-    filtrosAtivos.forEach(filtro => {
-        const li = document.createElement('li');
-        li.textContent = filtro;
-        listaFiltrosAtivos.appendChild(li);
-    });
 
+    // Adiciona cada filtro ativo à lista com um botão "X" para remover
+    for (const [key, value] of Object.entries(filtrosAtivos)) {
+        if (value) {
+            const li = document.createElement('li');
+            li.textContent = `${key.charAt(0).toUpperCase() + key.slice(1)}: ${value}`;
+
+            // Cria o botão "X" para remover o filtro
+            const botaoRemover = document.createElement('button');
+            botaoRemover.textContent = 'X';
+            botaoRemover.classList.add('removerFiltro');
+            botaoRemover.addEventListener('click', () => removerFiltroEspecifico(key));
+
+            li.appendChild(botaoRemover);
+            listaFiltrosAtivos.appendChild(li);
+        }
+    }
+
+    // Busca pacientes com os filtros aplicados
     buscarPacientes(nome, email, cpf, telefone, dataNascimento);
+}
+
+// Função para remover um filtro específico e atualizar a busca
+function removerFiltroEspecifico(filtro) {
+    document.getElementById(`filtro${filtro.charAt(0).toUpperCase() + filtro.slice(1)}`).value = '';
+    aplicarFiltros();
 }
 
 // Função para buscar pacientes com filtros específicos
@@ -90,13 +110,19 @@ async function buscarPacientes(nomeFiltro = '', emailFiltro = '', cpfFiltro = ''
 }
 
 function atualizarListagemPacientes(listaPacientes) {
-    const cardsMedicos = document.getElementById("listagem");
-    cardsMedicos.innerHTML = listaPacientes.map((paciente) => {
+    const cardsPacientes = document.getElementById("listagem");
+    const permissionamentoMedico = sessionStorage.getItem("PERMISSIONAMENTO_MEDICO");
+    cardsPacientes.innerHTML = listaPacientes.map((paciente) => {
         const responsavel = paciente.responsavel ? `${paciente.responsavel.nome} ${paciente.responsavel.sobrenome}` : 'Não informado';
         const dataNascimentoFormatada = new Date(paciente.dataNascimento).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
         const formatarCPF = (cpf) => cpf ? cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') : '';
         const formatarTelefone = (telefone) => telefone ? telefone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3') : '';
+        const acoes = permissionamentoMedico === "Supervisor" ? '' : `
+                <div class="actions">
+                    <button class="update"><i class="fas fa-pencil-alt"></i></button>
+                    <button class="delete"><i class="fas fa-trash-alt"></i></button>
+                </div>`;
 
         return `
             <div class="cardPaciente" data-paciente-id="${paciente.id}">
@@ -122,15 +148,37 @@ function atualizarListagemPacientes(listaPacientes) {
                         <p id="cpf">${formatarCPF(paciente.cpf)}</p>
                     </div>
                 </div>
-                <div class="actions">
-                    <button class="update"><i class="fas fa-pencil-alt"></i></button>
-                    <button class="delete" onclick="deletarPaciente(${paciente.id})"><i class="fas fa-trash-alt"></i></button>
-                </div>
+                ${acoes}
             </div>
         `;
     }).join('');
 
-    adicionarEventosBotoes(cardsMedicos);
+    if (permissionamentoMedico !== "Supervisor") {
+        cardsPacientes.querySelectorAll('.delete').forEach((botao) => {
+            botao.addEventListener('click', function () {
+                const id = this.closest('.cardPaciente').dataset.medicoId;
+                if (id) {
+                    Swal.fire({
+                        title: 'Tem certeza?',
+                        text: "Você não poderá reverter isso!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Sim, deletar!',
+                        cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) deletarPaciente(id);
+                    });
+                }
+            });
+        });
+
+        cardsPacientes.querySelectorAll('.update').forEach((botao) => {
+            botao.addEventListener('click', function () {
+                const id = this.closest('.cardPaciente').dataset.medicoId;
+                if (id) window.location.href = `atualizarPaciente.html?id=${id}`;
+            });
+        });
+    }
 }
 
 async function deletarPaciente(id) {
