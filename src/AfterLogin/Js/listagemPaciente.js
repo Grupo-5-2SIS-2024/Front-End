@@ -51,12 +51,9 @@ function aplicarFiltros() {
             listaFiltrosAtivos.appendChild(li);
         }
     }
-
-    // Busca pacientes com os filtros aplicados
     buscarPacientes(nome, email, cpf, telefone, dataNascimento);
 }
 
-// Função para remover um filtro específico e atualizar a busca
 function removerFiltroEspecifico(filtro) {
     document.getElementById(`filtro${filtro.charAt(0).toUpperCase() + filtro.slice(1)}`).value = '';
     aplicarFiltros();
@@ -153,10 +150,9 @@ function atualizarListagemPacientes(listaPacientes) {
         `;
     }).join('');
 
-    if (permissionamentoMedico !== "Supervisor") {
         cardsPacientes.querySelectorAll('.delete').forEach((botao) => {
             botao.addEventListener('click', function () {
-                const id = this.closest('.cardPaciente').dataset.medicoId;
+                const id = this.closest('.cardPaciente').dataset.pacienteId ;
                 if (id) {
                     Swal.fire({
                         title: 'Tem certeza?',
@@ -174,12 +170,12 @@ function atualizarListagemPacientes(listaPacientes) {
 
         cardsPacientes.querySelectorAll('.update').forEach((botao) => {
             botao.addEventListener('click', function () {
-                const id = this.closest('.cardPaciente').dataset.medicoId;
+                const id = this.closest('.cardPaciente').dataset.pacienteId ;
                 if (id) window.location.href = `atualizarPaciente.html?id=${id}`;
             });
         });
     }
-}
+
 
 async function deletarPaciente(id) {
     try {
