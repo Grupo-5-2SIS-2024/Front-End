@@ -264,7 +264,7 @@
 
         // Função para exibir o SweetAlert ao clicar no botão
         addPacienteBtn.addEventListener('click', async (event) => {
-            event.preventDefault(); // Evita o comportamento padrão do botão
+            event.preventDefault();
 
             const result = await Swal.fire({
                 title: "O paciente é menor de 15 anos?",
@@ -300,11 +300,10 @@
                             const responsavel = await response.json();
 
                             if (responsavel && responsavel.id) {
-                                // Se o responsável já existe, redirecionar para a página de cadastro do paciente com o ID do responsável
-                                window.location.href = `cadastroPacienteComResponsavel.html?idResponsavel=${responsavel.id}`;
+                                sessionStorage.setItem("idResponsavelCadastrado", responsavel.id); 
+                                window.location.href = `cadastroPacienteComResponsavel.html`;
                             }
                         } else if (response.status === 404) {
-                            // Se não existir, redirecionar para a tela de cadastro do responsável
                             Swal.fire({
                                 icon: 'info',
                                 title: 'Responsável não encontrado',

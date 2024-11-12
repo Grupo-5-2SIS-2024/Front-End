@@ -1,4 +1,35 @@
-// arquivo: ../Js/atualizarPaciente.js
+let selectedImage = null; // Variável para armazenar a imagem inicial ou a nova imagem selecionada
+
+const inputFile = document.querySelector("#picture__input");
+const pictureImage = document.querySelector(".picture__image");
+const pictureImageTxt = "Choose an image";
+pictureImage.innerHTML = pictureImageTxt;
+
+// Função para lidar com o evento de mudança do input de imagem
+inputFile.addEventListener("change", function (e) {
+    const inputTarget = e.target;
+    const file = inputTarget.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+        reader.addEventListener("load", function (e) {
+            const readerTarget = e.target;
+
+            const img = document.createElement("img");
+            img.src = readerTarget.result;
+            img.classList.add("picture__img");
+
+            pictureImage.innerHTML = "";
+            pictureImage.appendChild(img);
+
+            selectedImage = readerTarget.result; // Atualiza selectedImage com a nova imagem selecionada
+        });
+        reader.readAsDataURL(file);
+    } else {
+        pictureImage.innerHTML = pictureImageTxt;
+        selectedImage = null; // Reseta selectedImage se não houver imagem
+    }
+});
 
 // Função para buscar os valores do paciente e preencher o formulário
 async function buscarValoresPaciente(id) {
@@ -21,6 +52,22 @@ async function buscarValoresPaciente(id) {
         document.getElementById("bairro").value = paciente.endereco?.bairro || '';
         document.getElementById("numero").value = paciente.endereco?.numero || '';
         document.getElementById("complemento").value = paciente.endereco?.complemento || '';
+
+        // Exibir a imagem do paciente existente
+        if (pictureImage) {
+            if (paciente.foto) {
+                const img = document.createElement("img");
+                img.src = paciente.foto;
+                img.classList.add("picture__img");
+                pictureImage.innerHTML = "";
+                pictureImage.appendChild(img);
+                selectedImage = paciente.foto; // Armazena a imagem existente
+            } else {
+                pictureImage.innerHTML = pictureImageTxt;
+                selectedImage = null;
+            }
+        }
+
     } catch (error) {
         console.error("Erro ao buscar dados do paciente:", error);
         alert("Erro ao buscar dados do paciente. Tente novamente mais tarde.");
@@ -176,7 +223,8 @@ async function atualizarPaciente() {
                 "bairro": bairro,
                 "numero": numero,
                 "complemento": complemento
-            }
+            },
+            "foto": selectedImage // Envia a imagem atual ou nova imagem selecionada
         };
 
         try {
@@ -207,7 +255,6 @@ async function atualizarPaciente() {
         }
     }
 }
-
 
 function getIdFromURL() {
     const urlParams = new URLSearchParams(window.location.search);
