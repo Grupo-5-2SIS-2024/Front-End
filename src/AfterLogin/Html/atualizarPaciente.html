@@ -100,35 +100,41 @@
     <main>
         <div class="ContainerCadastro">
             <h1>Atualize os dados do seu <span class="equipe">Paciente</span></h1><br><br>
+            <label class="picture" for="picture__input" tabIndex="0">
+                <span class="picture__image"></span>
+            </label>
+
+            <input type="file" name="picture__input" id="picture__input">
             <div class="inputs_Container">
-                <div class="inputs_login_esquerda">
+                <div class="inputs_coluna">
                     <div class="input">
                         <input class="input__field" id="nome" type="text" required />
                         <label for="nome" class="input__label">Nome</label>
                         <small class="error" id="error-nome"></small>
                     </div>
-
                     <div class="input">
                         <input class="input__field" id="sobrenome" type="text" required />
                         <label for="sobrenome" class="input__label">Sobrenome</label>
                         <small class="error" id="error-sobrenome"></small>
                     </div>
-
                     <div class="input">
                         <input class="input__field" id="email" type="email" required />
                         <label for="email" class="input__label">E-mail</label>
                         <small class="error" id="error-email"></small>
                     </div>
+                    <div class="input">
+                        <input class="input__field" id="cns" type="text" required />
+                        <label for="cns" class="input__label">CNS</label>
+                        <small class="error" id="error-cns"></small>
+                    </div>
+                </div>
 
+                <div class="inputs_coluna">
                     <div class="input">
                         <input class="input__field" id="telefone" type="tel" required />
                         <label for="telefone" class="input__label">Telefone</label>
                         <small class="error" id="error-telefone"></small>
                     </div>
-
-                </div>
-
-                <div class="inputs_login_esquerda">
                     <div class="input">
                         <input class="input__field" id="cpf" type="text" required />
                         <label for="cpf" class="input__label">CPF</label>
@@ -140,7 +146,7 @@
                             <option value="masculino">Masculino</option>
                             <option value="feminino">Feminino</option>
                         </select>
-                        <label for="genero" class="input__label">Genero</label>
+                        <label for="genero" class="input__label">Gênero</label>
                         <small class="error" id="error-especialidade"></small>
                     </div>
                     <div class="input">
@@ -148,22 +154,49 @@
                         <label for="dataNascimento" class="input__labelDate">Data de Nascimento</label>
                         <small class="error" id="error-dataNascimento"></small>
                     </div>
+                </div>
+
+                <div class="inputs_coluna">
                     <div class="input">
-                        <input class="input__field" id="cns" type="text" required />
-                        <label for="cns" class="input__label">CNS</label>
-                        <small class="error" id="error-carteirinha"></small>
+                        <input class="input__field" id="cep" type="text" maxlength="9"
+                            onKeyPress="formatar('#####-###', this)" required oninput="buscarCep()" />
+                        <label for="cep" class="input__label">CEP</label>
+                    </div>
+                    <div class="input">
+                        <input class="input__field" id="rua" type="text" required />
+                        <label for="rua" class="input__label">Rua</label>
+                        <small class="error" id="error-rua"></small>
+                    </div>
+                    <div class="input">
+                        <input class="input__field" id="bairro" type="text" required />
+                        <label for="bairro" class="input__label">Bairro</label>
+                        <small class="error" id="error-bairro"></small>
+                    </div>
+                    <!-- Adicionar ambos os inputs dentro de uma div que organiza como linha dupla -->
+                    <div class="input_linha_dupla">
+                        <!-- Campo Número -->
+                        <div class="input">
+                            <input class="input__field" id="numero" type="number" required />
+                            <label for="numero" class="input__label">Número</label>
+                            <small class="error" id="error-numero"></small>
+                        </div>
+                        <!-- Campo Complemento -->
+                        <div class="input">
+                            <input class="input__field" id="complemento" type="text" />
+                            <label for="complemento" class="input__labelComplemento">Complemento</label>
+                            <small class="error" id="error-complemento"></small>
+                        </div>
                     </div>
                 </div>
             </div>
+
             <div>
-                <Button class="registrar" onclick="cadastrarPaciente()">
-                    Atualizar
-                </Button>
+                <button class="registrar" onclick="atualizarPaciente()">Atualizar</button>
             </div>
         </div>
         </div>
     </main>
-    <script src="../Js/atualizarColaborador.js"></script>
+    <script src="../Js/atualizarPaciente.js"></script>
     <script src="../Js/funcoesPadroes.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../Js/sessao.js"></script>

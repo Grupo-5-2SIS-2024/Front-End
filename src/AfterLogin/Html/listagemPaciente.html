@@ -73,7 +73,7 @@
                     </a>
                 </li>
 
-        <li id="Lead" class="side-item">
+                <li id="Lead" class="side-item">
                     <a href="listagemLead.html">
                         <i class="fa-solid fa-filter"></i>
                         <span class="item-description">
@@ -104,44 +104,44 @@
                 <h1>Área dos <span>Pacientes</span></h1>
                 <div class="containerBotao">
                     <button class="registrar" id="addPacienteBtn">Adicionar Paciente</button>
-                    <button class="filtro" onclick="abrirModalFiltro()">Filtro</button>
+                    <button class="filtro" onclick="abrirModalFiltro()"><i class="fas fa-filter"></i> Filtrar</button>
                 </div>
             </div>
             <div id="modalFiltro" class="modal">
                 <div class="modal-content">
                     <button class="btn-fechar" onclick="fecharModalFiltro()">&times;</button>
                     <h2>Filtrar Pacientes</h2>
-            
+
                     <div class="input-group">
                         <label for="filtroNome">Nome:</label>
                         <input type="text" id="filtroNome" placeholder="Nome do Paciente">
                     </div>
-            
+
                     <div class="input-group">
                         <label for="filtroEmail">Email:</label>
                         <input type="text" id="filtroEmail" placeholder="Email do Paciente">
                     </div>
-            
+
                     <div class="input-group">
                         <label for="filtroCPF">CPF:</label>
                         <input type="text" id="filtroCPF" placeholder="CPF do Paciente">
                     </div>
-            
+
                     <div class="input-group">
                         <label for="filtroTelefone">Telefone:</label>
                         <input type="text" id="filtroTelefone" placeholder="Telefone do Paciente">
                     </div>
-            
+
                     <div class="input-group">
                         <label for="filtroDataNascimento">Data de Nascimento:</label>
                         <input type="date" id="filtroDataNascimento" placeholder="Data de Nascimento">
                     </div>
-            
+
                     <div id="filtrosAtivosContainer">
                         <h3>Filtros Ativos</h3>
                         <ul id="listaFiltrosAtivos" class="lista-filtros-ativos"></ul>
                     </div>
-            
+
                     <div class="botoes-container">
                         <button onclick="aplicarFiltros()" class="btn-aplicar">Aplicar Filtros</button>
                         <button onclick="limparFiltros()" class="btn-limpar">Limpar Filtros</button>
@@ -200,6 +200,55 @@
             </div>
             <div class="listagemBox" id="listagem"></div>
         </div>
+
+        <!-- Modal Paciente -->
+        <div id="modalBackdrop" class="modal-backdrop" style="display: none;">
+            <div class="modalDetalhes">
+                <div id="container">
+                    <div class="left-section">
+                        <img src="../Assets/perfil.jpeg" class="patient-img" id="pacienteFoto" alt="Foto do Paciente">
+                        <h2 class="patient-name" id="pacienteNome"></h2>
+                    </div>
+                    <div class="right-section">
+                        <div class="tab-buttons">
+                            <button class="tab-btn active" content-id="detalhes" onclick="openTab(event, 'detalhes')">Detalhes</button>
+                            <button class="tab-btn" content-id="calendario" onclick="openTab(event, 'calendario')">Calendário</button>
+                            <button class="tab-btn" content-id="relatorios" onclick="openTab(event, 'relatorios')">Relatórios</button>
+                        </div>
+                        <div class="tab-contents">
+                            <div class="content show" id="detalhes">
+                                <h1 class="content-title">Detalhes do Paciente</h1>
+                                <div id="detalhesContent" class="content-description">
+                                    <!-- Detalhes do paciente serão inseridos aqui dinamicamente pelo JavaScript -->
+                                </div>
+                            </div>
+                            <div class="content" id="calendario">
+                                <h1 class="content-title">Calendário do Paciente</h1>
+                                
+                                <!-- Exibição da semana/mês -->
+                                <div class="count-dias">
+                                    <button class="nav-button" onclick="semanaPassada()">&#8249;</button>
+                                    <div id="dias" class="semana-range"></div>
+                                    <button class="nav-button" onclick="proximaSemana()">&#8250;</button>
+                                </div>
+                                
+                                <!-- Dias da semana (Segunda, Terça, etc.) -->
+                                <div class="week-days" id="diasSemana"></div>
+                                
+                                <!-- Colunas para as tarefas (consultas) dos dias da semana -->
+                                <div class="tasks-columns" id="colunasTarefas">
+                                    <!-- Colunas para cada dia de semana -->
+                                </div>
+                                
+                            </div>
+                            <div class="content" id="relatorios">
+                                <h1 class="content-title">Relatórios do Paciente</h1>
+                                <p class="content-description">Relatórios detalhados do paciente.</p>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+            </div>
         </div>
 
     </main>
@@ -215,7 +264,7 @@
 
         // Função para exibir o SweetAlert ao clicar no botão
         addPacienteBtn.addEventListener('click', async (event) => {
-            event.preventDefault(); // Evita o comportamento padrão do botão
+            event.preventDefault();
 
             const result = await Swal.fire({
                 title: "O paciente é menor de 15 anos?",
@@ -251,11 +300,10 @@
                             const responsavel = await response.json();
 
                             if (responsavel && responsavel.id) {
-                                // Se o responsável já existe, redirecionar para a página de cadastro do paciente com o ID do responsável
-                                window.location.href = `cadastroPacienteComResponsavel.html?idResponsavel=${responsavel.id}`;
+                                sessionStorage.setItem("idResponsavelCadastrado", responsavel.id); 
+                                window.location.href = `cadastroPacienteComResponsavel.html`;
                             }
                         } else if (response.status === 404) {
-                            // Se não existir, redirecionar para a tela de cadastro do responsável
                             Swal.fire({
                                 icon: 'info',
                                 title: 'Responsável não encontrado',

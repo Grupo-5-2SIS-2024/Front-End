@@ -13,17 +13,29 @@ async function buscar() {
 
         const cards = document.getElementById("tableUpcomingAppointments");
         cards.innerHTML = respostaDados.map((item) => {
-            return `                     <tr>
-                        <th>${item.nomePaciente}</th>
-                        <th>${item.dataConsulta}</th>
-                        <th>${item.especialidadeMedico}</th>
-                    </tr> `;
+            // Formatar a data e o horário
+            const dataObj = new Date(item.dataConsulta);
+            const dataFormatada = dataObj.toLocaleDateString("pt-BR", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric"
+            });
+            const horarioFormatado = dataObj.toLocaleTimeString("pt-BR", {
+                hour: "2-digit",
+                minute: "2-digit"
+            });
+            return `
+                <tr>
+                    <th>${item.nomePaciente}</th>
+                    <th>${dataFormatada} ${horarioFormatado}</th>
+                    <th>${item.especialidadeMedico}</th>
+                </tr>
+            `;
         }).join('');
     } catch (error) {
         console.error('Failed to fetch:', error);
     }
 }
-
 console.log("antes de buscar");
 buscar();
 console.log("depois de buscar");

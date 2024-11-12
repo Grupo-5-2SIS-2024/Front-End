@@ -47,6 +47,31 @@ a {
     cursor: pointer;
 }
 
+.containerBotao {
+    display: flex;
+    gap: 1rem;
+}
+
+.filtro {
+    width: 8vw;
+    height: 7vh;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    background-color: #ffffff;
+    font-weight: bold;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    color: rgb(0, 0, 0);
+}
+
+.filtro:hover {
+    transform: translateY(-0.4rem);
+    transition: 0.2s;
+    box-shadow: 0rem 0.5rem 0.8rem rgb(0, 0, 0);
+}
+
 /* Parte das KPIs */
 
 .KPIS {
@@ -107,7 +132,7 @@ a {
 
 .kpiSubtext {
     font-size: 12px;
-    color: #999999;
+    color: #151414;
     margin: 0;
 }
 
@@ -182,6 +207,149 @@ a {
 
 .cardLead .actions button:hover {
     color: #276E2A;
+}
+
+/* Modal de Cadastro de Área */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 115%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%; 
+    max-width: 600px; 
+    text-align: center;
+}
+
+.modal-content label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.modal-content input {
+    width: 80%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.modal-content button {
+    padding: 8px 16px;
+    background-color: #43A046;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.close {
+    display: none;
+}
+
+
+#filtrosAtivosContainer {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.lista-filtros-ativos {
+    display: flex; 
+    flex-wrap: wrap;
+    list-style-type: none;
+    padding: 0;
+    margin: 0; 
+}
+
+.lista-filtros-ativos li {
+    position: relative; /* Permite o posicionamento absoluto do botão "X" */
+    background-color: #e0e7ff;
+    border-radius: 5px;
+    padding: 8px 12px;
+    margin: 5px;
+    color: #333;
+    font-size: 14px;
+    font-weight: bold;
+    height: 5vh;
+    flex: 1 1 auto;
+    max-width: calc(43.33% - 10px);
+    box-sizing: border-box;
+}
+
+.lista-filtros-ativos li button {
+    position: absolute; 
+    top: 5px; 
+    right: 5px; 
+    background: none;
+    border: none;
+    color: #555;
+    font-size: 12px; 
+    cursor: pointer;
+    padding: 0; 
+    transition: color 0.3s;
+}
+
+.lista-filtros-ativos li button:hover {
+    color: #ff0000;
+}
+
+.botoes-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.botoes-container .btn-aplicar,
+.botoes-container .btn-limpar {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.botoes-container .btn-aplicar {
+    background-color: #4CAF50;
+}
+
+.botoes-container .btn-limpar {
+    background-color: #f44336;
+  
+}
+
+.botoes-container .btn-aplicar:hover,
+.botoes-container .btn-limpar:hover {
+    transform: translateY(-0.4rem);
+    transition: 0.2s;
+    box-shadow: 0rem 0.5rem 0.8rem rgb(0, 0, 0);
+}
+
+.btn-fechar {
+    position: absolute;
+    top: 225px;
+    right: 450px;
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    color: #333;
+    cursor: pointer;
+    font-weight: bold;
+    transition: color 0.3s;
 }
 
 /* Media Query para dispositivos com largura máxima de 440px */

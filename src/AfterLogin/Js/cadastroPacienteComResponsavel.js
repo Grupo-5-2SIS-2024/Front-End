@@ -1,3 +1,35 @@
+const inputFile = document.querySelector("#picture__input");
+const pictureImage = document.querySelector(".picture__image");
+const pictureImageTxt = "Choose an image";
+
+// Verifique se inputFile e pictureImage existem antes de configurar os eventos
+if (inputFile && pictureImage) {
+  pictureImage.innerHTML = pictureImageTxt;
+
+  inputFile.addEventListener("change", function (e) {
+    const inputTarget = e.target;
+    const file = inputTarget.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+
+      reader.addEventListener("load", function (e) {
+        const readerTarget = e.target;
+
+        const img = document.createElement("img");
+        img.src = readerTarget.result;
+        img.classList.add("picture__img");
+
+        pictureImage.innerHTML = "";
+        pictureImage.appendChild(img);
+      });
+
+      reader.readAsDataURL(file);
+    } else {
+      pictureImage.innerHTML = pictureImageTxt;
+    }
+  });
+}
 // Função para validar o cadastro do paciente
 function validarCadastro() {
     var nome = document.getElementById('nome').value;
@@ -215,8 +247,8 @@ async function cadastrarResponsavel() {
 
             if (respostaCadastro.status === 201) {
                 const responsavelCadastrado = await respostaCadastro.json();
-                idResponsavelCadastrado = responsavelCadastrado.id; // Salva o ID do responsável
-
+                sessionStorage.setItem("idResponsavelCadastrado", responsavelCadastrado.id); 
+            
                 Swal.fire({
                     icon: 'success',
                     title: 'Responsável cadastrado com sucesso!',
@@ -243,8 +275,27 @@ async function cadastrarResponsavel() {
     }
 }
 
+// Função para converter imagem em base64
+const toBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+});
+
+let idResponsavel = sessionStorage.getItem("idResponsavelCadastrado");
+
 // Função para cadastrar paciente com responsável
 async function cadastrarPacienteComResponsavel() {
+    if (!idResponsavel) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Cadastro de Responsável Necessário',
+            text: 'Por favor, cadastre o responsável primeiro antes de cadastrar o paciente.',
+        });
+        return;
+    }
+
     if (validarCadastro()) {
         const nomeDigitado = document.getElementById("nome").value;
         const sobrenomeDigitado = document.getElementById("sobrenome").value;
@@ -259,6 +310,7 @@ async function cadastrarPacienteComResponsavel() {
         const numeroDigitado = document.getElementById("numero").value;
         const complementoDigitado = document.getElementById("complemento").value;
         const bairroDigitado = document.getElementById("bairro").value;
+        const fotoEscolhida = document.getElementById("picture__input").files[0];
 
         const dadosPaciente = {
             "nome": nomeDigitado,
@@ -269,8 +321,9 @@ async function cadastrarPacienteComResponsavel() {
             "genero": generoEscolhido,
             "dataNascimento": dataNascimentoDigitada,
             "cns": cnsDigitado,
+            "foto": fotoEscolhida ? await toBase64(fotoEscolhida) : null,
             "responsavel": {
-                "id": idResponsavelCadastrado, // Usa o ID do responsável que foi cadastrado antes
+                "id": idResponsavel,
             },
             "endereco": {
                 "id": null,
@@ -290,6 +343,7 @@ async function cadastrarPacienteComResponsavel() {
             });
 
             if (respostaCadastro.status === 201) {
+                sessionStorage.removeItem("idResponsavelCadastrado");
                 Swal.fire({
                     icon: 'success',
                     title: 'Paciente cadastrado com sucesso!',
@@ -315,4 +369,5 @@ async function cadastrarPacienteComResponsavel() {
         }
     }
 }
+
 
