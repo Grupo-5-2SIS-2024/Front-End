@@ -22,14 +22,7 @@ body {
     height: 100vh;
 }
 
-h1 {
-    color: #333;
-    font-size: 24px;
-    margin: 0;
-    font-weight: 600;
-    text-align: center;
-    padding-bottom: 10px;
-}
+
 
 .grid-container {
     display: grid;
@@ -190,4 +183,153 @@ th {
         grid-column: 1 / 2;
         grid-row: 3 / 4;
     }
+}
+
+
+.buttons {
+    display: flex;
+    justify-content: flex-end; /* Move o conteúdo para o lado direito */
+    align-items: center;
+    padding: 20px;
+    gap: 1rem;
+}
+
+.buttons h1 {
+    color: #333;
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0 auto; /* Centraliza o título na tela */
+    text-align: center;
+    flex-grow: 1; /* Permite que o h1 ocupe o espaço necessário para centralização */
+}
+
+.filter-button {
+    background-color: #007744;
+    color: white;
+    border: none;
+    padding: 10px 20px; /* Ajuste do padding para um tamanho mais compacto */
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.filter-button:hover {
+    background-color: #005533;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    animation: animacaoModal 0.3s ease-out;
+}
+
+@keyframes animacaoModal {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.modal-content h3 {
+    margin-top: 0;
+    color: #007744;
+    text-align: center;
+}
+
+.filter-group {
+    margin-bottom: 20px;
+}
+
+.filter-group label {
+    font-weight: bold;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.filter-group select,
+.filter-group input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+}
+
+.filtro-duplo {
+    display: flex;
+    gap: 5px;
+}
+
+#filtroIdade,
+#filtroGenero,
+#filtroDataInicio,
+#filtroDataFim {
+    width: 100px;
+}
+
+.filter-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.filter-buttons button {
+    flex: 1;
+    margin-right: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.filter-buttons .limpar-button {
+    background-color: #ff6666;
+    color: white;
+}
+
+.filter-buttons .limpar-button:hover {
+    background-color: #cc0000;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.5em;
+    color: #aaa;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #000;
 }
