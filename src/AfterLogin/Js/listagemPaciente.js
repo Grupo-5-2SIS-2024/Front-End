@@ -1,3 +1,25 @@
+// Função para formatar CPF
+function formatarCPF(cpf) {
+    return cpf ? cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') : '';
+}
+
+// Função para formatar telefone
+function formatarTelefone(telefone) {
+    return telefone ? telefone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3') : '';
+}
+
+// Função auxiliar para calcular a idade
+function calcularIdade(dataNascimento) {
+    if (!dataNascimento) return 'Não informada';
+    const hoje = new Date();
+    const nascimento = new Date(dataNascimento);
+    let idade = hoje.getFullYear() - nascimento.getFullYear();
+    const mes = hoje.getMonth() - nascimento.getMonth();
+    if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) idade--;
+    return `${idade} anos`;
+}
+
+
 // Funções para abrir e fechar o modal de filtros
 function abrirModalFiltro() {
     document.getElementById("modalFiltro").style.display = "block";
@@ -113,17 +135,17 @@ function atualizarListagemPacientes(listaPacientes) {
         const responsavel = paciente.responsavel ? `${paciente.responsavel.nome} ${paciente.responsavel.sobrenome}` : 'Não informado';
         const dataNascimentoFormatada = new Date(paciente.dataNascimento).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
         const foto = paciente.foto || "../Assets/perfil.jpeg";
-        const formatarCPF = (cpf) => cpf ? cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') : '';
-        const formatarTelefone = (telefone) => telefone ? telefone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3') : '';
+        
         const acoes = permissionamentoMedico === "Supervisor" ? '' : `
-                <div class="actions">
-                    <button class="update"><i class="fas fa-pencil-alt"></i></button>
-                    <button class="delete"><i class="fas fa-trash-alt"></i></button>
-                </div>`;
+            <div class="actions">
+                <button class="view" onclick="abrirModalPaciente(${paciente.id})"><i class="fas fa-eye"></i></button>
+                <button class="update"><i class="fas fa-pencil-alt"></i></button>
+                <button class="delete"><i class="fas fa-trash-alt"></i></button>
+            </div>`;
 
         return `
-            <div onclick="abrirModalPaciente(${paciente.id})" class="cardPaciente" data-paciente-id="${paciente.id}">
-            <img src="${foto}" alt="Foto do Paciente">
+            <div class="cardPaciente" data-paciente-id="${paciente.id}">
+                <img onclick="abrirModalPaciente(${paciente.id})" src="${foto}" alt="Foto do Paciente">
                 <div class="info">
                     <div class="field">
                         <label for="nome">Nome</label>
@@ -151,31 +173,31 @@ function atualizarListagemPacientes(listaPacientes) {
         `;
     }).join('');
 
-        cardsPacientes.querySelectorAll('.delete').forEach((botao) => {
-            botao.addEventListener('click', function () {
-                const id = this.closest('.cardPaciente').dataset.pacienteId ;
-                if (id) {
-                    Swal.fire({
-                        title: 'Tem certeza?',
-                        text: "Você não poderá reverter isso!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Sim, deletar!',
-                        cancelButtonText: 'Cancelar'
-                    }).then((result) => {
-                        if (result.isConfirmed) deletarPaciente(id);
-                    });
-                }
-            });
+    cardsPacientes.querySelectorAll('.delete').forEach((botao) => {
+        botao.addEventListener('click', function () {
+            const id = this.closest('.cardPaciente').dataset.pacienteId;
+            if (id) {
+                Swal.fire({
+                    title: 'Tem certeza?',
+                    text: "Você não poderá reverter isso!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sim, deletar!',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) deletarPaciente(id);
+                });
+            }
         });
+    });
 
-        cardsPacientes.querySelectorAll('.update').forEach((botao) => {
-            botao.addEventListener('click', function () {
-                const id = this.closest('.cardPaciente').dataset.pacienteId ;
-                if (id) window.location.href = `atualizarPaciente.html?id=${id}`;
-            });
+    cardsPacientes.querySelectorAll('.update').forEach((botao) => {
+        botao.addEventListener('click', function () {
+            const id = this.closest('.cardPaciente').dataset.pacienteId;
+            if (id) window.location.href = `atualizarPaciente.html?id=${id}`;
         });
-    }
+    });
+}
 
 
 async function deletarPaciente(id) {
@@ -240,11 +262,6 @@ function abrirModalPaciente(idPaciente) {
         });
 }
 
-// Função para fechar o modal do paciente
-function fecharModalPaciente() {
-    document.getElementById('modalBackdrop').style.display = 'none';
-}
-
 // Função para abrir a aba selecionada
 function openTab(event, tabId) {
     const tabs = document.querySelectorAll('.content');
@@ -258,15 +275,55 @@ function openTab(event, tabId) {
 
 // Função para preencher os detalhes do paciente
 function preencherDetalhes(paciente) {
-    const detalhesContainer = document.getElementById('detalhes');
-    detalhesContainer.innerHTML = `
-        <div class="detalhe-item"><strong>CPF:</strong> ${formatarCPF(paciente.cpf)}</div>
-        <div class="detalhe-item"><strong>Email:</strong> ${paciente.email}</div>
-        <div class="detalhe-item"><strong>Telefone:</strong> ${formatarTelefone(paciente.telefone)}</div>
-        <div class="detalhe-item"><strong>Data de Nascimento:</strong> ${new Date(paciente.dataNascimento).toLocaleDateString('pt-BR')}</div>
-        <div class="detalhe-item"><strong>Endereço:</strong> ${paciente.endereco || 'Não informado'}</div>
-        <div class="detalhe-item"><strong>Informações Adicionais:</strong> ${paciente.outrasInformacoes || 'N/A'}</div>
-    `;
+    // Seção Esquerda
+    document.getElementById('pacienteFoto').src = paciente.foto || '../Assets/perfil.jpeg';
+    document.getElementById('pacienteNome').textContent = paciente.nome ? `${paciente.nome} ${paciente.sobrenome || ''}` : 'Nome não informado';
+    document.getElementById('pacienteIdade').textContent = paciente.dataNascimento ? calcularIdade(paciente.dataNascimento) : 'Idade não informada';
+    document.getElementById('pacienteCPF').textContent = paciente.cpf ? formatarCPF(paciente.cpf) : 'CPF não informado';
+
+    // Bloco Superior
+    document.getElementById('pacienteTelefone').textContent = paciente.telefone ? formatarTelefone(paciente.telefone) : 'Telefone não informado';
+    document.getElementById('pacienteCNS').textContent = paciente.cns || 'CNS não informado';
+    document.getElementById('pacienteDataNascimento').textContent = new Date(paciente.dataNascimento).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' }) || 'Data de nascimento não informada';
+
+    // Endereço
+    if (paciente.endereco) {
+        document.getElementById('enderecoCEP').textContent = paciente.endereco.cep || 'CEP não informado';
+        document.getElementById('enderecoLogradouro').textContent = paciente.endereco.logradouro || 'Logradouro não informado';
+        document.getElementById('enderecoNumero').textContent = paciente.endereco.numero || 'Número não informado';
+        document.getElementById('enderecoComplemento').textContent = paciente.endereco.complemento || 'Complemento não informado';
+        document.getElementById('enderecoBairro').textContent = paciente.endereco.bairro || 'Bairro não informado';
+    } else {
+        document.getElementById('enderecoCEP').textContent = 'CEP não informado';
+        document.getElementById('enderecoLogradouro').textContent = 'Logradouro não informado';
+        document.getElementById('enderecoNumero').textContent = 'Número não informado';
+        document.getElementById('enderecoComplemento').textContent = 'Complemento não informado';
+        document.getElementById('enderecoBairro').textContent = 'Bairro não informado';
+    }
+
+    // Responsável
+    if (paciente.responsavel) {
+        document.getElementById('responsavelNome').textContent = paciente.responsavel.nome || 'Nome não informado';
+        document.getElementById('responsavelSobrenome').textContent = paciente.responsavel.sobrenome || 'Sobrenome não informado';
+        document.getElementById('responsavelTelefone').textContent = paciente.responsavel.telefone ? formatarTelefone(paciente.responsavel.telefone) : 'Telefone não informado';
+        document.getElementById('responsavelCPF').textContent = paciente.responsavel.cpf ? formatarCPF(paciente.responsavel.cpf) : 'CPF não informado';
+    } else {
+        document.getElementById('responsavelNome').textContent = 'Nome não informado';
+        document.getElementById('responsavelSobrenome').textContent = 'Sobrenome não informado';
+        document.getElementById('responsavelTelefone').textContent = 'Telefone não informado';
+        document.getElementById('responsavelCPF').textContent = 'CPF não informado';
+    }
+}
+
+// Função auxiliar para calcular a idade
+function calcularIdade(dataNascimento) {
+    if (!dataNascimento) return 'Não informada';
+    const hoje = new Date();
+    const nascimento = new Date(dataNascimento);
+    let idade = hoje.getFullYear() - nascimento.getFullYear();
+    const mes = hoje.getMonth() - nascimento.getMonth();
+    if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) idade--;
+    return `${idade} anos`;
 }
 
 // Função para preencher o calendário do paciente
@@ -281,16 +338,6 @@ function preencherRelatorios(pacienteId) {
         <div class="relatorio-item">Relatório 1: Detalhes...</div>
         <div class="relatorio-item">Relatório 2: Detalhes...</div>
     `;
-}
-
-// Função para formatar CPF
-function formatarCPF(cpf) {
-    return cpf ? cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') : '';
-}
-
-// Função para formatar telefone
-function formatarTelefone(telefone) {
-    return telefone ? telefone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3') : '';
 }
 
 let dataInicioAtual = obterInicioDaSemana(new Date());
@@ -331,10 +378,13 @@ function filtrarConsultasPorPermissao() {
     const especificacaoMedica = sessionStorage.getItem('ESPECIFICACAO_MEDICA');
 
     if (permissao === 'Médico' && idMedico) {
+        // Exibe as consultas apenas do médico
         return consultasOriginais.filter(consulta => consulta.medico.id === idMedico);
     } else if (permissao === 'Supervisor') {
+        // Exibe as consultas relacionadas à área do supervisor
         return consultasOriginais.filter(consulta => consulta.especificacaoMedica.area === especificacaoMedica);
     } else if (permissao === 'Admin') {
+        // Exibe todas as consultas
         return consultasOriginais;
     }
     return [];
@@ -446,10 +496,22 @@ async function inicializarPagina(idPaciente) {
     atualizarDisplayData(dataInicioAtual);
 }
 
-// Evento para fechar o modal ao clicar fora do conteúdo
-document.getElementById('modalBackdrop').addEventListener('click', (e) => {
-    if (e.target === document.getElementById('modalBackdrop')) {
-        fecharModalPaciente();
+// Seleciona elementos
+const modalBackdrop = document.getElementById('modalBackdrop');
+const closeModalBtn = document.getElementById('closeModal');
+
+// Função para fechar o modal
+function fecharModal() {
+    modalBackdrop.style.display = 'none';
+}
+
+// Eventos para fechar o modal
+closeModalBtn.addEventListener('click', fecharModal); // Fechar ao clicar no botão
+modalBackdrop.addEventListener('click', (e) => {
+    if (e.target === modalBackdrop) {
+        fecharModal(); // Fechar ao clicar fora do conteúdo
     }
 });
+
+
 
