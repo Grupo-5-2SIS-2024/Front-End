@@ -716,6 +716,47 @@ a {
     color: #000;
 }
 
+.modalDetalhesTarefa {
+    display: none;
+    position: fixed;
+    z-index: 999999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content-Detalhes {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    animation: animacaoModal 0.3s ease-out;
+}
+
+@keyframes animacaoModal {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.modal-content-Detalhes .close {
+    float: right;
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
 /* Ajuste para dispositivos menores */
 @media (max-width: 768px) {
     .modalDetalhes {

@@ -344,25 +344,29 @@ let dataInicioAtual = obterInicioDaSemana(new Date());
 let consultasOriginais = [];
 let bancoDeDadosFiltrado = [];
 
-// Função para obter o início da semana a partir de uma data, ajustando para segunda-feira
+// Ao carregar a página, inicialize o calendário
+document.addEventListener('DOMContentLoaded', () => {
+    atualizarDisplayData(dataInicioAtual);
+});
+
+// Configurar a aba para inicializar o calendário ao clicar
+document.getElementById('calendario').addEventListener('click', () => {
+    atualizarDisplayData(dataInicioAtual);
+});
+
 function obterInicioDaSemana(date) {
     const day = date.getDay();
-    const diff = (day === 0 ? -6 : 1) - day; // Ajuste para segunda-feira como o primeiro dia da semana
+    const diff = (day === 0 ? -6 : 1) - day;
     const startDate = new Date(date);
     startDate.setDate(date.getDate() + diff);
     return startDate;
 }
 
-// Função para buscar consultas de um paciente específico
 async function buscarConsultasCliente(pacienteId) {
     try {
         const resposta = await fetch("http://localhost:8080/consultas");
-        if (!resposta.ok) {
-            throw new Error(`HTTP error! Status: ${resposta.status}`);
-        }
+        if (!resposta.ok) throw new Error(`HTTP error! Status: ${resposta.status}`);
         const todasConsultas = await resposta.json();
-
-        // Filtra as consultas apenas do paciente atual
         consultasOriginais = todasConsultas.filter(consulta => consulta.paciente.id === pacienteId);
         bancoDeDadosFiltrado = filtrarConsultasPorPermissao();
         atualizarDisplayCalendario(bancoDeDadosFiltrado);
@@ -371,7 +375,6 @@ async function buscarConsultasCliente(pacienteId) {
     }
 }
 
-// Função para filtrar as consultas com base no tipo de usuário
 function filtrarConsultasPorPermissao() {
     const permissao = sessionStorage.getItem('PERMISSIONAMENTO_MEDICO');
     const idMedico = parseInt(sessionStorage.getItem('ID_MEDICO'));
@@ -392,18 +395,69 @@ function filtrarConsultasPorPermissao() {
 
 // Função para atualizar o display de dados no calendário do paciente
 function atualizarDisplayCalendario(consultasCliente) {
-    const diasSemanaElement = document.getElementById('diasSemana');
-    diasSemanaElement.innerHTML = '';
+    const colunasTarefasElement = document.getElementById('colunasTarefas');
+    colunasTarefasElement.innerHTML = ''; // Limpa o conteúdo existente
 
-    consultasCliente.forEach(consulta => {
-        const taskElement = document.createElement('div');
-        taskElement.className = 'task';
-        taskElement.innerText = consulta.descricao;
-        diasSemanaElement.appendChild(taskElement);
-    });
+    // Itera pelos 7 dias da semana
+    for (let i = 0; i < 7; i++) {
+        const diaAtual = new Date(dataInicioAtual);
+        diaAtual.setDate(dataInicioAtual.getDate() + i);
+
+        // Filtra as consultas para o dia atual
+        const consultasDoDia = consultasCliente.filter(consulta =>
+            consulta.datahoraConsulta.startsWith(formatarData(diaAtual))
+        );
+
+        // Cria uma coluna para o dia
+        const colunaElement = document.createElement('div');
+        colunaElement.className = 'column';
+
+        if (consultasDoDia.length === 0) {
+            // Exibe "Sem tarefas" caso não haja consultas
+            const noTaskElement = document.createElement('div');
+            noTaskElement.className = 'task inactive';
+            noTaskElement.innerText = 'Sem tarefas';
+            colunaElement.appendChild(noTaskElement);
+        } else {
+            // Adiciona as consultas do dia
+            consultasDoDia.forEach(consulta => {
+                const taskElement = document.createElement('div');
+                taskElement.className = 'task';
+                taskElement.innerText = consulta.descricao;
+
+                // Adiciona o evento de clique para abrir os detalhes
+                taskElement.onclick = () => abrirDetalhesTarefa(consulta);
+
+                colunaElement.appendChild(taskElement);
+            });
+        }
+
+        colunasTarefasElement.appendChild(colunaElement);
+    }
 }
 
-// Função para atualizar os detalhes da data no calendário
+function abrirDetalhesTarefa(consulta) {
+    // Formatando a data e hora para exibição
+    const dataHora = new Date(consulta.datahoraConsulta);
+    const dataFormatada = dataHora.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+    const horaFormatada = dataHora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+    const detalhesDiv = document.getElementById('detalhesTarefa');
+    detalhesDiv.innerHTML = `
+        <p><strong>Descrição:</strong> ${consulta.descricao}</p>
+        <p><strong>Data e Hora:</strong> ${dataFormatada} às ${horaFormatada}</p>
+        <p><strong>Paciente:</strong> ${consulta.paciente.nome} ${consulta.paciente.sobrenome}</p>
+        <p><strong>Médico:</strong> ${consulta.medico.nome} ${consulta.medico.sobrenome} - ${consulta.especificacaoMedica.area}</p>
+        <p><strong>Status:</strong> ${consulta.statusConsulta.nomeStatus}</p>
+        <p><strong>Duração:</strong> ${consulta.duracaoConsulta}</p>
+    `;
+    document.getElementById('modalDetalhesTarefa').style.display = 'flex';
+}
+
+function fecharModalDetalhes() {
+    document.getElementById('modalDetalhesTarefa').style.display = 'none';
+}
+
 function atualizarDisplayData(startDate) {
     dataInicioAtual = obterInicioDaSemana(startDate);
     const endDate = new Date(dataInicioAtual);
@@ -417,7 +471,6 @@ function atualizarDisplayData(startDate) {
     atualizarDiasDaSemana(dataInicioAtual);
 }
 
-// Função para atualizar os dias da semana
 function atualizarDiasDaSemana(startDate) {
     const diasSemanaElement = document.getElementById('diasSemana');
     diasSemanaElement.innerHTML = '';
@@ -439,24 +492,31 @@ function atualizarDiasDaSemana(startDate) {
     atualizarColunasDeTarefas(startDate);
 }
 
-// Função para atualizar as colunas de tarefas do calendário
 function atualizarColunasDeTarefas(startDate) {
     const colunasTarefasElement = document.getElementById('colunasTarefas');
-    colunasTarefasElement.innerHTML = '';
+    colunasTarefasElement.innerHTML = ''; // Limpa o conteúdo existente
 
     for (let i = 0; i < 7; i++) {
         const currentDate = new Date(startDate);
         currentDate.setDate(currentDate.getDate() + i);
 
-        const tasks = bancoDeDadosFiltrado.filter(entry => entry.datahoraConsulta.startsWith(formatarData(currentDate)));
+        // Filtra as consultas para o dia atual
+        const tasks = bancoDeDadosFiltrado.filter(entry =>
+            entry.datahoraConsulta.startsWith(formatarData(currentDate))
+        );
 
         const columnElement = document.createElement('div');
         columnElement.className = 'column';
 
+        // Adiciona as tarefas à coluna
         tasks.forEach(task => {
             const taskElement = document.createElement('div');
             taskElement.className = 'task';
             taskElement.innerText = task.descricao;
+
+            // Adiciona o evento de clique para abrir os detalhes
+            taskElement.onclick = () => abrirDetalhesTarefa(task);
+
             columnElement.appendChild(taskElement);
         });
 
@@ -471,7 +531,6 @@ function atualizarColunasDeTarefas(startDate) {
     }
 }
 
-// Função para formatar a data
 function formatarData(date) {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -479,7 +538,6 @@ function formatarData(date) {
     return `${year}-${month}-${day}`;
 }
 
-// Funções de navegação para semana anterior e próxima
 function semanaPassada() {
     dataInicioAtual.setDate(dataInicioAtual.getDate() - 7);
     atualizarDisplayData(dataInicioAtual);
@@ -489,6 +547,7 @@ function proximaSemana() {
     dataInicioAtual.setDate(dataInicioAtual.getDate() + 7);
     atualizarDisplayData(dataInicioAtual);
 }
+
 
 // Função para inicializar a página e buscar as consultas do paciente específico
 async function inicializarPagina(idPaciente) {
