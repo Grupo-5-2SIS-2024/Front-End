@@ -190,5 +190,77 @@ async function adicionarAcompanhamento(idConsulta) {
     }
 }
 
+// async function importarTxt() {
+//     const fileInput = document.getElementById("arquivoTxt"); // Obter o elemento de input
+//     const file = fileInput.files[0]; // Obter o primeiro arquivo selecionado
+
+//     if (!file) {
+//         alert("Por favor, selecione um arquivo.");
+//         return;
+//     }
+
+//     const reader = new FileReader(); // Instância do FileReader
+
+//     try {
+//         reader.onload = async () => {
+//             try {
+//                 //const fkConsulta = 4; // Substitua pelo ID da consulta correto
+//                 const response = await fetch(
+//                     `http://localhost:8080/acompanhamentos/importar-feedback-txt/${consultaId}`,
+//                     {
+//                         method: "POST",
+//                         headers: { "Content-Type": "text/plain" },
+//                         body: reader.result, // Conteúdo do arquivo
+//                     }
+//                 );
+
+//                 if (response.ok) {
+//                     const fileContent = reader.result;
+//                     const mensagem = await response.text();
+//                     atualizarCamposFeedback(fileContent);
+//                     alert(`Importação realizada com sucesso: ${mensagem}`);
+//                 } else {
+//                     const errorMessage = await response.text();
+//                     alert(`Erro ao importar o arquivo: ${errorMessage}`);
+//                 }
+//             } catch (error) {
+//                 alert(`Erro ao processar a requisição: ${error.message}`);
+//                 console.error("Erro na requisição:", error);
+//             }
+//         };
+
+//         reader.onerror = () => {
+//             alert("Erro ao ler o arquivo.");
+//             console.error("Erro ao ler o arquivo.");
+//         };
+
+//         reader.readAsText(file); // Lê o arquivo como texto
+//     } catch (error) {
+//         alert(`Erro ao carregar o arquivo: ${error.message}`);
+//         console.error("Erro ao carregar o arquivo:", error);
+//     }
+// }
+
+  
+
+// // Função para atualizar os campos "Resumo" e "Relatório".
+// function atualizarCamposFeedback(fileContent) {
+//     const linhas = fileContent.split("\n");
+
+//     linhas.forEach((linha) => {
+//         const registro = linha.substring(0, 2);
+
+//         if (registro === "02") {
+//             const resumo = linha.substring(7, 52).trim();
+//             const relatorio = linha.substring(52, 97).trim();
+
+//             // Atualiza os campos no formulário.
+//             document.getElementById("resumo").value = resumo;
+//             document.getElementById("relatorio").value = relatorio;
+//         }
+//     });
+// }
+
+
 // Chamar a função para carregar dados da consulta ao abrir a página
 carregarDadosConsulta();
