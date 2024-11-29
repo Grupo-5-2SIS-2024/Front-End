@@ -234,7 +234,7 @@
                             <button class="tab-btn" content-id="calendario"
                                 onclick="openTab(event, 'calendario')">Calendário</button>
                             <button class="tab-btn" content-id="relatorios"
-                                onclick="openTab(event, 'relatorios')">Relatórios</button>
+                                onclick="openTab(event, 'evolucao')">Evoluções</button>
                         </div>
                         <div class="tab-contents">
                             <!-- Aba Detalhes -->
@@ -285,10 +285,63 @@
                                 <div class="tasks-columns" id="colunasTarefas"></div>
                             </div>
 
-                            <!-- Aba Relatórios -->
-                            <div class="content" id="relatorios">
+                            <!-- Aba Evoluções -->
+                            <div class="content" id="evolucao">
                                 <h1 class="content-title">Relatórios do Paciente</h1>
-                                <p class="content-description">Relatórios detalhados do paciente.</p>
+                                <div id="evolucoes" class="content44">
+                                    <ul id="listaEvolucoes" class="evolucoes-list">
+                                        <!-- Consultas realizadas serão listadas aqui -->
+                                    </ul>
+                                </div>
+                                
+                                <div id="modalEvolucao" class="modalEvolucao">
+                                    <div class="containerEvolucao">
+                                        <header class="headerModal">
+                                            <h1>Feedback da Consulta</h1>
+                                            <p>Preencha os detalhes do acompanhamento para a consulta selecionada.</p>
+                                        </header>
+                                
+                                        <main>
+                                            <form id="feedbackForm">
+                                                <div class="form-row">
+                                                    <!-- Coluna da Esquerda -->
+                                                    <div class="form-left">
+                                                        <div class="form-group">
+                                                            <label for="resumo">Resumo</label>
+                                                            <textarea id="resumo" name="resumo" rows="3" maxlength="45" placeholder="Escreva um breve resumo"></textarea>
+                                                        </div>
+                                
+                                                        <div class="form-group">
+                                                            <label for="relatorio">Relatório</label>
+                                                            <textarea id="relatorio" name="relatorio" rows="5" maxlength="45" placeholder="Escreva o relatório detalhado"></textarea>
+                                                        </div>
+                                                    </div>
+                                
+                                                    <!-- Coluna da Direita -->
+                                                    <div class="form-right">
+                                                        <div class="form-group">
+                                                            <label for="medico">Médico</label>
+                                                            <input type="text" id="medico" name="medico" disabled>
+                                                        </div>
+                                
+                                                        <div class="form-group">
+                                                            <label for="especificacaoMedica">Especificação Médica</label>
+                                                            <input type="text" id="especificacaoMedica" name="especificacaoMedica" disabled>
+                                                        </div>
+                                
+                                                        <div class="form-group">
+                                                            <label for="paciente">Paciente</label>
+                                                            <input type="text" id="paciente" name="paciente" disabled>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <button id="botao" type="button" class="buttonEvolucao" onclick="concluirConsultaEAdicionarFeedback(consultaId)">Salvar Feedback</button>
+                                            </form>
+                                        </main>
+                                    </div>
+                                </div>
+                                
+                                
                             </div>
                         </div>
                     </div>

@@ -757,6 +757,160 @@ a {
     cursor: pointer;
 }
 
+/* Aba evolucoes */
+
+.evolucoes-list {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    max-width: 600px;
+    margin: 20px auto;
+    background-color: #ccc;
+}
+
+.evolucao-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    margin: 5px 0;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.evolucao-item:hover {
+    background-color: #f1f1f1;
+}
+
+.evolucao-item .acoes {
+    display: flex;
+    gap: 10px;
+}
+
+.evolucao-item button {
+    border: none;
+    background: #005533;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.evolucao-item button:hover {
+    background: #004a2c;
+}
+
+.modalEvolucao {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo transparente cobrindo a tela toda */
+    display: flex; /* Alinha o modal com flexbox */
+    justify-content: center; /* Alinha o modal horizontalmente no centro */
+    align-items: center; /* Alinha o modal verticalmente no centro */
+    visibility: hidden; /* Inicialmente invisível */
+}
+
+.containerEvolucao {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column; /* Organiza os campos do formulário em uma coluna */
+}
+
+.headerModal h1 {
+    font-size: 22px; /* Tamanho de fonte reduzido */
+    color: #2E7D32;
+    margin: 0 0 10px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.headerModal p {
+    margin: 0 0 20px 0;
+    font-size: 14px;
+    color: #666;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#feedbackForm{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    right: 2rem;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.form-group input[type="text"],
+.form-group select,
+.form-group textarea {
+    padding: 10px;
+    border: 1px solid #CCC;
+    border-radius: 5px;
+    font-size: 14px;
+    resize: vertical;
+}
+
+.form-row {
+    display: flex;
+    justify-content: space-between; /* Cria um espaçamento entre as colunas */
+    gap: 3rem;
+}
+
+.form-left,
+.form-right {
+    width: 70%; /* Ajuste para as colunas ficarem do lado esquerdo e direito */
+}
+
+.buttonEvolucao {
+    background-color: #2E7D32;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%; /* Faz o botão ocupar toda a largura */
+}
+
+.buttonEvolucao:hover {
+    background-color: #1B5E20;
+}
+
+.botao-container {
+    display: flex;
+    justify-content: flex-start; /* Alinha os botões à esquerda */
+    gap: 10px; /* Reduz o espaço entre os botões */
+    margin-top: 20px; /* Ajuste a margem superior conforme necessário */
+}
+
+
+
 /* Ajuste para dispositivos menores */
 @media (max-width: 768px) {
     .modalDetalhes {

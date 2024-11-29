@@ -251,7 +251,7 @@ function abrirModalPaciente(idPaciente) {
             // Preenche as abas com as informações do paciente
             preencherDetalhes(data);
             preencherCalendario(data.id);
-            preencherRelatorios(data.id);
+            preencherEvolucoes(data.id);
 
             // Define a aba "Detalhes" como a aba ativa
             openTab(null, 'detalhes');
@@ -331,14 +331,49 @@ function preencherCalendario(pacienteId) {
     buscarConsultasCliente(pacienteId);
 }
 
-// Função para preencher os relatórios do paciente
-function preencherRelatorios(pacienteId) {
-    const relatoriosContainer = document.getElementById('relatorios');
-    relatoriosContainer.innerHTML = `
-        <div class="relatorio-item">Relatório 1: Detalhes...</div>
-        <div class="relatorio-item">Relatório 2: Detalhes...</div>
-    `;
+// Função para preencher o calendário do paciente
+async function preencherEvolucoes(pacienteId) {
+    try {
+        // Faz a requisição para buscar todas as consultas
+        const resposta = await fetch("http://localhost:8080/consultas");
+        if (!resposta.ok) {
+            throw new Error(`Erro ao buscar consultas. Status: ${resposta.status}`);
+        }
+
+        console.log(pacienteId);
+        // Obtém a lista de consultas
+        const consultas = await resposta.json();
+        console.log("Consultas recebidas:", consultas);
+
+        // Filtra as consultas pelo ID do paciente
+        const consultasFiltradas = consultas.filter(consulta => consulta.paciente.id === pacienteId);
+        console.log("Consultas filtradas para o paciente:", consultasFiltradas);
+
+        // Verifica o permissionamento do usuário
+        const permissaoUsuario = sessionStorage.getItem("PERMISSIONAMENTO_MEDICO");
+        if (permissaoUsuario === "supervisor") {
+            // Exibe somente consultas visíveis pelo supervisor
+            const consultasPermitidas = consultasFiltradas.filter(consulta => {
+                // Ajuste aqui a lógica de filtragem por área ou restrição do supervisor
+                return consulta.area === sessionStorage.getItem("ESPECIFICACAO_MEDICA");
+            });
+            console.log("Consultas permitidas para o supervisor:", consultasPermitidas);
+
+            // Chama a função para listar as consultas realizadas
+            listarConsultasRealizadas(consultasPermitidas, pacienteId);
+        } else if (permissaoUsuario === "Admin") {
+            // Se o usuário for 'adm', lista todas as consultas do paciente
+            listarConsultasRealizadas(consultasFiltradas, pacienteId);
+        } else {
+            console.warn("Permissão desconhecida. Nenhuma consulta será exibida.");
+        }
+    } catch (error) {
+        console.error("Erro ao preencher evoluções:", error);
+    }
 }
+
+
+// Parte do calendario do paciente
 
 let dataInicioAtual = obterInicioDaSemana(new Date());
 let consultasOriginais = [];
@@ -381,13 +416,10 @@ function filtrarConsultasPorPermissao() {
     const especificacaoMedica = sessionStorage.getItem('ESPECIFICACAO_MEDICA');
 
     if (permissao === 'Médico' && idMedico) {
-        // Exibe as consultas apenas do médico
         return consultasOriginais.filter(consulta => consulta.medico.id === idMedico);
     } else if (permissao === 'Supervisor') {
-        // Exibe as consultas relacionadas à área do supervisor
         return consultasOriginais.filter(consulta => consulta.especificacaoMedica.area === especificacaoMedica);
     } else if (permissao === 'Admin') {
-        // Exibe todas as consultas
         return consultasOriginais;
     }
     return [];
@@ -398,34 +430,28 @@ function atualizarDisplayCalendario(consultasCliente) {
     const colunasTarefasElement = document.getElementById('colunasTarefas');
     colunasTarefasElement.innerHTML = ''; // Limpa o conteúdo existente
 
-    // Itera pelos 7 dias da semana
     for (let i = 0; i < 7; i++) {
         const diaAtual = new Date(dataInicioAtual);
         diaAtual.setDate(dataInicioAtual.getDate() + i);
 
-        // Filtra as consultas para o dia atual
         const consultasDoDia = consultasCliente.filter(consulta =>
             consulta.datahoraConsulta.startsWith(formatarData(diaAtual))
         );
 
-        // Cria uma coluna para o dia
         const colunaElement = document.createElement('div');
         colunaElement.className = 'column';
 
         if (consultasDoDia.length === 0) {
-            // Exibe "Sem tarefas" caso não haja consultas
             const noTaskElement = document.createElement('div');
             noTaskElement.className = 'task inactive';
             noTaskElement.innerText = 'Sem tarefas';
             colunaElement.appendChild(noTaskElement);
         } else {
-            // Adiciona as consultas do dia
             consultasDoDia.forEach(consulta => {
                 const taskElement = document.createElement('div');
                 taskElement.className = 'task';
                 taskElement.innerText = consulta.descricao;
 
-                // Adiciona o evento de clique para abrir os detalhes
                 taskElement.onclick = () => abrirDetalhesTarefa(consulta);
 
                 colunaElement.appendChild(taskElement);
@@ -437,7 +463,6 @@ function atualizarDisplayCalendario(consultasCliente) {
 }
 
 function abrirDetalhesTarefa(consulta) {
-    // Formatando a data e hora para exibição
     const dataHora = new Date(consulta.datahoraConsulta);
     const dataFormatada = dataHora.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
     const horaFormatada = dataHora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
@@ -553,6 +578,188 @@ function proximaSemana() {
 async function inicializarPagina(idPaciente) {
     await buscarConsultasCliente(idPaciente);
     atualizarDisplayData(dataInicioAtual);
+}
+
+// Parte da evolucao
+
+// Função para listar as consultas realizadas na aba de relatórios
+async function listarConsultasRealizadas(consultasCliente, pacienteId) {
+    const evolucoesList = document.getElementById('listaEvolucoes');
+    evolucoesList.innerHTML = ''; // Limpa a lista antes de preencher
+
+    if (!Array.isArray(consultasCliente)) {
+        console.error('Dados de consultas inválidos. Não é um array:', consultasCliente);
+        evolucoesList.innerHTML = `<li class="evolucao-item">Nenhuma consulta encontrada.</li>`;
+        return;
+    }
+
+    if (consultasCliente.length === 0) {
+        evolucoesList.innerHTML = `<li class="evolucao-item">Nenhuma consulta realizada.</li>`;
+        return;
+    }
+
+    try {
+        const resposta = await fetch(`http://localhost:8080/acompanhamentos`);
+        if (!resposta.ok) {
+            throw new Error(`Erro ao buscar dados dos acompanhamentos. Status: ${resposta.status}`);
+        }
+        const acompanhamentos = await resposta.json();
+
+        consultasCliente.forEach((consulta, index) => {
+            if (!consulta || !consulta.datahoraConsulta || !consulta.id) {
+                console.warn('Consulta inválida no índice', index, consulta);
+                return;
+            }
+
+            const dataConsulta = new Date(consulta.datahoraConsulta);
+            const dataFormatada = dataConsulta.toLocaleDateString('pt-BR');
+
+            const acompanhamento = acompanhamentos.find(a => a.consulta.id === consulta.id);
+
+            const listItem = document.createElement('li');
+            listItem.classList.add('evolucao-item');
+
+            let botaoCriar = '';
+            let botaoVisualizar = '';
+            let botaoAtualizar = '';
+
+            if (acompanhamento) {
+                botaoVisualizar = `<button class="botao-visualizar" onclick="abrirModalEvolucao(${consulta.id}, 'visualizar')"><i class="fa fa-eye"></i></button>`;
+                botaoAtualizar = `<button class="botao-atualizar" onclick="abrirModalEvolucao(${consulta.id}, 'atualizar', ${pacienteId})"><i class="fas fa-pen"></i></button>`;
+            } else {
+                botaoCriar = `<button class="btn-detalhes" onclick="abrirModalEvolucao(${consulta.id}, 'criar', ${pacienteId})"><i class="fas fa-notes-medical"></i></button>`;
+            }
+
+            listItem.innerHTML = `
+                <span>Consulta ${index + 1}: ${dataFormatada}</span>
+                <div class="botao-container">
+                ${botaoVisualizar}
+                ${botaoAtualizar}
+                ${botaoCriar}
+                </div>
+            `;
+
+            evolucoesList.appendChild(listItem);
+        });
+    } catch (error) {
+        console.error('Erro ao carregar os dados dos acompanhamentos:', error);
+        evolucoesList.innerHTML = `<li class="evolucao-item">Erro ao carregar consultas.</li>`;
+    }
+}
+
+// Função para abrir o modal de evolução com diferentes modos
+async function abrirModalEvolucao(consultaId, modo, pacienteId) {
+    try {
+        const resposta = await fetch(`http://localhost:8080/acompanhamentos`);
+        if (!resposta.ok) {
+            throw new Error(`Erro ao buscar dados dos acompanhamentos. Status: ${resposta.status}`);
+        }
+        console.log("Paciente ID ao abrir modal:", pacienteId);
+
+        const acompanhamentos = await resposta.json();
+        const acompanhamentoAtual = acompanhamentos.find(a => a.consulta.id === consultaId);
+
+        const resumoInput = document.getElementById("resumo");
+        const relatorioInput = document.getElementById("relatorio");
+        const medicoInput = document.getElementById("medico");
+        const especificacaoInput = document.getElementById("especificacaoMedica");
+        const pacienteInput = document.getElementById("paciente");
+        const botaoSalvar = document.querySelector(".buttonEvolucao");
+        const botaoFechar = document.getElementById("botao");
+
+        if (modo === "visualizar" && acompanhamentoAtual) {
+            resumoInput.value = acompanhamentoAtual.resumo || "";
+            relatorioInput.value = acompanhamentoAtual.relatorio || "";
+            medicoInput.value = acompanhamentoAtual.consulta.medico.nome || "Não informado";
+            especificacaoInput.value = acompanhamentoAtual.consulta.especificacaoMedica.area || "Não informada";
+            pacienteInput.value = acompanhamentoAtual.consulta.paciente.nome || "Não informado";
+
+            resumoInput.disabled = true;
+            relatorioInput.disabled = true;
+            botaoFechar.innerHTML = "Fechar";
+            botaoSalvar.setAttribute("onclick", `fecharModalEvolucao()`);
+        } else {
+            resumoInput.value = acompanhamentoAtual?.resumo || "";
+            relatorioInput.value = acompanhamentoAtual?.relatorio || "";
+            medicoInput.value = acompanhamentoAtual?.consulta?.medico.nome || "Não informado";
+            especificacaoInput.value = acompanhamentoAtual?.consulta?.especificacaoMedica.area || "Não informada";
+            pacienteInput.value = acompanhamentoAtual?.consulta?.paciente.nome || "Não informado";
+
+            resumoInput.disabled = false;
+            relatorioInput.disabled = false;
+            botaoSalvar.style.display = "block";
+
+            // Corrigindo a chamada do método
+            botaoSalvar.setAttribute(
+                "onclick",
+                `adicionarAcompanhamento(${consultaId}, '${modo}', ${acompanhamentoAtual?.id || null}, ${pacienteId})`
+            );
+
+            botaoFechar.innerHTML = "Salvar Evolução";
+        }
+
+        const modal = document.getElementById("modalEvolucao");
+        modal.style.visibility = "visible";
+    } catch (error) {
+        console.error('Erro ao carregar os dados do acompanhamento:', error);
+    }
+}
+
+async function adicionarAcompanhamento(idConsulta, modo, idAcompanhamento, pacienteId) {
+    const resumo = document.getElementById("resumo").value;
+    const relatorio = document.getElementById("relatorio").value;
+
+    const dadosFeedback = {
+        resumo: resumo,
+        relatorio: relatorio,
+        consulta: { id: idConsulta },
+        status_consulta: 2
+    };
+
+    const url = modo === "criar" 
+        ? "http://localhost:8080/acompanhamentos" 
+        : `http://localhost:8080/acompanhamentos/${idAcompanhamento}`;
+
+    try {
+        const resposta = await fetch(url, {
+            method: modo === "criar" ? "POST" : "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(dadosFeedback),
+        });
+
+        if (!resposta.ok) {
+            const erroTexto = await resposta.text();
+            throw new Error(`Erro ao salvar feedback. Status: ${resposta.status}. Detalhes: ${erroTexto}`);
+        }
+
+        console.log("Paciente ID ao salvar:", pacienteId);
+        fecharModalEvolucao();
+        preencherEvolucoes(pacienteId);
+    } catch (error) {
+        console.error('Erro ao salvar o feedback:', error);
+        alert("Erro ao salvar o feedback. Tente novamente.");
+    }
+}
+
+
+// Função para fechar o modal
+function fecharModalEvolucao() {
+    const modal = document.getElementById("modalEvolucao");
+    modal.style.visibility = "hidden";
+}
+
+// Função para criar um novo relatório
+function criarRelatorio(consultaId) {
+    abrirModalEvolucao(consultaId, "criar");
+}
+
+// Função para visualizar o relatório existente
+function visualizarRelatorio(consultaId) {
+    abrirModalEvolucao(consultaId, "visualizar");
+}
+
+function atualizarRelatorio(consultaId) {
+    abrirModalEvolucao(consultaId, "atualizar", acompanhamentoId);
 }
 
 // Seleciona elementos
