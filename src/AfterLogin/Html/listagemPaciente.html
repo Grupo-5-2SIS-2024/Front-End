@@ -16,6 +16,18 @@
 </head>
 
 <body>
+    <i id="hamburger-menu" class="fa-solid fa-bars"></i>
+
+    <div id="menu-overlay" class="menu-overlay">
+        <ul>
+            <li><a href="homePosLoginAdm.html">Home</a></li>
+            <li><a href="calendario.html">Agendamento</a></li>
+            <li><a href="listagemColaborador.html">Colaborador</a></li>
+            <li><a href="listagemPaciente.html">Paciente</a></li>
+            <li><a href="dashboards.html">Dashboards</a></li>
+            <li><a href="listagemLead.html">Leads</a></li>
+        </ul>
+    </div>
     <nav id="sidebar">
         <div id="sidebar_content">
             <div id="user">
@@ -204,53 +216,144 @@
         <!-- Modal Paciente -->
         <div id="modalBackdrop" class="modal-backdrop" style="display: none;">
             <div class="modalDetalhes">
+                <button class="close-btn" id="closeModal">×</button>
                 <div id="container">
+                    <!-- Seção Esquerda -->
                     <div class="left-section">
                         <img src="../Assets/perfil.jpeg" class="patient-img" id="pacienteFoto" alt="Foto do Paciente">
                         <h2 class="patient-name" id="pacienteNome"></h2>
+                        <p><strong>Idade:</strong> <span id="pacienteIdade"></span></p>
+                        <p><strong>CPF:</strong> <span id="pacienteCPF"></span></p>
                     </div>
+
+                    <!-- Seção Direita -->
                     <div class="right-section">
                         <div class="tab-buttons">
-                            <button class="tab-btn active" content-id="detalhes" onclick="openTab(event, 'detalhes')">Detalhes</button>
-                            <button class="tab-btn" content-id="calendario" onclick="openTab(event, 'calendario')">Calendário</button>
-                            <button class="tab-btn" content-id="relatorios" onclick="openTab(event, 'relatorios')">Relatórios</button>
+                            <button class="tab-btn active" content-id="detalhes"
+                                onclick="openTab(event, 'detalhes')">Detalhes</button>
+                            <button class="tab-btn" content-id="calendario"
+                                onclick="openTab(event, 'calendario')">Calendário</button>
+                            <button class="tab-btn" content-id="relatorios"
+                                onclick="openTab(event, 'evolucao')">Evoluções</button>
                         </div>
                         <div class="tab-contents">
+                            <!-- Aba Detalhes -->
                             <div class="content show" id="detalhes">
                                 <h1 class="content-title">Detalhes do Paciente</h1>
                                 <div id="detalhesContent" class="content-description">
-                                    <!-- Detalhes do paciente serão inseridos aqui dinamicamente pelo JavaScript -->
+                                    <!-- Bloco Superior -->
+                                    <div class="detalhes-bloco-superior">
+                                        <div><strong>Telefone:</strong> <span id="pacienteTelefone"></span></div>
+                                        <div><strong>CNS:</strong> <span id="pacienteCNS"></span></div>
+                                        <div><strong>Data de Nascimento:</strong> <span
+                                                id="pacienteDataNascimento"></span></div>
+                                    </div>
+
+                                    <!-- Blocos Inferiores -->
+                                    <div class="detalhes-blocos-inferiores">
+                                        <!-- Endereço -->
+                                        <div class="detalhes-endereco">
+                                            <h4>Endereço</h4>
+                                            <p><strong>CEP:</strong> <span id="enderecoCEP"></span></p>
+                                            <p><strong>Logradouro:</strong> <span id="enderecoLogradouro"></span></p>
+                                            <p><strong>Número:</strong> <span id="enderecoNumero"></span></p>
+                                            <p><strong>Complemento:</strong> <span id="enderecoComplemento"></span></p>
+                                            <p><strong>Bairro:</strong> <span id="enderecoBairro"></span></p>
+                                        </div>
+
+                                        <!-- Responsável -->
+                                        <div class="detalhes-responsavel">
+                                            <h4>Responsável</h4>
+                                            <p><strong>Nome:</strong> <span id="responsavelNome"></span></p>
+                                            <p><strong>Sobrenome:</strong> <span id="responsavelSobrenome"></span></p>
+                                            <p><strong>Telefone:</strong> <span id="responsavelTelefone"></span></p>
+                                            <p><strong>CPF:</strong> <span id="responsavelCPF"></span></p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+
+                            <!-- Aba Calendário -->
                             <div class="content" id="calendario">
                                 <h1 class="content-title">Calendário do Paciente</h1>
-                                
-                                <!-- Exibição da semana/mês -->
                                 <div class="count-dias">
                                     <button class="nav-button" onclick="semanaPassada()">&#8249;</button>
                                     <div id="dias" class="semana-range"></div>
                                     <button class="nav-button" onclick="proximaSemana()">&#8250;</button>
                                 </div>
-                                
-                                <!-- Dias da semana (Segunda, Terça, etc.) -->
                                 <div class="week-days" id="diasSemana"></div>
-                                
-                                <!-- Colunas para as tarefas (consultas) dos dias da semana -->
-                                <div class="tasks-columns" id="colunasTarefas">
-                                    <!-- Colunas para cada dia de semana -->
+                                <div class="tasks-columns" id="colunasTarefas"></div>
+                            </div>
+
+                            <!-- Aba Evoluções -->
+                            <div class="content" id="evolucao">
+                                <h1 class="content-title">Relatórios do Paciente</h1>
+                                <div id="evolucoes" class="content44">
+                                    <ul id="listaEvolucoes" class="evolucoes-list">
+                                        <!-- Consultas realizadas serão listadas aqui -->
+                                    </ul>
                                 </div>
                                 
-                            </div>
-                            <div class="content" id="relatorios">
-                                <h1 class="content-title">Relatórios do Paciente</h1>
-                                <p class="content-description">Relatórios detalhados do paciente.</p>
+                                <div id="modalEvolucao" class="modalEvolucao">
+                                    <div class="containerEvolucao">
+                                        <header class="headerModal">
+                                            <h1>Feedback da Consulta</h1>
+                                            <p>Preencha os detalhes do acompanhamento para a consulta selecionada.</p>
+                                        </header>
+                                
+                                        <main>
+                                            <form id="feedbackForm">
+                                                <div class="form-row">
+                                                    <!-- Coluna da Esquerda -->
+                                                    <div class="form-left">
+                                                        <div class="form-group">
+                                                            <label for="resumo">Resumo</label>
+                                                            <textarea id="resumo" name="resumo" rows="3" maxlength="45" placeholder="Escreva um breve resumo"></textarea>
+                                                        </div>
+                                
+                                                        <div class="form-group">
+                                                            <label for="relatorio">Relatório</label>
+                                                            <textarea id="relatorio" name="relatorio" rows="5" maxlength="45" placeholder="Escreva o relatório detalhado"></textarea>
+                                                        </div>
+                                                    </div>
+                                
+                                                    <!-- Coluna da Direita -->
+                                                    <div class="form-right">
+                                                        <div class="form-group">
+                                                            <label for="medico">Médico</label>
+                                                            <input type="text" id="medico" name="medico" disabled>
+                                                        </div>
+                                
+                                                        <div class="form-group">
+                                                            <label for="especificacaoMedica">Especificação Médica</label>
+                                                            <input type="text" id="especificacaoMedica" name="especificacaoMedica" disabled>
+                                                        </div>
+                                
+                                                        <div class="form-group">
+                                                            <label for="paciente">Paciente</label>
+                                                            <input type="text" id="paciente" name="paciente" disabled>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <button id="botao" type="button" class="buttonEvolucao" onclick="concluirConsultaEAdicionarFeedback(consultaId)">Salvar Feedback</button>
+                                            </form>
+                                        </main>
+                                    </div>
+                                </div>
+                                
+                                
                             </div>
                         </div>
-                    </div>                    
+                    </div>
                 </div>
             </div>
         </div>
-
+        <div id="modalDetalhesTarefa" style="display: none;" class="modalDetalhesTarefa">
+            <div class="modal-content-Detalhes">
+                <span class="close" onclick="fecharModalDetalhes()">&times;</span>
+                <div id="detalhesTarefa"></div>
+            </div>
+        </div>
     </main>
     <script src="../Js/listagemPaciente.js"></script>
     <script src="../Js/funcoesPadroes.js"></script>
@@ -300,7 +403,7 @@
                             const responsavel = await response.json();
 
                             if (responsavel && responsavel.id) {
-                                sessionStorage.setItem("idResponsavelCadastrado", responsavel.id); 
+                                sessionStorage.setItem("idResponsavelCadastrado", responsavel.id);
                                 window.location.href = `cadastroPacienteComResponsavel.html`;
                             }
                         } else if (response.status === 404) {

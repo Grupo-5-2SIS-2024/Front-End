@@ -1,3 +1,25 @@
+// Função para formatar CPF
+function formatarCPF(cpf) {
+    return cpf ? cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') : '';
+}
+
+// Função para formatar telefone
+function formatarTelefone(telefone) {
+    return telefone ? telefone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3') : '';
+}
+
+// Função auxiliar para calcular a idade
+function calcularIdade(dataNascimento) {
+    if (!dataNascimento) return 'Não informada';
+    const hoje = new Date();
+    const nascimento = new Date(dataNascimento);
+    let idade = hoje.getFullYear() - nascimento.getFullYear();
+    const mes = hoje.getMonth() - nascimento.getMonth();
+    if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) idade--;
+    return `${idade} anos`;
+}
+
+
 // Funções para abrir e fechar o modal de filtros
 function abrirModalFiltro() {
     document.getElementById("modalFiltro").style.display = "block";
@@ -113,17 +135,17 @@ function atualizarListagemPacientes(listaPacientes) {
         const responsavel = paciente.responsavel ? `${paciente.responsavel.nome} ${paciente.responsavel.sobrenome}` : 'Não informado';
         const dataNascimentoFormatada = new Date(paciente.dataNascimento).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
         const foto = paciente.foto || "../Assets/perfil.jpeg";
-        const formatarCPF = (cpf) => cpf ? cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') : '';
-        const formatarTelefone = (telefone) => telefone ? telefone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3') : '';
+        
         const acoes = permissionamentoMedico === "Supervisor" ? '' : `
-                <div class="actions">
-                    <button class="update"><i class="fas fa-pencil-alt"></i></button>
-                    <button class="delete"><i class="fas fa-trash-alt"></i></button>
-                </div>`;
+            <div class="actions">
+                <button class="view" onclick="abrirModalPaciente(${paciente.id})"><i class="fas fa-eye"></i></button>
+                <button class="update"><i class="fas fa-pencil-alt"></i></button>
+                <button class="delete"><i class="fas fa-trash-alt"></i></button>
+            </div>`;
 
         return `
-            <div onclick="abrirModalPaciente(${paciente.id})" class="cardPaciente" data-paciente-id="${paciente.id}">
-            <img src="${foto}" alt="Foto do Paciente">
+            <div class="cardPaciente" data-paciente-id="${paciente.id}">
+                <img onclick="abrirModalPaciente(${paciente.id})" src="${foto}" alt="Foto do Paciente">
                 <div class="info">
                     <div class="field">
                         <label for="nome">Nome</label>
@@ -151,31 +173,31 @@ function atualizarListagemPacientes(listaPacientes) {
         `;
     }).join('');
 
-        cardsPacientes.querySelectorAll('.delete').forEach((botao) => {
-            botao.addEventListener('click', function () {
-                const id = this.closest('.cardPaciente').dataset.pacienteId ;
-                if (id) {
-                    Swal.fire({
-                        title: 'Tem certeza?',
-                        text: "Você não poderá reverter isso!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Sim, deletar!',
-                        cancelButtonText: 'Cancelar'
-                    }).then((result) => {
-                        if (result.isConfirmed) deletarPaciente(id);
-                    });
-                }
-            });
+    cardsPacientes.querySelectorAll('.delete').forEach((botao) => {
+        botao.addEventListener('click', function () {
+            const id = this.closest('.cardPaciente').dataset.pacienteId;
+            if (id) {
+                Swal.fire({
+                    title: 'Tem certeza?',
+                    text: "Você não poderá reverter isso!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sim, deletar!',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) deletarPaciente(id);
+                });
+            }
         });
+    });
 
-        cardsPacientes.querySelectorAll('.update').forEach((botao) => {
-            botao.addEventListener('click', function () {
-                const id = this.closest('.cardPaciente').dataset.pacienteId ;
-                if (id) window.location.href = `atualizarPaciente.html?id=${id}`;
-            });
+    cardsPacientes.querySelectorAll('.update').forEach((botao) => {
+        botao.addEventListener('click', function () {
+            const id = this.closest('.cardPaciente').dataset.pacienteId;
+            if (id) window.location.href = `atualizarPaciente.html?id=${id}`;
         });
-    }
+    });
+}
 
 
 async function deletarPaciente(id) {
@@ -229,7 +251,7 @@ function abrirModalPaciente(idPaciente) {
             // Preenche as abas com as informações do paciente
             preencherDetalhes(data);
             preencherCalendario(data.id);
-            preencherRelatorios(data.id);
+            preencherEvolucoes(data.id);
 
             // Define a aba "Detalhes" como a aba ativa
             openTab(null, 'detalhes');
@@ -238,11 +260,6 @@ function abrirModalPaciente(idPaciente) {
             console.error("Erro ao buscar dados do paciente:", error);
             alert("Não foi possível carregar as informações do paciente.");
         });
-}
-
-// Função para fechar o modal do paciente
-function fecharModalPaciente() {
-    document.getElementById('modalBackdrop').style.display = 'none';
 }
 
 // Função para abrir a aba selecionada
@@ -258,15 +275,55 @@ function openTab(event, tabId) {
 
 // Função para preencher os detalhes do paciente
 function preencherDetalhes(paciente) {
-    const detalhesContainer = document.getElementById('detalhes');
-    detalhesContainer.innerHTML = `
-        <div class="detalhe-item"><strong>CPF:</strong> ${formatarCPF(paciente.cpf)}</div>
-        <div class="detalhe-item"><strong>Email:</strong> ${paciente.email}</div>
-        <div class="detalhe-item"><strong>Telefone:</strong> ${formatarTelefone(paciente.telefone)}</div>
-        <div class="detalhe-item"><strong>Data de Nascimento:</strong> ${new Date(paciente.dataNascimento).toLocaleDateString('pt-BR')}</div>
-        <div class="detalhe-item"><strong>Endereço:</strong> ${paciente.endereco || 'Não informado'}</div>
-        <div class="detalhe-item"><strong>Informações Adicionais:</strong> ${paciente.outrasInformacoes || 'N/A'}</div>
-    `;
+    // Seção Esquerda
+    document.getElementById('pacienteFoto').src = paciente.foto || '../Assets/perfil.jpeg';
+    document.getElementById('pacienteNome').textContent = paciente.nome ? `${paciente.nome} ${paciente.sobrenome || ''}` : 'Nome não informado';
+    document.getElementById('pacienteIdade').textContent = paciente.dataNascimento ? calcularIdade(paciente.dataNascimento) : 'Idade não informada';
+    document.getElementById('pacienteCPF').textContent = paciente.cpf ? formatarCPF(paciente.cpf) : 'CPF não informado';
+
+    // Bloco Superior
+    document.getElementById('pacienteTelefone').textContent = paciente.telefone ? formatarTelefone(paciente.telefone) : 'Telefone não informado';
+    document.getElementById('pacienteCNS').textContent = paciente.cns || 'CNS não informado';
+    document.getElementById('pacienteDataNascimento').textContent = new Date(paciente.dataNascimento).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' }) || 'Data de nascimento não informada';
+
+    // Endereço
+    if (paciente.endereco) {
+        document.getElementById('enderecoCEP').textContent = paciente.endereco.cep || 'CEP não informado';
+        document.getElementById('enderecoLogradouro').textContent = paciente.endereco.logradouro || 'Logradouro não informado';
+        document.getElementById('enderecoNumero').textContent = paciente.endereco.numero || 'Número não informado';
+        document.getElementById('enderecoComplemento').textContent = paciente.endereco.complemento || 'Complemento não informado';
+        document.getElementById('enderecoBairro').textContent = paciente.endereco.bairro || 'Bairro não informado';
+    } else {
+        document.getElementById('enderecoCEP').textContent = 'CEP não informado';
+        document.getElementById('enderecoLogradouro').textContent = 'Logradouro não informado';
+        document.getElementById('enderecoNumero').textContent = 'Número não informado';
+        document.getElementById('enderecoComplemento').textContent = 'Complemento não informado';
+        document.getElementById('enderecoBairro').textContent = 'Bairro não informado';
+    }
+
+    // Responsável
+    if (paciente.responsavel) {
+        document.getElementById('responsavelNome').textContent = paciente.responsavel.nome || 'Nome não informado';
+        document.getElementById('responsavelSobrenome').textContent = paciente.responsavel.sobrenome || 'Sobrenome não informado';
+        document.getElementById('responsavelTelefone').textContent = paciente.responsavel.telefone ? formatarTelefone(paciente.responsavel.telefone) : 'Telefone não informado';
+        document.getElementById('responsavelCPF').textContent = paciente.responsavel.cpf ? formatarCPF(paciente.responsavel.cpf) : 'CPF não informado';
+    } else {
+        document.getElementById('responsavelNome').textContent = 'Nome não informado';
+        document.getElementById('responsavelSobrenome').textContent = 'Sobrenome não informado';
+        document.getElementById('responsavelTelefone').textContent = 'Telefone não informado';
+        document.getElementById('responsavelCPF').textContent = 'CPF não informado';
+    }
+}
+
+// Função auxiliar para calcular a idade
+function calcularIdade(dataNascimento) {
+    if (!dataNascimento) return 'Não informada';
+    const hoje = new Date();
+    const nascimento = new Date(dataNascimento);
+    let idade = hoje.getFullYear() - nascimento.getFullYear();
+    const mes = hoje.getMonth() - nascimento.getMonth();
+    if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) idade--;
+    return `${idade} anos`;
 }
 
 // Função para preencher o calendário do paciente
@@ -274,48 +331,77 @@ function preencherCalendario(pacienteId) {
     buscarConsultasCliente(pacienteId);
 }
 
-// Função para preencher os relatórios do paciente
-function preencherRelatorios(pacienteId) {
-    const relatoriosContainer = document.getElementById('relatorios');
-    relatoriosContainer.innerHTML = `
-        <div class="relatorio-item">Relatório 1: Detalhes...</div>
-        <div class="relatorio-item">Relatório 2: Detalhes...</div>
-    `;
+// Função para preencher o calendário do paciente
+async function preencherEvolucoes(pacienteId) {
+    try {
+        // Faz a requisição para buscar todas as consultas
+        const resposta = await fetch("http://localhost:8080/consultas");
+        if (!resposta.ok) {
+            throw new Error(`Erro ao buscar consultas. Status: ${resposta.status}`);
+        }
+
+        console.log(pacienteId);
+        // Obtém a lista de consultas
+        const consultas = await resposta.json();
+        console.log("Consultas recebidas:", consultas);
+
+        // Filtra as consultas pelo ID do paciente
+        const consultasFiltradas = consultas.filter(consulta => consulta.paciente.id === pacienteId);
+        console.log("Consultas filtradas para o paciente:", consultasFiltradas);
+
+        // Verifica o permissionamento do usuário
+        const permissaoUsuario = sessionStorage.getItem("PERMISSIONAMENTO_MEDICO");
+        if (permissaoUsuario === "supervisor") {
+            // Exibe somente consultas visíveis pelo supervisor
+            const consultasPermitidas = consultasFiltradas.filter(consulta => {
+                // Ajuste aqui a lógica de filtragem por área ou restrição do supervisor
+                return consulta.area === sessionStorage.getItem("ESPECIFICACAO_MEDICA");
+            });
+            console.log("Consultas permitidas para o supervisor:", consultasPermitidas);
+
+            // Chama a função para listar as consultas realizadas
+            listarConsultasRealizadas(consultasPermitidas, pacienteId);
+        } else if (permissaoUsuario === "Admin") {
+            // Se o usuário for 'adm', lista todas as consultas do paciente
+            listarConsultasRealizadas(consultasFiltradas, pacienteId);
+        } else {
+            console.warn("Permissão desconhecida. Nenhuma consulta será exibida.");
+        }
+    } catch (error) {
+        console.error("Erro ao preencher evoluções:", error);
+    }
 }
 
-// Função para formatar CPF
-function formatarCPF(cpf) {
-    return cpf ? cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') : '';
-}
 
-// Função para formatar telefone
-function formatarTelefone(telefone) {
-    return telefone ? telefone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3') : '';
-}
+// Parte do calendario do paciente
 
 let dataInicioAtual = obterInicioDaSemana(new Date());
 let consultasOriginais = [];
 let bancoDeDadosFiltrado = [];
 
-// Função para obter o início da semana a partir de uma data, ajustando para segunda-feira
+// Ao carregar a página, inicialize o calendário
+document.addEventListener('DOMContentLoaded', () => {
+    atualizarDisplayData(dataInicioAtual);
+});
+
+// Configurar a aba para inicializar o calendário ao clicar
+document.getElementById('calendario').addEventListener('click', () => {
+    atualizarDisplayData(dataInicioAtual);
+});
+
 function obterInicioDaSemana(date) {
     const day = date.getDay();
-    const diff = (day === 0 ? -6 : 1) - day; // Ajuste para segunda-feira como o primeiro dia da semana
+    const diff = (day === 0 ? -6 : 1) - day;
     const startDate = new Date(date);
     startDate.setDate(date.getDate() + diff);
     return startDate;
 }
 
-// Função para buscar consultas de um paciente específico
 async function buscarConsultasCliente(pacienteId) {
     try {
         const resposta = await fetch("http://localhost:8080/consultas");
-        if (!resposta.ok) {
-            throw new Error(`HTTP error! Status: ${resposta.status}`);
-        }
+        if (!resposta.ok) throw new Error(`HTTP error! Status: ${resposta.status}`);
         const todasConsultas = await resposta.json();
-
-        // Filtra as consultas apenas do paciente atual
         consultasOriginais = todasConsultas.filter(consulta => consulta.paciente.id === pacienteId);
         bancoDeDadosFiltrado = filtrarConsultasPorPermissao();
         atualizarDisplayCalendario(bancoDeDadosFiltrado);
@@ -324,7 +410,6 @@ async function buscarConsultasCliente(pacienteId) {
     }
 }
 
-// Função para filtrar as consultas com base no tipo de usuário
 function filtrarConsultasPorPermissao() {
     const permissao = sessionStorage.getItem('PERMISSIONAMENTO_MEDICO');
     const idMedico = parseInt(sessionStorage.getItem('ID_MEDICO'));
@@ -342,18 +427,62 @@ function filtrarConsultasPorPermissao() {
 
 // Função para atualizar o display de dados no calendário do paciente
 function atualizarDisplayCalendario(consultasCliente) {
-    const diasSemanaElement = document.getElementById('diasSemana');
-    diasSemanaElement.innerHTML = '';
+    const colunasTarefasElement = document.getElementById('colunasTarefas');
+    colunasTarefasElement.innerHTML = ''; // Limpa o conteúdo existente
 
-    consultasCliente.forEach(consulta => {
-        const taskElement = document.createElement('div');
-        taskElement.className = 'task';
-        taskElement.innerText = consulta.descricao;
-        diasSemanaElement.appendChild(taskElement);
-    });
+    for (let i = 0; i < 7; i++) {
+        const diaAtual = new Date(dataInicioAtual);
+        diaAtual.setDate(dataInicioAtual.getDate() + i);
+
+        const consultasDoDia = consultasCliente.filter(consulta =>
+            consulta.datahoraConsulta.startsWith(formatarData(diaAtual))
+        );
+
+        const colunaElement = document.createElement('div');
+        colunaElement.className = 'column';
+
+        if (consultasDoDia.length === 0) {
+            const noTaskElement = document.createElement('div');
+            noTaskElement.className = 'task inactive';
+            noTaskElement.innerText = 'Sem tarefas';
+            colunaElement.appendChild(noTaskElement);
+        } else {
+            consultasDoDia.forEach(consulta => {
+                const taskElement = document.createElement('div');
+                taskElement.className = 'task';
+                taskElement.innerText = consulta.descricao;
+
+                taskElement.onclick = () => abrirDetalhesTarefa(consulta);
+
+                colunaElement.appendChild(taskElement);
+            });
+        }
+
+        colunasTarefasElement.appendChild(colunaElement);
+    }
 }
 
-// Função para atualizar os detalhes da data no calendário
+function abrirDetalhesTarefa(consulta) {
+    const dataHora = new Date(consulta.datahoraConsulta);
+    const dataFormatada = dataHora.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+    const horaFormatada = dataHora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+    const detalhesDiv = document.getElementById('detalhesTarefa');
+    detalhesDiv.innerHTML = `
+        <p><strong>Descrição:</strong> ${consulta.descricao}</p>
+        <p><strong>Data e Hora:</strong> ${dataFormatada} às ${horaFormatada}</p>
+        <p><strong>Paciente:</strong> ${consulta.paciente.nome} ${consulta.paciente.sobrenome}</p>
+        <p><strong>Médico:</strong> ${consulta.medico.nome} ${consulta.medico.sobrenome} - ${consulta.especificacaoMedica.area}</p>
+        <p><strong>Status:</strong> ${consulta.statusConsulta.nomeStatus}</p>
+        <p><strong>Duração:</strong> ${consulta.duracaoConsulta}</p>
+    `;
+    document.getElementById('modalDetalhesTarefa').style.display = 'flex';
+}
+
+function fecharModalDetalhes() {
+    document.getElementById('modalDetalhesTarefa').style.display = 'none';
+}
+
 function atualizarDisplayData(startDate) {
     dataInicioAtual = obterInicioDaSemana(startDate);
     const endDate = new Date(dataInicioAtual);
@@ -367,7 +496,6 @@ function atualizarDisplayData(startDate) {
     atualizarDiasDaSemana(dataInicioAtual);
 }
 
-// Função para atualizar os dias da semana
 function atualizarDiasDaSemana(startDate) {
     const diasSemanaElement = document.getElementById('diasSemana');
     diasSemanaElement.innerHTML = '';
@@ -389,24 +517,31 @@ function atualizarDiasDaSemana(startDate) {
     atualizarColunasDeTarefas(startDate);
 }
 
-// Função para atualizar as colunas de tarefas do calendário
 function atualizarColunasDeTarefas(startDate) {
     const colunasTarefasElement = document.getElementById('colunasTarefas');
-    colunasTarefasElement.innerHTML = '';
+    colunasTarefasElement.innerHTML = ''; // Limpa o conteúdo existente
 
     for (let i = 0; i < 7; i++) {
         const currentDate = new Date(startDate);
         currentDate.setDate(currentDate.getDate() + i);
 
-        const tasks = bancoDeDadosFiltrado.filter(entry => entry.datahoraConsulta.startsWith(formatarData(currentDate)));
+        // Filtra as consultas para o dia atual
+        const tasks = bancoDeDadosFiltrado.filter(entry =>
+            entry.datahoraConsulta.startsWith(formatarData(currentDate))
+        );
 
         const columnElement = document.createElement('div');
         columnElement.className = 'column';
 
+        // Adiciona as tarefas à coluna
         tasks.forEach(task => {
             const taskElement = document.createElement('div');
             taskElement.className = 'task';
             taskElement.innerText = task.descricao;
+
+            // Adiciona o evento de clique para abrir os detalhes
+            taskElement.onclick = () => abrirDetalhesTarefa(task);
+
             columnElement.appendChild(taskElement);
         });
 
@@ -421,7 +556,6 @@ function atualizarColunasDeTarefas(startDate) {
     }
 }
 
-// Função para formatar a data
 function formatarData(date) {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -429,7 +563,6 @@ function formatarData(date) {
     return `${year}-${month}-${day}`;
 }
 
-// Funções de navegação para semana anterior e próxima
 function semanaPassada() {
     dataInicioAtual.setDate(dataInicioAtual.getDate() - 7);
     atualizarDisplayData(dataInicioAtual);
@@ -440,16 +573,211 @@ function proximaSemana() {
     atualizarDisplayData(dataInicioAtual);
 }
 
+
 // Função para inicializar a página e buscar as consultas do paciente específico
 async function inicializarPagina(idPaciente) {
     await buscarConsultasCliente(idPaciente);
     atualizarDisplayData(dataInicioAtual);
 }
 
-// Evento para fechar o modal ao clicar fora do conteúdo
-document.getElementById('modalBackdrop').addEventListener('click', (e) => {
-    if (e.target === document.getElementById('modalBackdrop')) {
-        fecharModalPaciente();
+// Parte da evolucao
+
+// Função para listar as consultas realizadas na aba de relatórios
+async function listarConsultasRealizadas(consultasCliente, pacienteId) {
+    const evolucoesList = document.getElementById('listaEvolucoes');
+    evolucoesList.innerHTML = ''; // Limpa a lista antes de preencher
+
+    if (!Array.isArray(consultasCliente)) {
+        console.error('Dados de consultas inválidos. Não é um array:', consultasCliente);
+        evolucoesList.innerHTML = `<li class="evolucao-item">Nenhuma consulta encontrada.</li>`;
+        return;
+    }
+
+    if (consultasCliente.length === 0) {
+        evolucoesList.innerHTML = `<li class="evolucao-item">Nenhuma consulta realizada.</li>`;
+        return;
+    }
+
+    try {
+        const resposta = await fetch(`http://localhost:8080/acompanhamentos`);
+        if (!resposta.ok) {
+            throw new Error(`Erro ao buscar dados dos acompanhamentos. Status: ${resposta.status}`);
+        }
+        const acompanhamentos = await resposta.json();
+
+        consultasCliente.forEach((consulta, index) => {
+            if (!consulta || !consulta.datahoraConsulta || !consulta.id) {
+                console.warn('Consulta inválida no índice', index, consulta);
+                return;
+            }
+
+            const dataConsulta = new Date(consulta.datahoraConsulta);
+            const dataFormatada = dataConsulta.toLocaleDateString('pt-BR');
+
+            const acompanhamento = acompanhamentos.find(a => a.consulta.id === consulta.id);
+
+            const listItem = document.createElement('li');
+            listItem.classList.add('evolucao-item');
+
+            let botaoCriar = '';
+            let botaoVisualizar = '';
+            let botaoAtualizar = '';
+
+            if (acompanhamento) {
+                botaoVisualizar = `<button class="botao-visualizar" onclick="abrirModalEvolucao(${consulta.id}, 'visualizar')"><i class="fa fa-eye"></i></button>`;
+                botaoAtualizar = `<button class="botao-atualizar" onclick="abrirModalEvolucao(${consulta.id}, 'atualizar', ${pacienteId})"><i class="fas fa-pen"></i></button>`;
+            } else {
+                botaoCriar = `<button class="btn-detalhes" onclick="abrirModalEvolucao(${consulta.id}, 'criar', ${pacienteId})"><i class="fas fa-notes-medical"></i></button>`;
+            }
+
+            listItem.innerHTML = `
+                <span>Consulta ${index + 1}: ${dataFormatada}</span>
+                <div class="botao-container">
+                ${botaoVisualizar}
+                ${botaoAtualizar}
+                ${botaoCriar}
+                </div>
+            `;
+
+            evolucoesList.appendChild(listItem);
+        });
+    } catch (error) {
+        console.error('Erro ao carregar os dados dos acompanhamentos:', error);
+        evolucoesList.innerHTML = `<li class="evolucao-item">Erro ao carregar consultas.</li>`;
+    }
+}
+
+// Função para abrir o modal de evolução com diferentes modos
+async function abrirModalEvolucao(consultaId, modo, pacienteId) {
+    try {
+        const resposta = await fetch(`http://localhost:8080/acompanhamentos`);
+        if (!resposta.ok) {
+            throw new Error(`Erro ao buscar dados dos acompanhamentos. Status: ${resposta.status}`);
+        }
+        console.log("Paciente ID ao abrir modal:", pacienteId);
+
+        const acompanhamentos = await resposta.json();
+        const acompanhamentoAtual = acompanhamentos.find(a => a.consulta.id === consultaId);
+
+        const resumoInput = document.getElementById("resumo");
+        const relatorioInput = document.getElementById("relatorio");
+        const medicoInput = document.getElementById("medico");
+        const especificacaoInput = document.getElementById("especificacaoMedica");
+        const pacienteInput = document.getElementById("paciente");
+        const botaoSalvar = document.querySelector(".buttonEvolucao");
+        const botaoFechar = document.getElementById("botao");
+
+        if (modo === "visualizar" && acompanhamentoAtual) {
+            resumoInput.value = acompanhamentoAtual.resumo || "";
+            relatorioInput.value = acompanhamentoAtual.relatorio || "";
+            medicoInput.value = acompanhamentoAtual.consulta.medico.nome || "Não informado";
+            especificacaoInput.value = acompanhamentoAtual.consulta.especificacaoMedica.area || "Não informada";
+            pacienteInput.value = acompanhamentoAtual.consulta.paciente.nome || "Não informado";
+
+            resumoInput.disabled = true;
+            relatorioInput.disabled = true;
+            botaoFechar.innerHTML = "Fechar";
+            botaoSalvar.setAttribute("onclick", `fecharModalEvolucao()`);
+        } else {
+            resumoInput.value = acompanhamentoAtual?.resumo || "";
+            relatorioInput.value = acompanhamentoAtual?.relatorio || "";
+            medicoInput.value = acompanhamentoAtual?.consulta?.medico.nome || "Não informado";
+            especificacaoInput.value = acompanhamentoAtual?.consulta?.especificacaoMedica.area || "Não informada";
+            pacienteInput.value = acompanhamentoAtual?.consulta?.paciente.nome || "Não informado";
+
+            resumoInput.disabled = false;
+            relatorioInput.disabled = false;
+            botaoSalvar.style.display = "block";
+
+            // Corrigindo a chamada do método
+            botaoSalvar.setAttribute(
+                "onclick",
+                `adicionarAcompanhamento(${consultaId}, '${modo}', ${acompanhamentoAtual?.id || null}, ${pacienteId})`
+            );
+
+            botaoFechar.innerHTML = "Salvar Evolução";
+        }
+
+        const modal = document.getElementById("modalEvolucao");
+        modal.style.visibility = "visible";
+    } catch (error) {
+        console.error('Erro ao carregar os dados do acompanhamento:', error);
+    }
+}
+
+async function adicionarAcompanhamento(idConsulta, modo, idAcompanhamento, pacienteId) {
+    const resumo = document.getElementById("resumo").value;
+    const relatorio = document.getElementById("relatorio").value;
+
+    const dadosFeedback = {
+        resumo: resumo,
+        relatorio: relatorio,
+        consulta: { id: idConsulta },
+        status_consulta: 2
+    };
+
+    const url = modo === "criar" 
+        ? "http://localhost:8080/acompanhamentos" 
+        : `http://localhost:8080/acompanhamentos/${idAcompanhamento}`;
+
+    try {
+        const resposta = await fetch(url, {
+            method: modo === "criar" ? "POST" : "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(dadosFeedback),
+        });
+
+        if (!resposta.ok) {
+            const erroTexto = await resposta.text();
+            throw new Error(`Erro ao salvar feedback. Status: ${resposta.status}. Detalhes: ${erroTexto}`);
+        }
+
+        console.log("Paciente ID ao salvar:", pacienteId);
+        fecharModalEvolucao();
+        preencherEvolucoes(pacienteId);
+    } catch (error) {
+        console.error('Erro ao salvar o feedback:', error);
+        alert("Erro ao salvar o feedback. Tente novamente.");
+    }
+}
+
+
+// Função para fechar o modal
+function fecharModalEvolucao() {
+    const modal = document.getElementById("modalEvolucao");
+    modal.style.visibility = "hidden";
+}
+
+// Função para criar um novo relatório
+function criarRelatorio(consultaId) {
+    abrirModalEvolucao(consultaId, "criar");
+}
+
+// Função para visualizar o relatório existente
+function visualizarRelatorio(consultaId) {
+    abrirModalEvolucao(consultaId, "visualizar");
+}
+
+function atualizarRelatorio(consultaId) {
+    abrirModalEvolucao(consultaId, "atualizar", acompanhamentoId);
+}
+
+// Seleciona elementos
+const modalBackdrop = document.getElementById('modalBackdrop');
+const closeModalBtn = document.getElementById('closeModal');
+
+// Função para fechar o modal
+function fecharModal() {
+    modalBackdrop.style.display = 'none';
+}
+
+// Eventos para fechar o modal
+closeModalBtn.addEventListener('click', fecharModal); // Fechar ao clicar no botão
+modalBackdrop.addEventListener('click', (e) => {
+    if (e.target === modalBackdrop) {
+        fecharModal(); // Fechar ao clicar fora do conteúdo
     }
 });
+
+
 
