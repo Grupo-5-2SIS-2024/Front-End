@@ -557,36 +557,43 @@ document.getElementById('medico').addEventListener('change', updateAvailablePati
 
 document.getElementById('agendar').addEventListener('click', agendarConsulta);
 
-function BaixarExcelGeral(){
 
-document.getElementById('download-excel').addEventListener('click', async () => {
-    const consultas = await buscarConsultas(); // Busca as consultas
+async function BaixarExcelGeral() {
+    try {
+        const resposta = await fetch(`http://localhost:8080/consultas/export/csv`, {
+            method: 'GET',
+            headers: {
+                "Accept": "text/csv" 
+            }
+        });
 
-    // Transforma os dados em um array de objetos adequado para o Excel
-    const dadosExcel = consultas.map(consulta => ({
-        Paciente: `${consulta.paciente.nome} ${consulta.paciente.sobrenome}`,
-        "Data e Hora": formatarData(consulta.datahoraConsulta),
-        Médico: `${consulta.medico.nome} ${consulta.medico.sobrenome}`,
-        Especialização: consulta.especificacaoMedica.area,
-        Status: consulta.statusConsulta.nomeStatus,
-        Descrição: consulta.descricao
-    }));
+        if (!resposta.ok) {
+            throw new Error(`Erro ao baixar o arquivo: ${resposta.statusText}`);
+        }
 
-    // Cria um novo workbook (arquivo Excel)
-    const wb = XLSX.utils.book_new();
-    const ws = XLSX.utils.json_to_sheet(dadosExcel); // Converte os dados para uma aba Excel
-    XLSX.utils.book_append_sheet(wb, ws, "Consultas"); // Adiciona a aba ao arquivo Excel
+  
+        const blob = await resposta.blob();
 
-    // Gera o arquivo Excel e inicia o download
-    XLSX.writeFile(wb, 'consultas.xlsx');
-});
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'consultas.csv'; 
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+
+    
+        window.URL.revokeObjectURL(url);
+    } catch (error) {
+        console.error('Erro ao baixar o arquivo:', error);
+    }
 }
 
 
-// Função para baixar o Excel de uma consulta específica
+
 async function baixarConsultaExcel(consultaId) {
     try {
-        // Busca as consultas e filtra a consulta específica pelo ID
+       
         const consultas = await buscarConsultas();
         const consulta = consultas.find(c => c.id === consultaId);
 
@@ -594,7 +601,7 @@ async function baixarConsultaExcel(consultaId) {
             throw new Error("Consulta não encontrada");
         }
 
-        // Transforma os dados da consulta em um objeto adequado para o Excel
+ 
         const dadosExcel = [{
             Paciente: `${consulta.paciente.nome} ${consulta.paciente.sobrenome}`,
             "Data e Hora": formatarData(consulta.datahoraConsulta),
@@ -604,12 +611,12 @@ async function baixarConsultaExcel(consultaId) {
             Descrição: consulta.descricao
         }];
 
-        // Cria um novo workbook (arquivo Excel)
+     
         const wb = XLSX.utils.book_new();
-        const ws = XLSX.utils.json_to_sheet(dadosExcel); // Converte os dados para uma aba Excel
-        XLSX.utils.book_append_sheet(wb, ws, "Consulta"); // Adiciona a aba ao arquivo Excel
+        const ws = XLSX.utils.json_to_sheet(dadosExcel); 
+        XLSX.utils.book_append_sheet(wb, ws, "Consulta"); 
 
-        // Gera o arquivo Excel e inicia o download, nomeando o arquivo com o ID da consulta
+        
         XLSX.writeFile(wb, `consulta_${consultaId}.xlsx`);
     } catch (error) {
         console.error("Erro ao baixar consulta em Excel:", error);
@@ -618,14 +625,14 @@ async function baixarConsultaExcel(consultaId) {
     return consultas.filter(consulta => consulta.statusConsulta.nomeStatus === 'Agendada');
 }
 
-// Função para excluir a última consulta "Agendada" (Pilha) com confirmação
+
 async function excluirUltimaConsulta() {
-    const consultasAgendadas = getConsultasAgendadas(); // Obter somente consultas agendadas
+    const consultasAgendadas = getConsultasAgendadas(); 
 
     if (consultasAgendadas.length > 0) {
-        const ultimaConsulta = consultasAgendadas[consultasAgendadas.length - 1]; // A última consulta agendada na pilha
+        const ultimaConsulta = consultasAgendadas[consultasAgendadas.length - 1]; 
 
-        // Exibe pop-up de confirmação
+   
         Swal.fire({
             title: 'Tem certeza?',
             text: `Deseja excluir a última consulta agendada de ${ultimaConsulta.paciente.nome}?`,
@@ -638,7 +645,7 @@ async function excluirUltimaConsulta() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    // Tenta excluir a consulta no backend usando o ID
+                    
                     const resposta = await fetch(`http://localhost:8080/consultas/${ultimaConsulta.id}`, {
                         method: 'DELETE',
                         headers: {
@@ -648,10 +655,10 @@ async function excluirUltimaConsulta() {
                     });
 
                     if (resposta.ok) {
-                        // Remove a última consulta agendada do vetor original de consultas
+                        
                         consultas = consultas.filter(consulta => consulta.id !== ultimaConsulta.id);
 
-                        // Exibe pop-up de sucesso com as informações da consulta excluída
+                       
                         Swal.fire({
                             icon: 'success',
                             title: 'Consulta Excluída',
@@ -659,7 +666,7 @@ async function excluirUltimaConsulta() {
                             confirmButtonText: 'Ok'
                         });
 
-                        // Atualiza a exibição das consultas
+  
                         atualizarListagemConsultas();
                     } else {
                         throw new Error('Erro ao excluir a consulta no backend');
@@ -683,12 +690,11 @@ async function excluirUltimaConsulta() {
 }
 
 async function excluirPrimeiraConsulta() {
-    const consultasAgendadas = getConsultasAgendadas(); // Obter somente consultas agendadas
+    const consultasAgendadas = getConsultasAgendadas(); 
 
     if (consultasAgendadas.length > 0) {
-        const primeiraConsulta = consultasAgendadas[0]; // A primeira consulta agendada na fila
-
-        // Exibe pop-up de confirmação
+        const primeiraConsulta = consultasAgendadas[0]; 
+        
         Swal.fire({
             title: 'Tem certeza?',
             text: `Deseja excluir a primeira consulta agendada de ${primeiraConsulta.paciente.nome}?`,
@@ -713,10 +719,10 @@ async function excluirPrimeiraConsulta() {
                     });
 
                     if (resposta.ok) {
-                        // Remove a primeira consulta agendada do vetor original de consultas
+                        
                         consultas = consultas.filter(consulta => consulta.id !== primeiraConsulta.id);
 
-                        // Exibe pop-up de sucesso com as informações da consulta excluída
+                        
                         Swal.fire({
                             icon: 'success',
                             title: 'Consulta Excluída',
@@ -724,7 +730,7 @@ async function excluirPrimeiraConsulta() {
                             confirmButtonText: 'Ok'
                         });
 
-                        // Atualiza a exibição das consultas
+                        
                         atualizarListagemConsultas();
                     } else {
                         throw new Error('Erro ao excluir a consulta no backend');
@@ -746,12 +752,12 @@ async function excluirPrimeiraConsulta() {
         });
     }
 }
-// Função para atualizar a listagem de consultas na interface
+
 function atualizarListagemConsultas() {
     buscarConsultas(); // Atualiza a lista de consultas na tela
 } 
 
-// Adiciona um ícone de bloco de notas para abrir a página de notas com o ID da consulta
+
 function AnaliseConsultasx(consultaId) {
     window.location.href = `FeedbackConsulta.html?consultaId=${consultaId}`;
 }
