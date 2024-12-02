@@ -1,3 +1,7 @@
+
+
+
+
 document.addEventListener("DOMContentLoaded", () => {
     const diaInput = document.getElementById("dia");
     const diaConsulta = sessionStorage.getItem('DIA_CONSULTA');

@@ -93,6 +93,7 @@ async function atualizarGraficoRosca(filtros = {}) {
 
 
 
+
 async function atualizarGraficoBarraHorizontal(filtros = {}) {
     const url = 'http://localhost:8080/consultas/altas-ultimos-seis-meses'; // URL do endpoint
 
