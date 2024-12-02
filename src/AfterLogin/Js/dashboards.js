@@ -1,588 +1,325 @@
+// Variáveis globais para os gráficos
+let graficos = {};
 
-let bancoDeDadosFiltrado = []; // Declaração global para dados filtrados
-
-
-
-
-
-async function inicializarGraficos() {
-    // Chama cada gráfico com filtros vazios (exibindo todos os dados)
-    atualizarGraficoRosca({});
-    atualizarGraficoBarraHorizontal({});
-    atualizarGraficoBarraDePe({});
-    atualizarGraficoLinhaFidelizacao({});
+// Função genérica para criar gráficos
+function criarGrafico(ctxId, tipo, dados, opcoes = {}) {
+    if (graficos[ctxId]) graficos[ctxId].destroy(); // Destroi o gráfico existente, se houver
+    const ctx = document.getElementById(ctxId).getContext('2d');
+    graficos[ctxId] = new Chart(ctx, { type: tipo, data: dados, options: opcoes });
 }
 
-async function inicializarPagina() {
+// Função para buscar dados genéricos
+async function fetchDados(url, filtros = {}) {
+    const queryParams = new URLSearchParams(filtros).toString();
+    const fullUrl = queryParams ? `${url}?${queryParams}` : url;
 
-    await preencherCamposDeFiltro(); // Preenche os campos de filtro
-    inicializarGraficos(); // Exibe gráficos com todos os dados inicialmente
-}
-
-inicializarPagina();
-
-
-
-
-
-
-
-
-function abrirModalFiltro() {
-    document.getElementById('modalFiltro').style.display = 'flex';
-    preencherCamposDeFiltro()
-}
-
-function fecharModalFiltro() {
-    document.getElementById('modalFiltro').style.display = 'none';
-}
-
-
-
-function aplicarFiltros() {
-    // Captura os valores dos filtros
-    const medicoId = document.getElementById('filtroMedicoS').value;
-    const pacienteId = document.getElementById('filtroPaciente').value;
-    const statusId = document.getElementById('filtroStatus').value;
-    const areaConsultaId = document.getElementById('filtroAreaConsulta').value;
-    const idadePaciente = document.getElementById('filtroIdade').value;
-    const generoPaciente = document.getElementById('filtroGenero').value;
-    const dataInicio = document.getElementById('filtroDataInicio').value;
-    const dataFim = document.getElementById('filtroDataFim').value;
-
-    // Repassa os filtros para a atualização dos gráficos
-    atualizarGraficoRosca({ medicoId, pacienteId, statusId, areaConsultaId, idadePaciente, generoPaciente, dataInicio, dataFim });
-    atualizarGraficoBarraHorizontal({ medicoId, pacienteId, statusId, areaConsultaId, idadePaciente, generoPaciente, dataInicio, dataFim });
-    atualizarGraficoBarraDePe({ medicoId, pacienteId, statusId, areaConsultaId, idadePaciente, generoPaciente, dataInicio, dataFim });
-    atualizarGraficoLinhaFidelizacao({ medicoId, pacienteId, statusId, areaConsultaId, idadePaciente, generoPaciente, dataInicio, dataFim });
-    
-    fecharModalFiltro();
-}
-
-
-function atualizarGraficosComDadosFiltrados() {
-    atualizarGraficoRosca(bancoDeDadosFiltrado);
-    atualizarGraficoBarraHorizontal(bancoDeDadosFiltrado);
-    atualizarGraficoBarraDePe(bancoDeDadosFiltrado);
-    atualizarGraficoLinhaFidelizacao(bancoDeDadosFiltrado);
-}
-
-function limparFiltros() {
-    document.getElementById('filtroMedico').value = '';
-    document.getElementById('filtroPaciente').value = '';
-    document.getElementById('filtroStatus').value = '';
-    document.getElementById('filtroAreaConsulta').value = '';
-    document.getElementById('filtroIdade').value = '';
-    document.getElementById('filtroGenero').value = '';
-    document.getElementById('filtroDataInicio').value = '';
-    document.getElementById('filtroDataFim').value = '';
-
-    console.log("Filtros limpos");
-}
-
-
-
-async function preencherCamposDeFiltro() {
     try {
-        console.log("Iniciando o preenchimento dos campos de filtro...");
-
-        // Preencher filtro de médicos
-        const respostaMedicos = await fetch("http://localhost:8080/medicos");
-        if (!respostaMedicos.ok) throw new Error(`Erro ao buscar médicos: ${respostaMedicos.status}`);
-        const medicos = await respostaMedicos.json();
-        if (medicos.length === 0) console.warn("Nenhum médico encontrado");
-        console.log("Dados de médicos:", medicos);
-        const filtroMedico = document.getElementById('filtroMedicoS');
-        
-        medicos.forEach(medico => {
-            console.log(medico.id)
-            console.log(medico.nome)
-            filtroMedico.innerHTML += `<option value="${medico.id}">${medico.nome}</option>`;
-        });
-
-        // Preencher filtro de pacientes
-        const respostaPacientes = await fetch("http://localhost:8080/pacientes");
-        if (!respostaPacientes.ok) throw new Error(`Erro ao buscar pacientes: ${respostaPacientes.status}`);
-        const pacientes = await respostaPacientes.json();
-        if (pacientes.length === 0) console.warn("Nenhum paciente encontrado");
-        console.log("Dados de pacientes:", pacientes);
-        const filtroPaciente = document.getElementById('filtroPaciente');
-        filtroPaciente.innerHTML = '<option value="">Todos os Pacientes</option>';
-        pacientes.forEach(paciente => {
-            filtroPaciente.innerHTML += `<option value="${paciente.id}">${paciente.nome}</option>`;
-        });
-
-        // Preencher filtro de status de consultas
-        const respostaStatus = await fetch("http://localhost:8080/statusConsultas");
-        if (!respostaStatus.ok) throw new Error(`Erro ao buscar status de consultas: ${respostaStatus.status}`);
-        const status = await respostaStatus.json();
-        if (status.length === 0) console.warn("Nenhum status encontrado");
-        console.log("Dados de status de consultas:", status);
-        const filtroStatus = document.getElementById('filtroStatus');
-        filtroStatus.innerHTML = '<option value="">Todos os Status</option>';
-        status.forEach(status => {
-            filtroStatus.innerHTML += `<option value="${status.id}">${status.nomeStatus}</option>`;
-        });
-
-        // Preencher filtro de área de consultas
-        const respostaAreas = await fetch("http://localhost:8080/especificacoes");
-        if (!respostaAreas.ok) throw new Error(`Erro ao buscar áreas de consulta: ${respostaAreas.status}`);
-        const areas = await respostaAreas.json();
-        if (areas.length === 0) console.warn("Nenhuma área de consulta encontrada");
-        console.log("Dados de áreas de consulta:", areas);
-        const filtroAreaConsulta = document.getElementById('filtroAreaConsulta');
-        filtroAreaConsulta.innerHTML = '<option value="">Todas as Áreas</option>';
-        areas.forEach(area => {
-            filtroAreaConsulta.innerHTML += `<option value="${area.id}">${area.area}</option>`;
-        });
-
-        console.log("Campos de filtro preenchidos com sucesso.");
+        const resposta = await fetch(fullUrl);
+        if (!resposta.ok) throw new Error(`Erro ao buscar dados: ${resposta.status}`);
+        return await resposta.json();
     } catch (error) {
-        console.error("Erro ao preencher campos de filtro:", error);
+        console.error(`Erro ao buscar dados de ${url}:`, error);
+        return null;
     }
 }
 
-async function inicializarGraficos() {
-    // Chama cada gráfico com filtros vazios (exibindo todos os dados)
-    atualizarGraficoRosca({});
-    atualizarGraficoBarraHorizontal({});
-    atualizarGraficoBarraDePe({});
-    atualizarGraficoLinhaFidelizacao({});
-}
+// Função para atualizar gráfico Rosca
+async function atualizarGraficoRosca(filtros = {}) {
+    const url = 'http://localhost:8080/consultas/percentagem-concluidos';
+    const dados = await fetchDados(url, filtros);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-async function buscar() {
-    console.log("passei por aqui");
-
-    try {
-        const resposta = await fetch("http://localhost:8080/consultas/agendamentosProximos");
-        if (!resposta.ok) {
-            throw new Error(`HTTP error! Status: ${resposta.status}`);
-        }
-        const respostaDados = await resposta.json();
-        console.log(respostaDados);
-
-        const cards = document.getElementById("tableUpcomingAppointments");
-        cards.innerHTML = respostaDados.map((item) => {
-            return `                     <tr>
-                        <th>${item.nomePaciente}</th>
-                        <th>${item.dataConsulta}</th>
-                        <th>${item.especialidadeMedico}</th>
-                    </tr> `;
-        }).join('');
-    } catch (error) {
-        console.error('Failed to fetch:', error);
-    }
-}
-
-console.log("antes de buscar");
-buscar();
-console.log("depois de buscar");
-
-
-// GRAFICO 2
-
-// async function buscarRosca() {
-//     console.log("passei por aqui");
-
-//     try {
-//         const resposta = await fetch("http://localhost:8080/consultas/percentagem-concluidos");
-//         if (!resposta.ok) {
-//             throw new Error(`HTTP error! Status: ${resposta.status}`);
-//         }
-//         const respostaDados = await resposta.json();
-//         console.log(respostaDados);
-
-//         const data = {
-//             labels: ['Total', 'Porcentagem de Atendimento Concluidos'],
-//             datasets: [{
-//                 label: 'Consultas',
-//                 data: [100, respostaDados.percentagemConcluidos],
-//                 backgroundColor: [
-//                     'rgb(255, 99, 132)',
-//                     'rgb(54, 162, 235)'
-//                 ],
-//                 hoverOffset: 4
-//             }]
-//         };
-
-//         const config = {
-//             type: 'doughnut',
-//             data: data,
-//         };
-
-//         const ctx = document.getElementById('GraficoRosca').getContext('2d');
-//         graficoRosca = new Chart(ctx, config);
-//     } catch (error) {
-//         console.error('Failed to fetch:', error);
-//     }
-// }
-
-
-
-
-
-
-
-
-
-async function atualizarGraficoRosca(filtros) {
-    // Constrói a URL com parâmetros de filtro, ignorando filtros não definidos
-    let url = 'http://localhost:8080/consultas/percentagem-concluidos';
-    const queryParams = new URLSearchParams(filtros);
-    if (queryParams.toString()) url += `?${queryParams.toString()}`;
-
-    try {
-        const resposta = await fetch(url);
-        const dados = await resposta.json();
-
-
-        const data = {
-            labels: ['Consultas Concluídas', 'Consultas Pendentes'],
+    if (dados) {
+        criarGrafico('GraficoRosca', 'doughnut', {
+            labels: ['Concluídas', 'Pendentes'],
             datasets: [{
-                label: 'Consultas',
-                data: [100, dados.percentagemConcluidos],
-                backgroundColor: ['rgb(54, 162, 235)', 'rgb(255, 99, 132)'],
-                hoverOffset: 4
-            }]
-        };
-
-        const ctx = document.getElementById('GraficoRosca').getContext('2d');
-        if (window.graficoRosca) window.graficoRosca.destroy(); // Remove o gráfico anterior, se existir
-        window.graficoRosca = new Chart(ctx, { type: 'doughnut', data: data });
-    } catch (error) {
-        console.error("Erro ao atualizar o gráfico Rosca:", error);
+                data: [dados.realizadas, dados.total],
+                backgroundColor: ['#36A2EB', '#FF6384'],
+            }],
+        });
     }
 }
 
 
 
-async function atualizarGraficoBarraHorizontal(filtros) {
-    let url = 'http://localhost:8080/consultas/por-mes';
-    const queryParams = new URLSearchParams(filtros);
-    if (queryParams.toString()) url += `?${queryParams.toString()}`;
+
+
+
+
+
+
+// Função para atualizar gráfico de Barra Horizontal
+async function atualizarGraficoBarraHorizontal(filtros = {}) {
+    const url = 'http://localhost:8080/consultas/altas-ultimos-seis-meses'; // URL corrigida para buscar os dados corretos
 
     try {
-        const resposta = await fetch(url);
-        const dados = await resposta.json();
+        const dados = await fetchDados(url, filtros); // Chama a função genérica de busca de dados
 
-        const labels = dados.meses.map(item => `Mês ${mes.mes}`);
-        const dataValues = dados.map(item => item.total);
+        if (dados) {
+            // Mapeia os rótulos e os valores
+            const labels = dados.map(item => `Mês ${item.mes}`);
+            const dataValues = dados.map(item => item.total);
 
-        const data = {
-                       labels: labels,
-                        datasets: [{
-                            axis: 'y',
-                            label: 'Consultas por Mês',
-                            data: dataValues,
-                            fill: false,
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                                'rgba(255, 159, 64, 0.2)',
-                                'rgba(255, 205, 86, 0.2)',
-                                'rgba(75, 192, 192, 0.2)',
-                                'rgba(54, 162, 235, 0.2)',
-                                'rgba(153, 102, 255, 0.2)',
-                                'rgba(201, 203, 207, 0.2)'
-                            ],
-                            borderColor: [
-                                'rgb(255, 99, 132)',
-                                'rgb(255, 159, 64)',
-                                'rgb(255, 205, 86)',
-                                'rgb(75, 192, 192)',
-                                'rgb(54, 162, 235)',
-                                'rgb(153, 102, 255)',
-                                'rgb(201, 203, 207)'
-                            ],
-                            borderWidth: 1
-                        }]
-                    };
-            
-                    const config = {
-                        type: 'bar',
-                        data: data,
-                        options: {
-                            indexAxis: 'y',
-                        }
-                    };
-
-                    const ctx = document.getElementById('GraficoBarraHorizontal').getContext('2d');
-                            new Chart(ctx, config);
-                        } catch (error) {
-                            console.error('Failed to fetch:', error);
-                        }
+            // Cria o gráfico usando a função genérica
+            criarGrafico('GraficoBarraHorizontal', 'bar', {
+                labels: labels,
+                datasets: [{
+                    label: 'Consultas por Mês',
+                    data: dataValues,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 205, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(201, 203, 207, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(201, 203, 207)'
+                    ],
+                    borderWidth: 1
+                }]
+            }, {
+                indexAxis: 'y' // Configura para barras horizontais
+            });
+        } else {
+            console.warn('Nenhum dado foi retornado para criar o gráfico.');
+        }
+    } catch (error) {
+        console.error('Erro ao atualizar o gráfico de barra horizontal:', error);
+    }
 }
 
-async function atualizarGraficoBarraDePe(filtros) {
-    let url = 'http://localhost:8080/consultas/agendados-disponiveis';
-    const queryParams = new URLSearchParams(filtros);
-    if (queryParams.toString()) url += `?${queryParams.toString()}`;
 
-    try {
-        const resposta = await fetch(url);
-        const dados = await resposta.json();
 
-        const labels = dados.meses.map(mes => `Mês ${mes}`);
-        const dataValuesAgendados = dados.agendados;
-        const dataValuesDisponiveis = dados.disponiveis;
+
+async function atualizarGraficoBarraDePe(filtros = {}) {
+    console.log("Iniciando atualização do gráfico de barras de pé");
+
+    const url = 'http://localhost:8080/consultas/horarios-ultimos-seis-meses';
+    const dados = await fetchDados(url, filtros);
+
+    if (dados) {
+        console.log("Dados recebidos:", dados);
+
+        // Preparando os dados para o gráfico
+        const labels = dados.map(item => `Mês ${item.mes} de ${item.ano} `);
+        const agendados = dados.map(item => item.agendados);
+        const disponiveis = dados.map(item => item.disponiveis);
 
         const data = {
             labels: labels,
             datasets: [
                 {
                     label: 'Agendados',
-                    data: dataValuesAgendados,
-                    backgroundColor: 'rgba(0, 204, 0, 0.6)',
-                    borderColor: 'rgba(0, 204, 0, 1)',
-                    borderWidth: 1
+                    data: agendados,
+                    backgroundColor: 'rgba(76, 175, 80, 0.6)',
+                    borderColor: 'rgba(76, 175, 80, 1)',
+                    borderWidth: 1,
                 },
                 {
                     label: 'Disponíveis',
-                    data: dataValuesDisponiveis,
-                    backgroundColor: 'rgba(0, 102, 0, 0.6)',
-                    borderColor: 'rgba(0, 102, 0, 1)',
-                    borderWidth: 1
-                }
-            ]
+                    data: disponiveis,
+                    backgroundColor: 'rgba(255, 193, 7, 0.6)',
+                    borderColor: 'rgba(255, 193, 7, 1)',
+                    borderWidth: 1,
+                },
+            ],
         };
 
-        const ctx = document.getElementById('GraficoBarraDePe').getContext('2d');
-        if (window.graficoBarraDePe) window.graficoBarraDePe.destroy();
-        window.graficoBarraDePe = new Chart(ctx, { type: 'bar', data: data, options: { scales: { y: { beginAtZero: true } } } });
-    } catch (error) {
-        console.error("Erro ao atualizar o gráfico Barra de Pé:", error);
+        const opcoes = {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                },
+            },
+        };
+
+        criarGrafico('GraficoBarraDePe', 'bar', data, opcoes);
+        console.log("Gráfico atualizado com sucesso");
+    } else {
+        console.error("Falha ao receber os dados para o gráfico");
     }
 }
 
-async function atualizarGraficoLinhaFidelizacao(filtros) {
-    let url = 'http://localhost:8080/pacientes/conversoes-mes';
-    const queryParams = new URLSearchParams(filtros);
-    if (queryParams.toString()) url += `?${queryParams.toString()}`;
+// Função para atualizar gráfico de Linhas
+async function atualizarGraficoLinhaFidelizacao(filtros = {}) {
+    const url = 'http://localhost:8080/pacientes/conversoes-ultimos-seis-meses';
+    const dados = await fetchDados(url, filtros);
+
+    if (dados) {
+        criarGrafico('GraficoLinhaFidelizacao', 'line', {
+            labels: dados.dataConversao,
+            datasets: [{
+                label: 'Conversões',
+                data: dados.totalConvertidos,
+                borderColor: '#FF5722',
+                fill: false,
+            }],
+        });
+    }
+}
+
+
+
+
+
+async function buscarTabela() {
+    console.log("Iniciando busca de agendamentos...");
 
     try {
-        const resposta = await fetch(url);
-        const dados = await resposta.json();
+        // Faz a requisição para o endpoint
+        const resposta = await fetch("http://localhost:8080/consultas/agendamentosProximos");
+        if (!resposta.ok) {
+            throw new Error(`Erro HTTP! Status: ${resposta.status}`);
+        }
 
-        const labels = dados.meses.map(mes => `Mês ${mes}`);
-        const dataValues = dados.valores;
+        // Converte a resposta para JSON
+        const respostaDados = await resposta.json();
+        console.log("Dados recebidos:", respostaDados);
 
-        const data = {
-            labels: labels,
-            datasets: [{
-                label: 'Conversões por Mês',
-                data: dataValues,
-                fill: false,
-                borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1
-            }]
-        };
+        // Seleciona a tabela
+        const tabela = document.getElementById("tableUpcomingAppointments");
 
-        const ctx = document.getElementById('GraficoLinhaFidelizacao').getContext('2d');
-        if (window.graficoLinhaFidelizacao) window.graficoLinhaFidelizacao.destroy();
-        window.graficoLinhaFidelizacao = new Chart(ctx, { type: 'line', data: data });
+        // Remove todas as linhas, exceto o cabeçalho
+        tabela.innerHTML = `
+            <tr>
+                <th>Paciente</th>
+                <th>Vencimento</th>
+                <th>Especialidade</th>
+            </tr>
+        `;
+
+        // Adiciona os dados na tabela
+        respostaDados.forEach(item => {
+            // Formata a data de vencimento
+            const dataObj = new Date(item.dataConsulta);
+            const dataFormatada = dataObj.toLocaleDateString("pt-BR", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric"
+            });
+            const horarioFormatado = dataObj.toLocaleTimeString("pt-BR", {
+                hour: "2-digit",
+                minute: "2-digit"
+            });
+
+            // Cria uma nova linha para a tabela
+            const novaLinha = `
+                <tr>
+                    <td>${item.nomePaciente}</td>
+                    <td>${dataFormatada} ${horarioFormatado}</td>
+                    <td>${item.especialidadeMedico}</td>
+                </tr>
+            `;
+
+            tabela.innerHTML += novaLinha;
+        });
+
+        console.log("Tabela atualizada com sucesso.");
     } catch (error) {
-        console.error("Erro ao atualizar o gráfico Linha Fidelização:", error);
+        console.error("Erro ao buscar agendamentos:", error);
     }
 }
 
+// Executa a função ao carregar
+console.log("Antes de buscar");
+buscarTabela();
+console.log("Depois de buscar");
 
-function atualizarGraficosComDadosFiltrados() {
-    atualizarGraficoRosca(bancoDeDadosFiltrado);
-    atualizarGraficoBarraHorizontal(bancoDeDadosFiltrado);
-    atualizarGraficoBarraDePe(bancoDeDadosFiltrado);
-    atualizarGraficoLinhaFidelizacao(bancoDeDadosFiltrado);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Função para inicializar gráficos
+async function inicializarGraficos() {
+    // Inicializa os gráficos sem filtros
+    await atualizarGraficoRosca();
+    await atualizarGraficoBarraHorizontal();
+    await atualizarGraficoBarraDePe();
+    await atualizarGraficoLinhaFidelizacao();
 }
 
+// Função para aplicar filtros
+async function aplicarFiltros() {
+    const filtros = {
+        medicoId: document.getElementById('filtroMedicoS').value,
+        pacienteId: document.getElementById('filtroPaciente').value,
+        statusId: document.getElementById('filtroStatus').value,
+        areaConsultaId: document.getElementById('filtroAreaConsulta').value,
+        idadePaciente: document.getElementById('filtroIdade').value,
+        generoPaciente: document.getElementById('filtroGenero').value,
+        dataInicio: document.getElementById('filtroDataInicio').value,
+        dataFim: document.getElementById('filtroDataFim').value,
+    };
 
+    await atualizarGraficoRosca(filtros);
+    await atualizarGraficoBarraHorizontal(filtros);
+    await atualizarGraficoBarraDePe(filtros);
+    await atualizarGraficoLinhaFidelizacao(filtros);
+    fecharModalFiltro();
+}
 
-// console.log("antes de buscar");
-// buscarRosca();
-// console.log("depois de buscar");
+// Função para limpar filtros
+function limparFiltros() {
+    document.querySelectorAll('#modalFiltro select, #modalFiltro input').forEach(input => input.value = '');
+    inicializarGraficos(); // Exibe gráficos com todos os dados novamente
+}
 
+// Função para preencher os campos de filtro
+async function preencherCamposDeFiltro() {
+    const medicos = await fetchDados('http://localhost:8080/medicos');
+    const pacientes = await fetchDados('http://localhost:8080/pacientes');
+    const status = await fetchDados('http://localhost:8080/statusConsultas');
+    const areas = await fetchDados('http://localhost:8080/especificacoes');
 
-// // GRAFICO 3
-// async function buscarBarraY() {
-//     console.log("passei por aqui");
+    // Preenche os filtros com as opções disponíveis
+    preencherSelect('filtroMedicoS', medicos, 'id', 'nome');
+    preencherSelect('filtroPaciente', pacientes, 'id', 'nome');
+    preencherSelect('filtroStatus', status, 'id', 'nomeStatus');
+    preencherSelect('filtroAreaConsulta', areas, 'id', 'area');
+}
 
-//     try {
-//         const resposta = await fetch("http://localhost:8080/consultas/altas-ultimos-seis-meses");
-//         if (!resposta.ok) {
-//             throw new Error(`HTTP error! Status: ${resposta.status}`);
-//         }
-//         const respostaDados = await resposta.json();
-//         console.log(respostaDados);
+// Função para preencher select com dados
+function preencherSelect(elementId, dados, valorKey, textoKey) {
+    const select = document.getElementById(elementId);
+    select.innerHTML = '<option value="">Todos</option>';
+    if (dados && Array.isArray(dados)) {
+        dados.forEach(item => {
+            select.innerHTML += `<option value="${item[valorKey]}">${item[textoKey]}</option>`;
+        });
+    }
+}
 
-//         // Extracting the data correctly
-//         const labels = respostaDados.map(item => `Mês ${item.mes}`);
-//         const dataValues = respostaDados.map(item => item.total);
+// Função para abrir e fechar modal
+function abrirModalFiltro() {
+    document.getElementById('modalFiltro').style.display = 'flex';
+}
 
-//         const data = {
-//             labels: labels,
-//             datasets: [{
-//                 axis: 'y',
-//                 label: 'Consultas por Mês',
-//                 data: dataValues,
-//                 fill: false,
-//                 backgroundColor: [
-//                     'rgba(255, 99, 132, 0.2)',
-//                     'rgba(255, 159, 64, 0.2)',
-//                     'rgba(255, 205, 86, 0.2)',
-//                     'rgba(75, 192, 192, 0.2)',
-//                     'rgba(54, 162, 235, 0.2)',
-//                     'rgba(153, 102, 255, 0.2)',
-//                     'rgba(201, 203, 207, 0.2)'
-//                 ],
-//                 borderColor: [
-//                     'rgb(255, 99, 132)',
-//                     'rgb(255, 159, 64)',
-//                     'rgb(255, 205, 86)',
-//                     'rgb(75, 192, 192)',
-//                     'rgb(54, 162, 235)',
-//                     'rgb(153, 102, 255)',
-//                     'rgb(201, 203, 207)'
-//                 ],
-//                 borderWidth: 1
-//             }]
-//         };
+function fecharModalFiltro() {
+    document.getElementById('modalFiltro').style.display = 'none';
+}
 
-//         const config = {
-//             type: 'bar',
-//             data: data,
-//             options: {
-//                 indexAxis: 'y',
-//             }
-//         };
-
-//         const ctx = document.getElementById('GraficoBarraHorizontal').getContext('2d');
-//         new Chart(ctx, config);
-//     } catch (error) {
-//         console.error('Failed to fetch:', error);
-//     }
-// }
-
-// console.log("antes de buscar");
-// buscarBarraY();
-// console.log("depois de buscar");
-
-
-
-// // GRAFICO 4
-
-
-// async function buscarLinhasFidelizacao() {
-//     console.log("passei por aqui");
-
-//     try {
-//         const resposta = await fetch("http://localhost:8080/pacientes/conversoes-ultimos-seis-meses");
-//         if (!resposta.ok) {
-//             throw new Error(`HTTP error! Status: ${resposta.status}`);
-//         }
-//         const respostaDados = await resposta.json();
-//         console.log(respostaDados);
-
-//         // Extracting the data correctly
-//         const labels = respostaDados.map(item => `Mês ${item.mes}`);
-//         const dataValues = respostaDados.map(item => item.total);
-
-//         const data = {
-//             labels: labels,
-//             datasets: [{
-//                 label: 'Conversões por Mês',
-//                 data: dataValues,
-//                 fill: false,
-//                 borderColor: 'rgb(75, 192, 192)',
-//                 tension: 0.1
-//             }]
-//         };
-
-//         const config = {
-//             type: 'line',
-//             data: data,
-//         };
-
-//         const ctx = document.getElementById('GraficoLinhaFidelizacao').getContext('2d');
-//         new Chart(ctx, config);
-//     } catch (error) {
-//         console.error('Failed to fetch:', error);
-//     }
-// }
-
-// console.log("antes de buscar");
-// buscarLinhasFidelizacao();
-// console.log("depois de buscar");
-
-
-// // GRAFICO 5 
-
-
-// async function buscarBarra() {
-//     console.log("passei por aqui");
-
-//     try {
-//         const resposta = await fetch("http://localhost:8080/consultas/horarios-ultimos-seis-meses");
-//         if (!resposta.ok) {
-//             throw new Error(`HTTP error! Status: ${resposta.status}`);
-//         }
-//         const respostaDados = await resposta.json();
-//         console.log(respostaDados);
-
-//         // Extracting the data correctly
-//         const labels = respostaDados.map(item => `Mês ${item.mes}`);
-//         const dataValuesAgendados = respostaDados.map(item => item.agendados);
-//         const dataValuesDisponiveis = respostaDados.map(item => item.disponiveis);
-
-//         const ctx = document.getElementById('GraficoBarraDePe').getContext('2d');
-//         new Chart(ctx, {
-//             type: 'bar',
-//             data: {
-//                 labels: labels,
-//                 datasets: [
-//                     {
-//                         label: 'Agendados',
-//                         data: dataValuesAgendados,
-//                         backgroundColor: 'rgba(0, 204, 0, 0.6)',
-//                         borderColor: 'rgba(0, 204, 0, 1)',
-//                         borderWidth: 1
-//                     },
-//                     {
-//                         label: 'Disponiveis',
-//                         data: dataValuesDisponiveis,
-//                         backgroundColor: 'rgba(0, 102, 0, 0.6)',
-//                         borderColor: 'rgba(0, 102, 0, 1)',
-//                         borderWidth: 1
-//                     }
-//                 ]
-//             },
-//             options: {
-//                 scales: {
-//                     y: {
-//                         beginAtZero: true
-//                     }
-//                 }
-//             }
-//         });
-
-//     } catch (error) {
-//         console.error('Failed to fetch:', error);
-//     }
-// }
-
-// console.log("antes de buscar");
-// buscarBarra();
-// console.log("depois de buscar");
+// Inicializar página
+(async function inicializarPagina() {
+    await preencherCamposDeFiltro(); // Preenche os campos de filtro
+    await inicializarGraficos(); // Inicializa gráficos com todos os dados
+})();
