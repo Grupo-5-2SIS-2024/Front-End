@@ -224,7 +224,7 @@ async function buscarKPIsPaciente() {
             fetch("http://localhost:8080/pacientes/agendamentos-vencidos").then(r => r.json())
         ]);
 
-        document.querySelector(".cardKpi:nth-child(1) .kpiNumber").textContent = porcentagemABA + '%';
+        document.querySelector(".cardKpi:nth-child(1) .kpiNumber").textContent = `${parseFloat(porcentagemABA).toFixed(1)}%`;
         document.querySelector(".cardKpi:nth-child(2) .kpiNumber").textContent = pacientesAtivos.toString().padStart(2, '0');
         document.querySelector(".cardKpi:nth-child(3) .kpiNumber").textContent = pacientesUltimoTrimestre.toString().padStart(2, '0');
         document.querySelector(".cardKpi:nth-child(4) .kpiNumber").textContent = agendamentosVencidos.toString().padStart(2, '0');
