@@ -37,7 +37,7 @@ body {
 .dados {
     width: 50%;
     height: 55vh;
-    background-color: #C8E6C9;
+    background-color: #BBDEFB; /* #C8E6C9 -> #BBDEFB (azul muito claro) */
     padding-top: 10vh;
     display: flex;
     flex-direction: column;
@@ -48,7 +48,7 @@ body {
 }
 
 .login {
-    background-color: #388E3B;
+    background-color: #1976D2; /* #388E3B -> #1976D2 (azul médio) */
     padding: 10px;
     padding-left: 20px;
     padding-right: 20px;
@@ -71,7 +71,7 @@ body {
     padding: 1rem, 1rem, 1rem, 1rem;
     border-radius: 0.5rem;
     font-size: 1rem;
-    background-color: #43A046;
+    background-color: #1976D2; /* #43A046 -> #1976D2 (azul médio) */
     font-weight: bold;
     outline: none;
     border: none;
@@ -153,14 +153,14 @@ a {
 
 .titulo1 {
     font-weight: 990;
-    color: #38B54C;
+    color: #2196F3; /* #38B54C -> #2196F3 (azul claro) */
     font-size: 9vh;
     padding-top: 3vh;
 }
 
 .titulo2 {
     font-weight: bolder;
-    color: #276E2A;
+    color: #0D47A1; /* #276E2A -> #0D47A1 (azul escuro) */
     font-size: 7vh;
 }
 
@@ -179,7 +179,7 @@ a {
 
 .contato {
     font-weight: 700;
-    color: #276E2A;
+    color: #0D47A1; /* #276E2A -> #0D47A1 (azul escuro) */
     font-size: 3.5vh;
 }
 
@@ -188,4 +188,28 @@ a {
     background-size: cover;
     height: 21vh;
     width: 90%;
+}
+
+.btn-voltar {
+    position: fixed;
+    top: 24px;
+    left: 32px;
+    font-size: 2.5rem;
+    color: #1976D2;
+    background: #fff;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: background 0.2s, color 0.2s;
+    z-index: 1000;
+}
+
+.btn-voltar:hover {
+    background: #1976D2;
+    color: #fff;
 }

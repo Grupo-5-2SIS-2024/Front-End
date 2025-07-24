@@ -14,7 +14,7 @@ body {
 }
 
 .sidebar {
-    background-color: #007744;
+    background-color: #0D47A1; /* azul escuro */
     width: 250px;
     padding: 20px;
     color: white;
@@ -39,7 +39,7 @@ body {
 }
 
 .menu li.active {
-    background-color: #004c30;
+    background-color: #1565C0; /* hover azul escuro */
     border-radius: 5px;
 }
 
@@ -60,7 +60,7 @@ body {
 }
 
 .header .highlight {
-    color: #007744;
+    color: #1976D2; /* azul médio */
 }
 
 .buttons{
@@ -70,7 +70,7 @@ body {
 }
 
 .filter-button {
-    background-color: #007744;
+    background-color: #1976D2; /* azul médio */
     color: white;
     border: none;
     padding: 10px 20px;
@@ -83,7 +83,7 @@ body {
 }
 
 .filter-button:hover {
-    background-color: #005533;
+    background-color: #1565C0; /* hover azul escuro */
 }
 
 .filter-group {
@@ -187,7 +187,7 @@ body {
 }
 
 .task {
-    background-color: #007744;
+    background-color: #1E88E5; /* azul intermediário */
     color: white;
     padding: 10px;
     margin-bottom: 10px;
@@ -201,7 +201,7 @@ body {
 
 .task:hover {
     transform: translateY(-3px);
-    background-color: #005533;
+    background-color: #1976D2; /* azul médio */
 }
 
 .task.inactive {
@@ -247,7 +247,7 @@ body {
 
 .modal-content h3 {
     margin-top: 0;
-    color: #007744;
+    color: #1976D2; /* azul médio */
     text-align: center;
 }
 
@@ -270,14 +270,14 @@ body {
 }
 
 .modal-content button {
-    background-color: #007744;
+    background-color: #1976D2; /* azul médio */
     color: white;
     cursor: pointer;
     font-weight: bold;
 }
 
 .modal-content button:hover {
-    background-color: #005533;
+    background-color: #1565C0; /* hover azul escuro */
 }
 
 .filter-buttons {

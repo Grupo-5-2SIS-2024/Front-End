@@ -1,7 +1,7 @@
 body {
     display: flex;
     height: 100vh;
-    background-color: #def5e0;
+    background-color: #BBDEFB; /* azul muito claro */
     background-size: cover;
     background-position: 100%;
     overflow-x: hidden;
@@ -17,14 +17,14 @@ body {
 }
 
 .sessaoSuperior {
-    background-color: aqua;
+    background-color: #1976D2; /* azul médio */
     width: 100vw;
     height: 50vh;
     display: flex;
 }
 
 .divInfoPerfil {
-    background-color: #E8F5E9;
+    background-color: #BBDEFB; /* azul muito claro */
     width: 42vw;
     height: 50vh;
     font-family: initial;
@@ -45,7 +45,7 @@ body {
     align-items: center;
     margin-left: 15%;
     border-radius: 15px;
-    color: #38B54C;
+    color: #1976D2; /* azul médio */
     box-shadow: 5px 5px 5px rgb(142, 141, 141);
     position: relative;
     gap: 0.3rem;
@@ -58,7 +58,7 @@ body {
     background: transparent;
     border: none;
     cursor: pointer;
-    color: #38B54C;
+    color: #1976D2; /* azul médio */
     font-size: 16px;
     display: none;
 }
@@ -72,7 +72,7 @@ body {
 }
 
 .divInfoClinica {
-    background-color: #E8F5E9;
+    background-color: #BBDEFB; /* azul muito claro */
     width: 58vw;
     height: 50vh;
     display: flex;
@@ -129,7 +129,7 @@ body {
     /* Diminuído de 3rem para 2rem */
     font-weight: bold;
     margin: 0;
-    color: #43A046;
+    color: #1976D2; /* azul médio */
 }
 
 .kpiText {
@@ -148,8 +148,7 @@ body {
 .bolaVerde {
     width: 50px;
     height: 50px;
-    background-color: green;
-    /* Cor de fundo verde */
+    background-color: #2196F3; /* azul claro */
     border-radius: 50%;
 }
 
@@ -160,14 +159,14 @@ body {
 }
 
 .sessaoInferior {
-    background-color: #E8F5E9;
+    background-color: #BBDEFB; /* azul muito claro */
     width: 100vw;
     height: 50vh;
     display: flex;
 }
 
 .grafico {
-    background-color: #E8F5E9;
+    background-color: #BBDEFB; /* azul muito claro */
     width: 60vw;
     height: 50vh;
     display: flex;
@@ -192,7 +191,7 @@ canvas {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #E8F5E9;
+    background-color: #BBDEFB; /* azul muito claro */
     width: 25vw;
     height: 50vh;
     justify-content: center;
@@ -209,7 +208,7 @@ canvas {
 }
 
 .containerTituloCalendario span {
-    color: #2f8333;
+    color: #1976D2; /* azul médio */
 }
 
 .tituloCalendario {
@@ -241,6 +240,7 @@ canvas {
 #monthYear {
     font-size: 18px;
     font-weight: bold;
+    color: #1976D2; /* azul médio */
 }
 
 button {
@@ -287,7 +287,7 @@ button {
 }
 
 .calendar-days .selected {
-    background-color: #00cc66;
+    background-color: #1976D2; /* azul médio */
     color: white;
 }
 
@@ -310,7 +310,7 @@ button {
         height: auto;
         overflow-x: hidden;
         overflow-y: auto;
-        background-color: #def5e0;
+        background-color: #BBDEFB; /* azul muito claro */
     }
 
     .container {
@@ -444,7 +444,7 @@ button {
     }
 
     .calendar-days .selected {
-        background-color: #2f8333;
+        background-color: #1976D2; /* azul médio */
         color: white;
     }
 

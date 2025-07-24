@@ -1,7 +1,7 @@
 body {
     display: flex;
     height: 100vh;
-    background-color: #def5e0;
+    background-color: #BBDEFB;
     background-size: cover;
     background-position: 100%;
     overflow-x: hidden;
@@ -35,7 +35,7 @@ body {
 }
 
 .header h1 span {
-    color: #2f8333;
+    color: #1976D2; /* azul médio */
 }
 
 .containerBotao {
@@ -49,12 +49,16 @@ body {
     padding: 1rem;
     border-radius: 0.5rem;
     font-size: 1rem;
-    background-color: #43A046;
+    background-color: #1976D2; /* azul médio */
+    color: whitesmoke;
     font-weight: bold;
     outline: none;
     border: none;
     cursor: pointer;
-    color: whitesmoke;
+}
+
+.registrar:hover {
+    background-color: #1565C0; /* hover azul escuro */
 }
 
 .filtro {
@@ -64,20 +68,24 @@ body {
     border-radius: 0.5rem;
     font-size: 1rem;
     background-color: #ffffff;
+    color: #1976D2; /* azul médio */
+    border: 2px solid #1976D2;
     font-weight: bold;
     outline: none;
     border: none;
     cursor: pointer;
-    color: rgb(0, 0, 0);
 }
 
 .filtro:hover {
+    background-color: #1976D2;
+    color: #fff;
     transform: translateY(-0.4rem);
     transition: 0.2s;
     box-shadow: 0rem 0.5rem 0.8rem rgb(0, 0, 0);
 }
 
 .registrar:hover {
+    background-color: #1565C0; /* hover azul escuro */
     transform: translateY(-0.4rem);
     transition: 0.2s;
     box-shadow: 0rem 0.5rem 0.8rem rgb(0, 0, 0);
@@ -142,7 +150,7 @@ a {
     font-size: 3rem;
     font-weight: bold;
     margin: 0;
-    color: #43A046;
+    color: #1976D2; /* azul médio */
 }
 
 .kpiText {
@@ -235,7 +243,7 @@ a {
 }
 
 .cardPaciente .actions button:hover {
-    color: #276E2A;
+    color: #1976D2; /* azul médio */
 }
 
 /* MODAIS */
@@ -277,7 +285,7 @@ a {
 
 .modal-content button {
     padding: 8px 16px;
-    background-color: #43A046;
+    background-color: #1976D2; /* azul médio */
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -301,11 +309,11 @@ a {
 }
 
 .lista-filtros-ativos li {
-    background-color: #e0e7ff;
+    background-color: #BBDEFB; /* azul muito claro */
+    color: #1976D2; /* azul médio */
     border-radius: 5px;
     padding: 8px 12px;
     margin: 5px; 
-    color: #333;
     font-size: 14px;
     font-weight: bold;
     height: 8vh;
@@ -346,17 +354,21 @@ a {
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    background-color: #1976D2; /* azul médio */
+    color: #fff;
 }
 
-.botoes-container .btn-limpar{
+.botoes-container .btn-aplicar:hover {
+    background-color: #1565C0; /* hover azul escuro */
+}
+
+.botoes-container .btn-limpar {
     background-color: #f44336;
+    color: #fff;
 }
 
-.botoes-container .btn-aplicar:hover,
 .botoes-container .btn-limpar:hover {
-    transform: translateY(-0.4rem);
-    transition: 0.2s;
-    box-shadow: 0rem 0.5rem 0.8rem rgb(0, 0, 0);
+    background-color: #b71c1c;
 }
 
 .btn-fechar {
@@ -403,6 +415,7 @@ a {
     display: flex;
     gap: 20px;
     flex-direction: row;
+    background-color: #BBDEFB; /* azul muito claro */
 }
 
 /* Conteúdo do modal */
@@ -473,16 +486,16 @@ a {
 }
 
 .tab-btn.active {
-    background-color: #def5e0;
+    background-color: #BBDEFB; /* azul muito claro */
 }
 
 .tab-btn:hover {
-    background-color: #d9f8db;
+    background-color: #2196F3; /* azul claro */
 }
 
 .tab-contents {
     flex: 1;
-    background-color: #d9f8db;
+    background-color: #E3F2FD; /* azul claro */
     border-radius: 0 0 8px 8px;
     padding: 16px;
     overflow-y: auto;
@@ -888,7 +901,7 @@ a {
 }
 
 .buttonEvolucao {
-    background-color: #2E7D32;
+    background-color: #1976D2; /* azul médio */
     color: white;
     padding: 10px 20px;
     border: none;
@@ -899,7 +912,7 @@ a {
 }
 
 .buttonEvolucao:hover {
-    background-color: #1B5E20;
+    background-color: #1565C0; /* hover azul escuro */
 }
 
 .botao-container {

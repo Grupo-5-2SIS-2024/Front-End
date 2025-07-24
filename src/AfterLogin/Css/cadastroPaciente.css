@@ -70,7 +70,7 @@ body {
 }
 
 .equipe {
-    color: #38B54C;
+    color: #2196F3; /* azul claro */
 }
 
 .error {
@@ -171,7 +171,7 @@ body {
     padding: 1rem;
     border-radius: 0.5rem;
     font-size: 1rem;
-    background-color: #43A046;
+    background-color: #1976D2; /* azul médio */
     font-weight: bold;
     outline: none;
     border: none;
@@ -183,6 +183,7 @@ body {
     transform: translateY(-0.4rem);
     transition: 0.2s;
     box-shadow: 0rem 0.5rem 0.8rem rgb(0, 0, 0);
+    background-color: #1565C0; /* hover azul escuro */
 }
 
 /* Media Queries para ajuste em telas menores */

@@ -12,7 +12,7 @@ body {
 }
 
 .sidebar {
-    background-color: #2E7D32;
+    background-color: #0D47A1;
     color: white;
     padding: 20px;
     width: 250px;
@@ -25,7 +25,7 @@ body {
     width: 500px;
     padding: 30px;
     border-radius: 10px;
-    border: 2px solid #2E7D32;
+    border: 2px solid #0D47A1;
 }
 
 .swal2-html-container {
@@ -75,7 +75,7 @@ body {
 }
 
 .main-content h1 span {
-    color: #2E7D32;
+    color: #1976D2;
 }
 
 input[type="checkbox"] {
@@ -88,7 +88,7 @@ input[type="checkbox"] {
 label[for="recorrente"] {
     font-weight: bold;
     font-size: 16px;
-    color: #2E7D32;
+    color: #1976D2;
 }
 
 .form-container {
@@ -142,7 +142,7 @@ label[for="recorrente"] {
 }
 
 button#agendar {
-    background-color: #2E7D32;
+    background-color: #1976D2;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -155,7 +155,7 @@ button#agendar {
 }
 
 button#agendar:hover {
-    background-color: #1B5E20;
+    background-color: #1565C0;
 }
 
 .consulta {
@@ -188,7 +188,7 @@ button#agendar:hover {
 }
 
 .consulta-actions i:hover {
-    color: #2E7D32;
+    color: #1976D2;
 }
 
 .consulta-info {
@@ -205,7 +205,7 @@ button#agendar:hover {
 .consulta-info h3 {
     margin: 0;
     font-size: 16px;
-    color: #2E7D32;
+    color: #1976D2;
 }
 
 .consulta-info p {
@@ -223,7 +223,7 @@ button#agendar:hover {
 }
 
 .btn-download {
-    background-color: #2E7D32;
+    background-color: #1E88E5;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -237,12 +237,12 @@ button#agendar:hover {
 }
 
 .btn-download:hover {
-    background-color: #1B5E20;
+    background-color: #2196F3;
 }
 
 .btn-delete-pilha,
 .btn-delete-fila {
-    background-color: #d32f2f;
+    background-color: #d32f2f; /* Mantido vermelho para deletar */
     color: white;
     padding: 10px 20px;
     border: none;

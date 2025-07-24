@@ -20,7 +20,7 @@ body {
 
 header h1 {
     font-size: 24px;
-    color: #2E7D32;
+    color: #1976D2; /* azul médio */
     margin: 0 0 10px 0;
 }
 
@@ -53,7 +53,7 @@ header p {
 }
 
 button {
-    background-color: #2E7D32;
+    background-color: #1976D2; /* azul médio */
     color: white;
     padding: 10px 20px;
     border: none;
@@ -63,7 +63,7 @@ button {
 }
 
 button:hover {
-    background-color: #1B5E20;
+    background-color: #1565C0; /* hover azul escuro */
 }
 
 

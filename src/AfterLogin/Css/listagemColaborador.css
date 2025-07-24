@@ -1,7 +1,7 @@
 body {
     display: flex;
     height: 100vh;
-    background-color: #def5e0;
+    background-color: #BBDEFB; /* azul muito claro */
     background-size: cover;
     background-position: 100%;
     overflow-x: hidden;
@@ -35,7 +35,7 @@ body {
 }
 
 .header h1 span {
-    color: #2f8333;
+    color: #1976D2; /* azul médio */
 }
 
 .containerBotao {
@@ -49,7 +49,7 @@ body {
     padding: 1rem;
     border-radius: 0.5rem;
     font-size: 1rem;
-    background-color: #43A046;
+    background-color: #1976D2; /* azul médio */
     font-weight: bold;
     outline: none;
     border: none;
@@ -63,7 +63,7 @@ body {
     padding: 1rem;
     border-radius: 0.5rem;
     font-size: 1rem;
-    background-color: #43A046;
+    background-color: #1976D2; /* azul médio */
     font-weight: bold;
     outline: none;
     border: none;
@@ -91,10 +91,9 @@ body {
     box-shadow: 0rem 0.5rem 0.8rem rgb(0, 0, 0);
 }
 
-.registrar:hover, .registrarArea:hover {
-    transform: translateY(-0.4rem);
-    transition: 0.2s;
-    box-shadow: 0rem 0.5rem 0.8rem rgb(0, 0, 0);
+.registrar:hover,
+.registrarArea:hover {
+    background-color: #1565C0; /* hover azul escuro */
 }
 
 a {
@@ -156,7 +155,7 @@ a {
     font-size: 3rem;
     font-weight: bold;
     margin: 0;
-    color: #43A046;
+    color: #1976D2; /* azul médio */
 }
 
 .kpiText {
@@ -249,7 +248,7 @@ a {
 }
 
 .cardColaborador .actions button:hover {
-    color: #276E2A;
+    color: #1976D2; /* azul médio */
 }
 
 /* Modal de Cadastro de Área */
@@ -289,7 +288,7 @@ a {
 
 .modal-content button {
     padding: 8px 16px;
-    background-color: #43A046;
+    background-color: #1976D2; /* azul médio */
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -347,12 +346,12 @@ a {
 }
 
 .update {
-    background-color: #ffa726;
+    background-color: #1E88E5; /* azul intermediário */
     color: white;
 }
 
 .confirm {
-    background-color: #4caf50;
+    background-color: #2196F3; /* azul claro */
     color: white;
 }
 
@@ -374,11 +373,11 @@ a {
 }
 
 .lista-filtros-ativos li {
-    background-color: #e0e7ff;
+    background-color: #BBDEFB; /* azul muito claro */
     border-radius: 5px;
     padding: 8px 12px;
     margin: 5px;
-    color: #333;
+    color: #1976D2; /* azul médio */
     font-size: 14px;
     font-weight: bold;
     height: 5vh;
@@ -422,7 +421,8 @@ a {
 }
 
 .botoes-container .btn-aplicar {
-    background-color: #4CAF50;
+    background-color: #1976D2; /* azul médio */
+    color: #fff;
 }
 
 .botoes-container .btn-limpar {
@@ -430,7 +430,10 @@ a {
   
 }
 
-.botoes-container .btn-aplicar:hover,
+.botoes-container .btn-aplicar:hover {
+    background-color: #1565C0; /* hover azul escuro */
+}
+
 .botoes-container .btn-limpar:hover {
     transform: translateY(-0.4rem);
     transition: 0.2s;
@@ -456,11 +459,11 @@ a {
 }
 
 .swal2-confirm {
-    background-color: #28a745 !important;
+    background-color: #1976D2 !important; /* azul médio */
 }
 
 .swal2-cancel {
-    background-color: #dc3545 !important;
+    background-color: #1565C0 !important; /* hover azul escuro */
 }
 
 

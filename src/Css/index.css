@@ -8,15 +8,15 @@
 }
 
 ::-webkit-scrollbar-track {
-    background-color: transparent;
+      background-color: #0D47A1;
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #43A046;
+    background-color: #1976D2;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background-color: #103E13;
+    background-color: #0D47A1;
 }
 
 /* começo do cabeçalho */
@@ -26,7 +26,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #103E13;
+    background-color: #0D47A1;
     position: fixed;
     z-index: 99999;
 }
@@ -91,9 +91,9 @@
 }
 
 a {
+    color: rgb(255, 255, 255);
     list-style: none;
     text-decoration: none;
-    color: rgb(255, 255, 255);
     font-weight: bold;
     transition: all 0.3s ease 0s;
     cursor: pointer;
@@ -106,7 +106,7 @@ a {
     padding: 1rem, 1rem, 1rem, 1rem;
     border-radius: 0.5rem;
     font-size: 1rem;
-    background-color: #43A046;
+    background-color: #1976D2;
     font-weight: bold;
     outline: none;
     border: none;
@@ -188,7 +188,7 @@ a {
     font-size: 4.5rem;
     letter-spacing: 0.1rem;
     font-weight: 500;
-    color: #43A046;
+    color: #1976D2;
 }
 
 .divBoxTextoBanner {
@@ -223,7 +223,7 @@ a {
     height: 6vh;
     border-radius: 5%;
     font-size: 2vh;
-    background-color: #4CAF4F;
+    background-color: #1E88E5;
     border: none;
     font-weight: bold;
     transition: all 0.3s ease 0s;
@@ -233,7 +233,7 @@ a {
 }
 
 .botaoBanner:hover {
-    background-color: #2ab42e;
+    background-color: #2196F3;
     box-shadow: 0rem 0.5rem 0.8rem rgb(0, 0, 0);
     transform: translateY(-0.6rem);
 }
@@ -379,7 +379,7 @@ justify-content: space-evenly;
     padding-top: 10vh;
 }
 .titulo_about_verde{
-    color:#2ab42e;
+    color:#2196F3;
     font-size: 5vh;
     font-weight: bold;
     padding-left: 10%;
@@ -397,7 +397,7 @@ justify-content: space-evenly;
     padding-left: 10%;
 }
 .sobrev{
-    color:#2ab42e;
+    color:#2196F3;
     width: 90%;
     padding-left: 10%;
     padding-top: 1.9vh;
@@ -541,7 +541,7 @@ padding-top: 10vh;
 .card_beneficios4 {
     width: 22rem;
     height: 16rem;
-    background-image: url('../Assets/standard-quality-control-collage-concept.jpg');
+    background-image: url('../Assets/standard-quality-control-collage-concept.jpg'); 
     background-size: cover;
     box-shadow: 0.1rem 0.5rem 1rem rgba(47, 47, 47, 0.342);
     display: flex;
@@ -699,13 +699,13 @@ padding-top: 10vh;
 }
 .name {
 	font-size: 2.3125rem;
-	background: linear-gradient(90deg, #43A046, #43A046);
+	background: linear-gradient(90deg, #1976D2, #1976D2);
 	padding-inline: 0.625rem; 
 	transform: translateY(-0.625rem); 
 }
 .role {
 	display: inline-block;
-	background: linear-gradient(90deg, #103E13, #103E13);
+	background: linear-gradient(90deg, #0D47A1, #0D47A1);
 	padding: 0.625rem; 
 	box-shadow: 0 0.0625rem 0.625rem rgba(0, 0, 0, 0.2); 
 	transform: translateY(0.625rem); 
@@ -745,7 +745,7 @@ padding-top: 10vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #E8F5E9;
+    background-color: #e9e8f5;
     height: 90vh;
 }
 
@@ -770,7 +770,7 @@ padding-top: 10vh;
 }
 
 .conosco{
-    color:#2ab42e;
+    color:#2196F3;
 }
 
 .fc_desc{
@@ -791,7 +791,6 @@ padding-top: 10vh;
     padding-bottom: 20vh;
 }
 .fundo_faleconosco{
-    /* background-color:#b3e7b5; ; */
     width: 58%;
     height: 80vh;
     display: flex;
@@ -800,7 +799,6 @@ padding-top: 10vh;
     align-items: center;
 }
 .formulario{
-    /* background-color:#a1a1a1; ; */
     width: 42%;
     height: 70vh;
     display: flex;
@@ -830,8 +828,8 @@ padding-top: 10vh;
 }
 
 input{
-    background-color: #C8E6C9;
-    border: 1px solid #C8E6C9;;
+    background-color: #BBDEFB;
+    border: 1px solid #BBDEFB;;
     border-radius: 10px;
     color:grey;
     padding-left: 2vh;
@@ -895,14 +893,14 @@ align-items: center;
     font-family: sans-serif;
     text-decoration: none;
     color: whitesmoke;
-    border: 2px solid #43A046;
+    border: 2px solid #1976D2;
     letter-spacing: 2px;
     text-align: center;
     position: relative;
     transition: all .50s;
     /* padding: 2vh; */
     border-radius: 10px;
-    background-color: #43A046;
+    background-color: #1976D2;
   }
   
  .wrapper a span{
@@ -917,7 +915,7 @@ align-items: center;
     left: 0;
     width: 0;
     height: 100%;
-    background: #1B5E1F;
+    background: #1565C0;
     transition: all .35s;
     border-radius: 9px;
   }
@@ -935,7 +933,7 @@ align-items: center;
 
 /* Estilos do Rodapé */
 .footer {
-    background-color: #103E13;
+    background-color: #0D47A1;
     color: white;
     padding-left: 30px;
     padding-top: 50px;
@@ -999,7 +997,7 @@ font-weight: 100;
 }
 
 .contact-button {
-    background-color: #2ab42e; 
+    background-color: #2196F3; 
     color: white; 
     border-radius: 10px; 
     padding: 15px 25px; 

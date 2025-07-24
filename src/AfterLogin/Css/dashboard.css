@@ -204,7 +204,7 @@ th {
 }
 
 .filter-button {
-    background-color: #007744;
+    background-color: #1976D2; /* azul médio */
     color: white;
     border: none;
     padding: 10px 20px; /* Ajuste do padding para um tamanho mais compacto */
@@ -217,7 +217,7 @@ th {
 }
 
 .filter-button:hover {
-    background-color: #005533;
+    background-color: #1565C0; /* hover azul escuro */
 }
 
 .modal {
@@ -257,7 +257,7 @@ th {
 
 .modal-content h3 {
     margin-top: 0;
-    color: #007744;
+    color: #1976D2; /* azul médio */
     text-align: center;
 }
 
