@@ -221,6 +221,11 @@ async function cadastrarColaborador() {
       return;
     }
 
+    let fotoBase64 = null;
+    if (fotoEscolhida) {
+      fotoBase64 = await toBase64(fotoEscolhida);
+    }
+
     const dadosColaborador = {
       "nome": nomeDigitado,
       "sobrenome": sobrenomeDigitado,
@@ -237,7 +242,7 @@ async function cadastrarColaborador() {
       "permissao": {
         "id": nivelAcessoId
       },
-      "foto": await toBase64(fotoEscolhida)
+      "foto": fotoBase64 
     };
 
     console.log(dadosColaborador);
